@@ -40,7 +40,7 @@ const maps = JSON.parse(mapsData);
 // client.on("debug", ( e ) => console.log(e));
 
 client.on("ready", () => {
-	console.log(`* ${client.user.tag} discord bot connected.`);
+	console.log(`-> ${client.user.tag} discord bot connected.`);
 	client.user.setPresence({
 		activities: [
 			{
