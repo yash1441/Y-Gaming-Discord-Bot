@@ -1,0 +1,32 @@
+{
+  "ap": {
+    "immortal1": 80,
+    "immortal2": 200,
+    "immortal3": 400
+  },
+  "eu": {
+    "immortal1": 100,
+    "immortal2": 200,
+    "immortal3": 550
+  },
+  "na": {
+    "immortal1": 90,
+    "immortal2": 200,
+    "immortal3": 450
+  },
+  "kr": {
+    "immortal1": 90,
+    "immortal2": 150,
+    "immortal3": 200
+  },
+  "latam": {
+    "immortal1": 90,
+    "immortal2": 150,
+    "immortal3": 200
+  },
+  "br": {
+    "immortal1": 100,
+    "immortal2": 230,
+    "immortal3": 340
+  }
+}
