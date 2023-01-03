@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const fs = require("fs");
 const HenrikDevValorantAPI = require("unofficial-valorant-api");
 const vapi = new HenrikDevValorantAPI();
 const Jimp = require("jimp");
