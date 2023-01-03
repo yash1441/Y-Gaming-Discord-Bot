@@ -3,8 +3,10 @@ const axios = require("axios");
 const fs = require("fs");
 const canvacord = require("canvacord");
 
-let ranksData = fs.readFileSync("../Data/rank-threshold.json");
-const rankThreshold = JSON.parse(ranksData);
+const dataDirectory = path.join(__dirname, "../Data");
+const rankThreshold = JSON.parse(
+	fs.readFileSync(path.join(dataDirectory, "rank-threshold.json"))
+);
 
 module.exports = {
 	data: new SlashCommandBuilder()
