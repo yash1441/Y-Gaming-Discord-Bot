@@ -51,8 +51,6 @@ module.exports = {
 
 		number > 10 ? (number = 10) : (number = number);
 
-		console.log({ number });
-
 		let valoId = "NULL",
 			matches;
 		valoId = interaction.options.getString("username").split("#", 2);
