@@ -530,7 +530,7 @@ client.on("interactionCreate", async (interaction) => {
 				n: 1,
 			});
 
-			console.log(response);
+			console.log(response.data.data);
 			return;
 			let url = response.data[0].url;
 
