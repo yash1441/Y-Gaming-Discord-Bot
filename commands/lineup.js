@@ -50,7 +50,7 @@ module.exports = {
 		let bombsite = interaction.options.getString("bombsite");
 
 		let imageName = `${map}${bombsite}${agent}.png`;
-		let file = path.join(__dirname, "Lineups", imageName);
+		let file = path.join(__dirname, "../Lineups", imageName);
 
 		console.log({ imageName, file });
 
