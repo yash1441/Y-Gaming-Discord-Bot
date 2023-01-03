@@ -29,10 +29,8 @@ module.exports = {
 			tag: valoID[1],
 		});
 
-		console.log(accountData);
-
 		await interaction.editReply({
-			content: `Done`,
+			content: "```json\n" + JSON.stringify(accountData, null, 2) + "```",
 		});
 	},
 };
