@@ -49,10 +49,10 @@ module.exports = {
 		let map = interaction.options.getString("map");
 		let bombsite = interaction.options.getString("bombsite");
 
-		console.log({ agent, map, bombsite });
-
 		let imageName = `${map}${bombsite}${agent}.png`;
 		let file = path.join(__dirname, "Lineups", imageName);
+
+		console.log({ imageName, file });
 
 		fs.access(file, fs.F_OK, (err) => {
 			if (err) {
