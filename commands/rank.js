@@ -89,7 +89,7 @@ module.exports = {
 		let playerRating = mmrData.data.current_data.ranking_in_tier;
 		if (playerRating == null) playerRating = 0;
 		let name = accountData.data.name;
-		let tag = accountData.data.tag;
+		//let tag = accountData.data.tag;
 		//let playerCardSmall = accountData.data.card.small;
 		let playerCardWide = accountData.data.card.wide;
 		let puuid = accountData.data.puuid;
@@ -98,8 +98,6 @@ module.exports = {
 		const leaderboardData = await vapi.getLeaderboard({
 			version: "v1",
 			region: interaction.options.getString("region"),
-			name: name,
-			tag: tag,
 			puuid: puuid,
 		});
 
