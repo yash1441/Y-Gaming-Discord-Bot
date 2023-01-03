@@ -530,15 +530,15 @@ client.on("interactionCreate", async (interaction) => {
 				n: 1,
 			});
 
-			let stuff = {
-				method: "POST",
-				url: "https://api.openai.com/v1/images/generations",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${process.env.OPENAI_KEY}`,
-				},
-				data: { prompt: prompt, n: 1, size: "1024x1024" },
-			};
+			// let stuff = {
+			// 	method: "POST",
+			// 	url: "https://api.openai.com/v1/images/generations",
+			// 	headers: {
+			// 		"Content-Type": "application/json",
+			// 		Authorization: `Bearer ${process.env.OPENAI_KEY}`,
+			// 	},
+			// 	data: { prompt: prompt, n: 1, size: "1024x1024" },
+			// };
 
 			let url = undefined;
 
