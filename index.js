@@ -527,12 +527,9 @@ client.on("interactionCreate", async (interaction) => {
 
 			let response = await openai.createImage({
 				prompt: prompt,
-				n: 1,
 			});
 
-			console.log(response.data.data);
-			return;
-			let url = response.data[0].url;
+			let url = response.data.data[0].url;
 
 			await interaction.editReply({
 				content: "Just kidding, generating image...",
