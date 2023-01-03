@@ -3,7 +3,7 @@ const axios = require("axios");
 const fs = require("fs");
 const canvacord = require("canvacord");
 
-let ranksData = fs.readFileSync("rank-threshold.json");
+let ranksData = fs.readFileSync("../Data/rank-threshold.json");
 const rankThreshold = JSON.parse(ranksData);
 
 module.exports = {
