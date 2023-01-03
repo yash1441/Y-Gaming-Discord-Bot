@@ -4,10 +4,10 @@ const HenrikDevValorantAPI = require("unofficial-valorant-api");
 const vapi = new HenrikDevValorantAPI();
 const Jimp = require("jimp");
 
-let agentsData = fs.readFileSync("agents.json");
+let agentsData = fs.readFileSync("../Data/agents.json");
 const agents = JSON.parse(agentsData);
 
-let mapsData = fs.readFileSync("maps.json");
+let mapsData = fs.readFileSync("../Data/maps.json");
 const maps = JSON.parse(mapsData);
 
 module.exports = {
