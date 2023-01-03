@@ -539,7 +539,7 @@ client.on("interactionCreate", async (interaction) => {
 			// 	},
 			// 	data: { prompt: prompt, n: 1, size: "1024x1024" },
 			// };
-
+			console.log(response);
 			let url = response.data[0].url;
 
 			// await axios
