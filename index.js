@@ -551,6 +551,9 @@ client.on("interactionCreate", async (interaction) => {
 							});
 					});
 			});
+
+			response = await openai.listModels();
+			console.log(response);
 		}
 	}
 });
