@@ -523,38 +523,16 @@ client.on("interactionCreate", async (interaction) => {
 			fs.unlinkSync(file);
 		} else if (commandName == "imagine") {
 			await interaction.reply({ content: "Getting your login info..." });
-			const prompt = options.getString("prompt");
+			let prompt = options.getString("prompt");
 
-			const response = await openai.createImage({
+			let response = await openai.createImage({
 				prompt: prompt,
 				n: 1,
 			});
 
-			// let stuff = {
-			// 	method: "POST",
-			// 	url: "https://api.openai.com/v1/images/generations",
-			// 	headers: {
-			// 		"Content-Type": "application/json",
-			// 		Authorization: `Bearer ${process.env.OPENAI_KEY}`,
-			// 	},
-			// 	data: { prompt: prompt, n: 1, size: "1024x1024" },
-			// };
 			console.log(response);
+			return;
 			let url = response.data[0].url;
-
-			// await axios
-			// 	.request(response)
-			// 	.then(function (response) {
-			// 		url = response.data[0].url;
-			// 		//interaction.editReply({ content: response.data.data[0].url });
-			// 	})
-			// 	.catch(function (error) {
-			// 		interaction.editReply({ content: "No" });
-			// 	});
-
-			// if (url == undefined) {
-			// 	return;
-			// }
 
 			await interaction.editReply({
 				content: "Just kidding, generating image...",
