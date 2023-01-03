@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require("discord.js");
 const axios = require("axios");
 const fs = require("fs");
+const path = require("path");
 const canvacord = require("canvacord");
 
 const dataDirectory = path.join(__dirname, "../Data");
