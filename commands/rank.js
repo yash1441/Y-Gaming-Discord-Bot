@@ -93,25 +93,27 @@ module.exports = {
 		//let playerCardSmall = accountData.data.card.small;
 		let playerCardWide = accountData.data.card.wide;
 		let puuid = accountData.data.puuid;
-		let file, ratingColor, ratingRequired;
+		let file, ratingColor, ratingRequired, leaderboard;
 
-		const leaderboardData = await vapi.getLeaderboard({
-			version: "v1",
-			region: interaction.options.getString("region"),
-			puuid: puuid,
-		});
-
-		if (leaderboardData.status != 200) {
-			return await interaction.editReply({
-				content:
-					"<@132784173311197184>\n\n" +
-					"```json\n" +
-					JSON.stringify(leaderboardData, null, 2) +
-					"```",
+		if (playerRankUnpatched == 27) {
+			const leaderboardData = await vapi.getLeaderboard({
+				version: "v1",
+				region: interaction.options.getString("region"),
+				puuid: puuid,
 			});
-		}
 
-		let leaderboard = leaderboardData.data[0].leaderboardRank;
+			if (leaderboardData.status != 200) {
+				return await interaction.editReply({
+					content:
+						"<@132784173311197184>\n\n" +
+						"```json\n" +
+						JSON.stringify(leaderboardData, null, 2) +
+						"```",
+				});
+			}
+
+			leaderboard = leaderboardData.data[0].leaderboardRank;
+		}
 
 		if (playerRating <= 25) ratingColor = "#FF0000";
 		else if (playerRating <= 75) ratingColor = "#FF7F00";
