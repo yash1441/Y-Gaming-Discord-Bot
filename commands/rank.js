@@ -1,8 +1,9 @@
 const { SlashCommandBuilder } = require("discord.js");
-const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 const canvacord = require("canvacord");
+const HenrikDevValorantAPI = require("unofficial-valorant-api");
+const vapi = new HenrikDevValorantAPI();
 
 const dataDirectory = path.join(__dirname, "../Data");
 const rankThreshold = JSON.parse(
@@ -44,6 +45,16 @@ module.exports = {
 		}
 		let valoID = "NULL";
 		valoID = interaction.options.getString("username").split("#", 2);
+
+		const mmr = await vapi.getMMR({
+			version: "v2",
+			region: interaction.options.getString("region"),
+			name: valoID[0],
+			tag: valoID[1],
+		});
+
+		return console.log(mmr);
+
 		let mmrURL =
 			"https://api.henrikdev.xyz/valorant/v2/mmr/" +
 			interaction.options.getString("region") +
