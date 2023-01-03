@@ -46,112 +46,74 @@ module.exports = {
 		let valoID = "NULL";
 		valoID = interaction.options.getString("username").split("#", 2);
 
-		const mmr = await vapi.getMMR({
+		const mmrData = await vapi.getMMR({
 			version: "v2",
 			region: interaction.options.getString("region"),
 			name: valoID[0],
 			tag: valoID[1],
 		});
 
-		return console.log(mmr);
+		const accountData = await vapi.getAccount({
+			name: valoID[0],
+			tag: valoID[1],
+		});
 
-		let mmrURL =
-			"https://api.henrikdev.xyz/valorant/v2/mmr/" +
-			interaction.options.getString("region") +
-			"/" +
-			valoID[0] +
-			"/" +
-			valoID[1];
-		let accountURL =
-			"https://api.henrikdev.xyz/valorant/v1/account/" +
-			valoID[0] +
-			"/" +
-			valoID[1] +
-			"?force=true";
-		let leaderboardURL;
-		let puuid,
-			playerTier,
-			playerRank,
-			playerRating,
-			playerCardSmall,
-			playerCardWide,
-			Name,
-			Tag,
-			file,
-			ratingColor,
-			ratingRequired,
-			playerRankUnpatched,
-			errorFound = false,
-			leaderboard;
-		await axios
-			.get(encodeURI(mmrURL))
-			.then((res) => {
-				playerRankUnpatched = res.data.data.current_data.currenttier;
-				if (playerRankUnpatched == null) playerRankUnpatched = 0;
-				playerTier =
-					"https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/" +
-					playerRankUnpatched +
-					"/largeicon.png";
-				playerRank = res.data.data.current_data.currenttierpatched;
-				playerRating = res.data.data.current_data.ranking_in_tier;
-				if (playerRating == null) playerRating = 0;
-			})
-			.catch((error) => {
-				interaction.editReply({
-					content: `**Error:** Cannot find __${interaction.options.getString(
-						"username"
-					)}__. Make sure the username is in this format - \`Name#Tag\`\n${
-						error.message
-					}`,
-				});
-				console.log(error.code);
-				errorFound = true;
+		if (mmrData.status == 404 || accountData.status == 404) {
+			return await interaction.editReply({
+				content: `**Error:** Cannot find __${interaction.options.getString(
+					"username"
+				)}__. Make sure the username is in this format - \`Name#Tag\``,
 			});
-
-		await axios
-			.get(encodeURI(accountURL))
-			.then((res) => {
-				Name = res.data.data.name;
-				Tag = res.data.data.tag;
-				playerCardSmall = res.data.data.card.small;
-				playerCardWide = res.data.data.card.wide;
-				puuid = res.data.data.puuid;
-				leaderboardURL =
-					"https://api.henrikdev.xyz/valorant/v1/leaderboard/" +
-					interaction.options.getString("region") +
-					"?puuid=" +
-					puuid;
-			})
-			.catch((error) => {
-				interaction.editReply({
-					content: `**Error:** Cannot find __${interaction.options.getString(
-						"username"
-					)}__. Make sure the username is in this format - \`Name#Tag\`\n${
-						error.message
-					}`,
-				});
-				errorFound = true;
+		} else if (mmrData.status != 200) {
+			return await interaction.editReply({
+				content:
+					"<@132784173311197184>\n\n" +
+					"```json\n" +
+					JSON.stringify(mmrData, null, 2) +
+					"```",
 			});
-
-		if (playerRankUnpatched == 27) {
-			await axios
-				.get(encodeURI(leaderboardURL))
-				.then((res) => {
-					leaderboard = res.data.data[0].leaderboardRank;
-				})
-				.catch((error) => {
-					interaction.editReply({
-						content: `**Error:** Cannot find __${interaction.options.getString(
-							"username"
-						)}__. Make sure the username is in this format - \`Name#Tag\`\n${
-							error.message
-						}`,
-					});
-					errorFound = true;
-				});
+		} else if (accountData.status != 200) {
+			return await interaction.editReply({
+				content:
+					"<@132784173311197184>\n\n" +
+					"```json\n" +
+					JSON.stringify(accountData, null, 2) +
+					"```",
+			});
 		}
 
-		if (errorFound) return;
+		let playerRankUnpatched = mmrData.data.current_data.currenttier;
+		if (playerRankUnpatched == null) playerRankUnpatched = 0;
+		let playerTier = `https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/${playerRankUnpatched}/largeicon.png`;
+		//let playerRank = mmrData.data.current_data.currenttierpatched;
+		let playerRating = mmrData.data.current_data.ranking_in_tier;
+		if (playerRating == null) playerRating = 0;
+		let name = accountData.data.name;
+		let tag = accountData.data.tag;
+		//let playerCardSmall = accountData.data.card.small;
+		let playerCardWide = accountData.data.card.wide;
+		let puuid = accountData.data.puuid;
+		let file, ratingColor, ratingRequired;
+
+		const leaderboardData = await vapi.getLeaderboard({
+			version: "v1",
+			region: interaction.options.getString("region"),
+			name: name,
+			tag: tag,
+			puuid: puuid,
+		});
+
+		if (leaderboardData.status != 200) {
+			return await interaction.editReply({
+				content:
+					"<@132784173311197184>\n\n" +
+					"```json\n" +
+					JSON.stringify(leaderboardData, null, 2) +
+					"```",
+			});
+		}
+
+		let leaderboard = leaderboardData.data[0].leaderboardRank;
 
 		if (playerRating <= 25) ratingColor = "#FF0000";
 		else if (playerRating <= 75) ratingColor = "#FF7F00";
@@ -174,7 +136,7 @@ module.exports = {
 			.setCustomStatusColor("#42454900")
 			.setRank(1, "Ascendant", false)
 			.setLevel(10, "RR", false)
-			.setUsername(Name)
+			.setUsername(name)
 			.setDiscriminator("0000")
 			.setCurrentXP(playerRating, ratingColor)
 			.setRequiredXP(ratingRequired)
@@ -183,7 +145,7 @@ module.exports = {
 		if (playerRankUnpatched == 27) rankCard.setLevel(leaderboard, "#", true);
 
 		await rankCard.build().then((buffer) => {
-			file = `${Name}-RankCard.png`;
+			file = `${name}-RankCard.png`;
 			canvacord.write(buffer, file);
 		});
 
