@@ -13,9 +13,14 @@ const HenrikDevValorantAPI = require("unofficial-valorant-api");
 const canvacord = require("canvacord");
 const Jimp = require("jimp");
 const request = require("request-promise");
+const { Configuration, OpenAIApi } = require("openai");
 require("dotenv").config();
 
 const vapi = new HenrikDevValorantAPI();
+const configuration = new Configuration({
+	apiKey: process.env.OPENAI_KEY,
+});
+const openai = new OpenAIApi(configuration);
 
 const client = new Client({
 	intents: [
@@ -518,7 +523,12 @@ client.on("interactionCreate", async (interaction) => {
 			fs.unlinkSync(file);
 		} else if (commandName == "imagine") {
 			await interaction.reply({ content: "Getting your login info..." });
-			let prompt = options.getString("prompt");
+			const prompt = options.getString("prompt");
+
+			const response = await openai.createImage({
+				prompt: prompt,
+				n: 1,
+			});
 
 			let stuff = {
 				method: "POST",
@@ -533,9 +543,9 @@ client.on("interactionCreate", async (interaction) => {
 			let url = undefined;
 
 			await axios
-				.request(stuff)
+				.request(response)
 				.then(function (response) {
-					url = response.data.data[0].url;
+					url = response.data[0].url;
 					//interaction.editReply({ content: response.data.data[0].url });
 				})
 				.catch(function (error) {
