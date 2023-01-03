@@ -1,13 +1,16 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const fs = require("fs");
+const path = require("path");
 const HenrikDevValorantAPI = require("unofficial-valorant-api");
 const vapi = new HenrikDevValorantAPI();
 const Jimp = require("jimp");
 
-let agentsData = fs.readFileSync("../Data/agents.json");
+const dataDirectory = path.join(__dirname, "../Data");
+
+const agentsData = fs.readFileSync(path.join(dataDirectory, "agents.json"));
 const agents = JSON.parse(agentsData);
 
-let mapsData = fs.readFileSync("../Data/maps.json");
+const mapsData = fs.readFileSync(path.join(dataDirectory, "maps.json"));
 const maps = JSON.parse(mapsData);
 
 module.exports = {
