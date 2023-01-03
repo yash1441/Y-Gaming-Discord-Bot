@@ -6,12 +6,10 @@ const vapi = new HenrikDevValorantAPI();
 const Jimp = require("jimp");
 
 const dataDirectory = path.join(__dirname, "../Data");
-
-const agentsData = fs.readFileSync(path.join(dataDirectory, "agents.json"));
-const agents = JSON.parse(agentsData);
-
-const mapsData = fs.readFileSync(path.join(dataDirectory, "maps.json"));
-const maps = JSON.parse(mapsData);
+const agents = JSON.parse(
+	fs.readFileSync(path.join(dataDirectory, "agents.json"))
+);
+const maps = JSON.parse(fs.readFileSync(path.join(dataDirectory, "maps.json")));
 
 module.exports = {
 	data: new SlashCommandBuilder()
