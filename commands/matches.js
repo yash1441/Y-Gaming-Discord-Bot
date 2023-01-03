@@ -51,6 +51,8 @@ module.exports = {
 
 		number > 10 ? (number = 10) : (number = number);
 
+		console.log({ number });
+
 		let valoId = "NULL",
 			matches;
 		valoId = interaction.options.getString("username").split("#", 2);
@@ -82,10 +84,12 @@ module.exports = {
 			match.push(matches.data[i]);
 		}
 
+		console.log(match);
+
 		let embeds = [];
 		for (i = 0; i < match.length; i++) {
 			let tempEmbed = new EmbedBuilder()
-				.setDescription(`${tempEmbed.date}`)
+				.setDescription(`${match[i].date}`)
 				.addFields(
 					{ name: "Rank", value: `${match[i].currenttierpatched}` },
 					{ name: "RR", value: `${match[i].mmr_change_to_last_game}` }
