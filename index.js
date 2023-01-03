@@ -540,21 +540,21 @@ client.on("interactionCreate", async (interaction) => {
 			// 	data: { prompt: prompt, n: 1, size: "1024x1024" },
 			// };
 
-			let url = undefined;
+			let url = response.data[0].url;
 
-			await axios
-				.request(response)
-				.then(function (response) {
-					url = response.data[0].url;
-					//interaction.editReply({ content: response.data.data[0].url });
-				})
-				.catch(function (error) {
-					interaction.editReply({ content: "No" });
-				});
+			// await axios
+			// 	.request(response)
+			// 	.then(function (response) {
+			// 		url = response.data[0].url;
+			// 		//interaction.editReply({ content: response.data.data[0].url });
+			// 	})
+			// 	.catch(function (error) {
+			// 		interaction.editReply({ content: "No" });
+			// 	});
 
-			if (url == undefined) {
-				return;
-			}
+			// if (url == undefined) {
+			// 	return;
+			// }
 
 			await interaction.editReply({
 				content: "Just kidding, generating image...",
