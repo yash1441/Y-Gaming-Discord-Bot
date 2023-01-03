@@ -85,7 +85,7 @@ module.exports = {
 		let embeds = [];
 		for (i = 0; i < match.length; i++) {
 			let tempEmbed = new EmbedBuilder()
-				.setDescription(`${match[i].date}`)
+				.setDescription(`${tempEmbed.date}`)
 				.addFields(
 					{ name: "Rank", value: `${match[i].currenttierpatched}` },
 					{ name: "RR", value: `${match[i].mmr_change_to_last_game}` }
