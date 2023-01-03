@@ -1,5 +1,6 @@
 const {
 	Client,
+	Collection,
 	GatewayIntentBits,
 	EmbedBuilder,
 	ActivityType,
