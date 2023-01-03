@@ -84,10 +84,12 @@ module.exports = {
 			match.push(matches.data[i]);
 		}
 
-		console.log(match);
-
 		let embeds = [];
 		for (i = 0; i < match.length; i++) {
+			if (match[i] == undefined) {
+				i = match.length;
+				continue;
+			}
 			let tempEmbed = new EmbedBuilder()
 				.setDescription(`${match[i].date}`)
 				.addFields(
