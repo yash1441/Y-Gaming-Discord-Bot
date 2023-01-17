@@ -13,11 +13,10 @@ const options = {
 		colorize: true,
 		format: combine(
 			colorize(),
-			align(),
 			timestamp({
 				format: timezoned,
 			}),
-			printf((info) => `${info.timestamp} ${info.level}: ${info.message}`)
+			printf((info) => `-> ${info.timestamp}\t${info.level}\n${info.message}`)
 		),
 	},
 	file: {
@@ -25,14 +24,13 @@ const options = {
 		filename: "./Logger/log.log",
 		colorize: false,
 		format: combine(
-			align(),
 			timestamp({
 				format: timezoned,
 			}),
 			errors({ stack: true }),
 			printf(
 				(info) =>
-					`${info.timestamp} ${info.level}: ${info.stack || info.message}`
+					`-> ${info.timestamp}\t${info.level}\n${info.stack || info.message}`
 			)
 		),
 	},
@@ -41,14 +39,13 @@ const options = {
 		filename: "./Logger/error.log",
 		colorize: false,
 		format: combine(
-			align(),
 			timestamp({
 				format: timezoned,
 			}),
 			errors({ stack: true }),
 			printf(
 				(info) =>
-					`${info.timestamp} ${info.level}: ${info.stack || info.message}`
+					`-> ${info.timestamp}\t${info.level}\n${info.stack || info.message}`
 			)
 		),
 	},
