@@ -51,12 +51,7 @@ for (const file of commandFiles) {
 ////////////////////
 
 client.on("ready", () => {
-	debugLogger.info(`Discord bot went online. Username: ${client.user.tag}`);
 	logger.info(`Discord bot went online. Username: ${client.user.tag}`);
-	debugLogger.warn(`Discord bot went online. Username: ${client.user.tag}`);
-	logger.warn(`Discord bot went online. Username: ${client.user.tag}`);
-	debugLogger.error(`Discord bot went online. Username: ${client.user.tag}`);
-	logger.error(`Discord bot went online. Username: ${client.user.tag}`);
 	logger.debug(`Discord bot went online. Username: ${client.user.tag}`);
 	client.user.setPresence({
 		activities: [
