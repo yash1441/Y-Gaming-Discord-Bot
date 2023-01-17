@@ -4,34 +4,34 @@ const { combine, timestamp, printf, colorize, errors, json } = format;
 const options = {
 	console: {
 		level: "debug",
-		handleExceptions: true,
-		json: false,
 		colorize: true,
 		timestamp: function () {
 			return new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
 		},
+		format: combine(colorize(), printf(`${timestamp} ${level}: ${message}`)),
 	},
 	file: {
 		level: "info",
 		filename: "./Logger/log.log",
-		json: true,
 		colorize: false,
 		timestamp: function () {
 			return new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
 		},
+		format: combine(timestamp(), errors({ stack: true }), json()),
 	},
 	errorFile: {
 		level: "error",
 		filename: "./Logger/error.log",
-		json: true,
 		colorize: false,
 		timestamp: function () {
 			return new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
 		},
+		format: combine(timestamp(), errors({ stack: true }), json()),
 	},
 };
 
 const logger = createLogger({
+	level: "debug",
 	transports: [
 		new transports.Console(options.console),
 		new transports.File(options.file),
