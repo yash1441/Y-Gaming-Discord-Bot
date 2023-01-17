@@ -10,6 +10,9 @@ const options = {
 		},
 		format: combine(
 			colorize(),
+			timestamp({
+				format: "YY-MM-DD HH:mm:ss",
+			}),
 			printf((info) => `${info.timestamp} ${info.level}: ${info.message}`)
 		),
 	},
