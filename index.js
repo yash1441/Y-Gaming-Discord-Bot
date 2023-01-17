@@ -8,7 +8,7 @@ const {
 const fs = require("fs");
 const path = require("path");
 require("dotenv").config();
-const { logger, debugLogger } = require("./Logger/logger.js");
+const logger = require("./Logger/logger.js");
 
 const client = new Client({
 	intents: [
