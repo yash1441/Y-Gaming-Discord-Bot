@@ -1,18 +1,21 @@
 const { createLogger, format, transports } = require("winston");
 const { combine, timestamp, printf, colorize, errors, align } = format;
 
+const timezoned = () => {
+	return new Date().toLocaleString("en-US", {
+		timeZone: "Asia/Kolkata",
+	});
+};
+
 const options = {
 	console: {
 		level: "debug",
 		colorize: true,
-		timestamp: function () {
-			return new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
-		},
 		format: combine(
 			colorize(),
 			align(),
 			timestamp({
-				format: "YY-MM-DD HH:mm:ss",
+				format: timezoned,
 			}),
 			printf((info) => `${info.timestamp} ${info.level}: ${info.message}`)
 		),
@@ -21,13 +24,10 @@ const options = {
 		level: "info",
 		filename: "./Logger/log.log",
 		colorize: false,
-		timestamp: function () {
-			return new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
-		},
 		format: combine(
 			align(),
 			timestamp({
-				format: "YY-MM-DD HH:mm:ss",
+				format: timezoned,
 			}),
 			errors({ stack: true }),
 			printf(
@@ -40,13 +40,10 @@ const options = {
 		level: "error",
 		filename: "./Logger/error.log",
 		colorize: false,
-		timestamp: function () {
-			return new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
-		},
 		format: combine(
 			align(),
 			timestamp({
-				format: "YY-MM-DD HH:mm:ss",
+				format: timezoned,
 			}),
 			errors({ stack: true }),
 			printf(
