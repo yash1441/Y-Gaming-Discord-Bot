@@ -26,7 +26,9 @@ const options = {
 		},
 		format: combine(
 			align(),
-			timestamp(),
+			timestamp({
+				format: "YY-MM-DD HH:mm:ss",
+			}),
 			errors({ stack: true }),
 			printf(
 				(info) =>
@@ -43,7 +45,9 @@ const options = {
 		},
 		format: combine(
 			align(),
-			timestamp(),
+			timestamp({
+				format: "YY-MM-DD HH:mm:ss",
+			}),
 			errors({ stack: true }),
 			printf(
 				(info) =>
