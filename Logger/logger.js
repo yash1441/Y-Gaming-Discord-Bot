@@ -8,7 +8,10 @@ const options = {
 		timestamp: function () {
 			return new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
 		},
-		format: combine(colorize(), printf(`${timestamp} ${level}: ${message}`)),
+		format: combine(
+			colorize(),
+			printf((info) => `${info.timestamp} ${info.level}: ${info.message}`)
+		),
 	},
 	file: {
 		level: "info",
