@@ -1,14 +1,5 @@
 const { createLogger, format, transports } = require("winston");
-const {
-	combine,
-	timestamp,
-	printf,
-	colorize,
-	errors,
-	json,
-	align,
-	prettyPrint,
-} = format;
+const { combine, timestamp, printf, colorize, errors, json, align } = format;
 
 const options = {
 	console: {
@@ -20,7 +11,6 @@ const options = {
 		format: combine(
 			colorize(),
 			align(),
-			prettyPrint(),
 			timestamp({
 				format: "YY-MM-DD HH:mm:ss",
 			}),
