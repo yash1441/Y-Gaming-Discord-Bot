@@ -8,6 +8,7 @@ const {
 const fs = require("fs");
 const path = require("path");
 require("dotenv").config();
+const winston = require("winston");
 
 const client = new Client({
 	intents: [
@@ -17,6 +18,20 @@ const client = new Client({
 		GatewayIntentBits.GuildVoiceStates,
 	],
 	partials: ["MESSAGE", "CHANNEL", "REACTION"],
+});
+
+const logger = winston.createLogger({
+	level: "info",
+	format: winston.format.json(),
+	defaultMeta: { service: "user-service" },
+	transports: [
+		//
+		// - Write all logs with importance level of `error` or less to `error.log`
+		// - Write all logs with importance level of `info` or less to `combined.log`
+		//
+		new winston.transports.File({ filename: "error.log", level: "error" }),
+		new winston.transports.File({ filename: "combined.log" }),
+	],
 });
 
 ////////////////////
@@ -50,7 +65,7 @@ for (const file of commandFiles) {
 ////////////////////
 
 client.on("ready", () => {
-	console.log(`-> ${client.user.tag} discord bot connected.`);
+	logger.info(`Discord bot went online. Username: ${client.user.tag}`);
 	client.user.setPresence({
 		activities: [
 			{
