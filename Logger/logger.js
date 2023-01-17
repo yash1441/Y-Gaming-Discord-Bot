@@ -24,7 +24,15 @@ const options = {
 		timestamp: function () {
 			return new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
 		},
-		format: combine(align(), timestamp(), errors({ stack: true })),
+		format: combine(
+			align(),
+			timestamp(),
+			errors({ stack: true }),
+			printf(
+				(info) =>
+					`${info.timestamp} ${info.level}: ${info.stack || info.message}`
+			)
+		),
 	},
 	errorFile: {
 		level: "error",
@@ -33,7 +41,15 @@ const options = {
 		timestamp: function () {
 			return new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
 		},
-		format: combine(align(), timestamp(), errors({ stack: true })),
+		format: combine(
+			align(),
+			timestamp(),
+			errors({ stack: true }),
+			printf(
+				(info) =>
+					`${info.timestamp} ${info.level}: ${info.stack || info.message}`
+			)
+		),
 	},
 };
 
