@@ -11,6 +11,7 @@ const options = {
 		format: combine(
 			colorize(),
 			align(),
+			prettyPrint(),
 			timestamp({
 				format: "YY-MM-DD HH:mm:ss",
 			}),
