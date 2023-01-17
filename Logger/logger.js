@@ -13,7 +13,7 @@ const options = {
 	},
 	file: {
 		level: "info",
-		filename: "log.log",
+		filename: "./Logger/log.log",
 		json: true,
 		colorize: false,
 		timestamp: function () {
@@ -22,7 +22,7 @@ const options = {
 	},
 	errorFile: {
 		level: "error",
-		filename: "error.log",
+		filename: "./Logger/error.log",
 		json: true,
 		colorize: false,
 		timestamp: function () {
