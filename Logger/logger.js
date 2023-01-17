@@ -9,7 +9,7 @@ const logger = createLogger({
 	level: "debug",
 	format: combine(
 		colorize(),
-		timestamp(),
+		timestamp({ format: 'DD-MM-YY HH:mm:ss' }),
 		errors({ stack: true }),
 		logFormat
 	),
