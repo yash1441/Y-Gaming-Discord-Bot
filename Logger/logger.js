@@ -1,28 +1,41 @@
 const { createLogger, format, transports } = require("winston");
 const { combine, timestamp, printf, colorize, errors, json } = format;
 
-const logFormat = printf(({ level, message, timestamp }) => {
-	return `${timestamp} ${level}: ${message}`;
-});
+const options = {
+	console: {
+		level: "debug",
+		handleExceptions: true,
+		json: false,
+		colorize: true,
+		timestamp: function () {
+			return new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
+		},
+	},
+	file: {
+		level: "info",
+		filename: "log.log",
+		json: true,
+		colorize: false,
+		timestamp: function () {
+			return new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
+		},
+	},
+	errorFile: {
+		level: "error",
+		filename: "error.log",
+		json: true,
+		colorize: false,
+		timestamp: function () {
+			return new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
+		},
+	},
+};
 
 const logger = createLogger({
-	level: "info",
-	format: combine(
-		timestamp({ format: "DD-MM-YY HH:mm:ss" }),
-		errors({ stack: true }),
-		json()
-	),
 	transports: [
-		new transports.File({ filename: "./Logger/error.log", level: "warn" }),
-		new transports.File({ filename: "./Logger/log.log", level: "info" }),
-		new transports.Console({
-			level: "debug",
-			format: combine(
-				colorize(),
-				timestamp({ format: "DD-MM-YY HH:mm:ss" }),
-				logFormat
-			),
-		}),
+		new winston.transports.Console(options.console),
+		new winston.transports.File(options.file),
+		new winston.transports.File(options.errorFile),
 	],
 });
 
