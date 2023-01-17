@@ -8,7 +8,7 @@ const {
 const fs = require("fs");
 const path = require("path");
 require("dotenv").config();
-const logger = require("./Logger/logger.js");
+const { logger, debugLogger } = require("./Logger/logger.js");
 
 const client = new Client({
 	intents: [
@@ -51,7 +51,13 @@ for (const file of commandFiles) {
 ////////////////////
 
 client.on("ready", () => {
+	debugLogger.info(`Discord bot went online. Username: ${client.user.tag}`);
 	logger.info(`Discord bot went online. Username: ${client.user.tag}`);
+	debugLogger.warn(`Discord bot went online. Username: ${client.user.tag}`);
+	logger.warn(`Discord bot went online. Username: ${client.user.tag}`);
+	debugLogger.error(`Discord bot went online. Username: ${client.user.tag}`);
+	logger.error(`Discord bot went online. Username: ${client.user.tag}`);
+	logger.debug(`Discord bot went online. Username: ${client.user.tag}`);
 	client.user.setPresence({
 		activities: [
 			{
