@@ -1,5 +1,5 @@
 const { createLogger, format, transports } = require("winston");
-const { combine, timestamp, printf, colorize, errors, json, align } = format;
+const { combine, timestamp, printf, colorize, errors, align } = format;
 
 const options = {
 	console: {
@@ -24,7 +24,7 @@ const options = {
 		timestamp: function () {
 			return new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
 		},
-		format: combine(timestamp(), errors({ stack: true }), json()),
+		format: combine(align(), timestamp(), errors({ stack: true })),
 	},
 	errorFile: {
 		level: "error",
@@ -33,7 +33,7 @@ const options = {
 		timestamp: function () {
 			return new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
 		},
-		format: combine(timestamp(), errors({ stack: true }), json()),
+		format: combine(align(), timestamp(), errors({ stack: true })),
 	},
 };
 
