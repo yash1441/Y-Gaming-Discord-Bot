@@ -209,8 +209,9 @@ async function sendLiveEmbed(stream, user, game, channelId) {
 		.setImage(
 			stream.thumbnail_url.replace("{width}", "1280").replace("{height}", "720")
 		)
+		.setTimestamp(stream.started_at)
 		.setFooter({
-			text: "Started <t:" + moment(stream.started_at).valueOf() / 1000 + ":R>",
+			text: "Started streaming",
 		});
 	channel.send({
 		content: `${stream.user_name} is **Live**!`,
