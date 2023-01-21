@@ -204,7 +204,7 @@ async function sendLiveEmbed(stream, user, game, channelId) {
 		.setURL("https://twitch.tv/" + stream.user_name)
 		.addFields(
 			{ name: "Game", value: stream.game_name, inline: true },
-			{ name: "Viewers", value: stream.viewer_count, inline: true },
+			{ name: "Viewers", value: stream.viewer_count.toString(), inline: true },
 			{ name: "Tags", value: tags, inline: false }
 		)
 		.setImage(
