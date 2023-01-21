@@ -222,7 +222,7 @@ async function sendLiveEmbed(
 		.setImage(
 			stream.thumbnail_url.replace("{width}", "1280").replace("{height}", "720")
 		)
-		.setTimestamp(stream.started_at)
+		.setTimestamp()
 		.setFooter({
 			text: "Started streaming",
 		});
