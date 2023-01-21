@@ -7,6 +7,7 @@ const {
 } = require("discord.js");
 const fs = require("fs");
 const path = require("path");
+const twitch = require("node-twitch");
 require("dotenv").config();
 const logger = require("./Logger/logger.js");
 
@@ -19,6 +20,13 @@ const client = new Client({
 	],
 	partials: ["MESSAGE", "CHANNEL", "REACTION"],
 });
+
+const twitch = new TwitchApi({
+	client_id: "cb7n9qw551wz1wdkdog9p54zk1npb3",
+	client_secret: "8c32pt17vakr4enqe9n3f5dzbg1b4w",
+});
+
+let isLive = false;
 
 ////////////////////
 /// ADD COMMANDS ///
@@ -68,6 +76,7 @@ client.on("ready", () => {
 			" - " + guild.name + ": ID: " + guild.id + "\n"
 		);
 	});
+
 	const embed = new EmbedBuilder()
 		.setColor("Random")
 		.setTitle("Servers that have Y-Gaming Discord Bot", "")
@@ -79,6 +88,18 @@ client.on("ready", () => {
 			console.log("err");
 		}
 	});
+
+	setInterval(() => {
+		twitch.getStreams({ channel: "ygamingplay" }).then((response) => {
+			if (response.data.length > 0 && !isLive) {
+				isLive = true;
+				const channel = client.channels.cache.get("770859213273694208");
+				channel.send("ESL CSGO is live! Go check out their stream!");
+			} else if (response.data.length == 0) {
+				isLive = false;
+			}
+		});
+	}, 60000);
 });
 
 client.on("interactionCreate", async (interaction) => {
