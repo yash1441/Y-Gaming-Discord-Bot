@@ -99,7 +99,7 @@ client.on("ready", () => {
 				isLive = false;
 			}
 		});
-	}, 60000);
+	}, 10000);
 });
 
 client.on("interactionCreate", async (interaction) => {
