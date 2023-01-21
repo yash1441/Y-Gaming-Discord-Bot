@@ -7,7 +7,7 @@ const {
 } = require("discord.js");
 const fs = require("fs");
 const path = require("path");
-const twitch = require("node-twitch");
+const TwitchApi = require("node-twitch").default;
 require("dotenv").config();
 const logger = require("./Logger/logger.js");
 
@@ -22,8 +22,8 @@ const client = new Client({
 });
 
 const twitch = new TwitchApi({
-	client_id: "cb7n9qw551wz1wdkdog9p54zk1npb3",
-	client_secret: "8c32pt17vakr4enqe9n3f5dzbg1b4w",
+	client_id: process.env.TWITCH_ID,
+	client_secret: process.env.TWITCH_SECRET,
 });
 
 let isLive = false;
