@@ -91,7 +91,7 @@ client.on("ready", async () => {
 	});
 
 	setInterval(() => {
-		checkLive("ygamingplay");
+		checkLive("tansmh");
 	}, 10000);
 });
 
@@ -126,7 +126,13 @@ async function checkLive(channel) {
 		const game = await getGame(parseInt(stream.game_id));
 		if (!game) return console.log("Game not found - " + stream.game_name);
 
-		await sendLiveEmbed(stream, user, game, "770859213273694208");
+		await sendLiveEmbed(
+			stream,
+			user,
+			game,
+			"992356452368920607",
+			"770854206046470164"
+		);
 	} else if (!stream && isLive) {
 		// Stream went OFFLINE //
 		isLive = false;
@@ -206,6 +212,7 @@ async function sendLiveEmbed(
 		: (message = `${stream.user_name} is **Live**!`);
 
 	const embed = new EmbedBuilder()
+		.setColor("#6441A4")
 		.setAuthor({
 			name: stream.user_name,
 			iconURL: user.profile_image_url,
@@ -214,17 +221,15 @@ async function sendLiveEmbed(
 		.setThumbnail(game.box_art_url)
 		.setTitle(stream.title)
 		.setURL("https://twitch.tv/" + stream.user_name)
-		.addFields(
-			{ name: "Game", value: stream.game_name, inline: true },
-			{ name: "Viewers", value: stream.viewer_count.toString(), inline: true },
-			{ name: "Tags", value: tags, inline: false }
-		)
+		.setDescription("**Game**\n" + stream.game_name + "\n\n" + tags)
 		.setImage(
 			stream.thumbnail_url.replace("{width}", "1280").replace("{height}", "720")
 		)
 		.setTimestamp()
 		.setFooter({
 			text: "Started streaming",
+			iconURL:
+				"https/www.tailorbrands.com/wp-content/uploads/2021/04/twitch-logo.png",
 		});
 	channel.send({
 		content: message,
