@@ -201,11 +201,11 @@ async function sendLiveEmbed(stream, user, game, channelId) {
 		.setThumbnail(game.box_art_url)
 		.setTitle(stream.title)
 		.setURL("https://twitch.tv/" + stream.user_name)
-		.addFields(
-			{ name: "Game", value: stream.game_name, inline: true },
-			{ name: "Viewers", value: stream.viewer_count, inline: true },
-			{ name: "Tags", value: "`" + stream.tags.join("``") + "`", inline: true }
-		)
+		// .addFields(
+		// 	{ name: "Game", value: stream.game_name, inline: true },
+		// 	{ name: "Viewers", value: stream.viewer_count, inline: true },
+		// 	{ name: "Tags", value: "`" + stream.tags.join("``") + "`", inline: true }
+		// )
 		.setImage(
 			stream.thumbnail_url.replace("{width}", "1280").replace("{height}", "720")
 		)
