@@ -190,9 +190,21 @@ async function getGame(game_id) {
 	} else return false;
 }
 
-async function sendLiveEmbed(stream, user, game, channelId) {
+async function sendLiveEmbed(
+	stream,
+	user,
+	game,
+	channelId,
+	roleId = undefined
+) {
 	const channel = client.channels.cache.get(channelId);
 	const tags = "`" + stream.tags.join("` `") + "`";
+
+	let message;
+	roleId
+		? (message = `<@&${roleId}> ${stream.user_name} is **Live**!`)
+		: (message = `${stream.user_name} is **Live**!`);
+
 	const embed = new EmbedBuilder()
 		.setAuthor({
 			name: stream.user_name,
@@ -215,7 +227,7 @@ async function sendLiveEmbed(stream, user, game, channelId) {
 			text: "Started streaming",
 		});
 	channel.send({
-		content: `${stream.user_name} is **Live**!`,
+		content: message,
 		embeds: [embed],
 		//component: [row],
 	});
