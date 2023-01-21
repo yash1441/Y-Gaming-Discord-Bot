@@ -192,7 +192,7 @@ async function getGame(game_id) {
 
 async function sendLiveEmbed(stream, user, game, channelId) {
 	const channel = client.channels.cache.get(channelId);
-	const tags = stream.tags.join("`, `");
+	const tags = "`" + stream.tags.join("` `") + "`";
 	const embed = new EmbedBuilder()
 		.setAuthor({
 			name: stream.user_name,
