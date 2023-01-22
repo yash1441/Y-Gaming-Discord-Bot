@@ -229,7 +229,7 @@ async function sendLiveEmbed(
 		.setFooter({
 			text: "Started streaming",
 			iconURL:
-				"https/www.tailorbrands.com/wp-content/uploads/2021/04/twitch-logo.png",
+				"https://www.tailorbrands.com/wp-content/uploads/2021/04/twitch-logo.png",
 		});
 	channel.send({
 		content: message,
