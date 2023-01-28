@@ -4,6 +4,8 @@ const {
 	GatewayIntentBits,
 	EmbedBuilder,
 	ActivityType,
+	ButtonBuilder,
+	ButtonStyle,
 } = require("discord.js");
 const fs = require("fs");
 const path = require("path");
@@ -211,6 +213,14 @@ async function sendLiveEmbed(
 		? (message = `<@&${roleId}> ${stream.user_name} is **Live**!`)
 		: (message = `${stream.user_name} is **Live**!`);
 
+	const button = new ButtonBuilder()
+		.setLabel("Watch Stream")
+		.setEmoji("<a:TanWiggle:961250315989049414>")
+		.setStyle(ButtonStyle.Link)
+		.setURL("https://twitch.tv/" + stream.user_name);
+
+	const row = new ActionRowBuilder().addComponents(button);
+
 	const embed = new EmbedBuilder()
 		.setColor("#6441A4")
 		.setAuthor({
@@ -234,6 +244,6 @@ async function sendLiveEmbed(
 	channel.send({
 		content: message,
 		embeds: [embed],
-		//component: [row],
+		component: [row],
 	});
 }
