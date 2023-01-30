@@ -277,11 +277,10 @@ async function sendOfflineEmbed(stream, video, channelId) {
 	const lastMessage = messages.first();
 	if (lastMessage.author.id === client.user.id) {
 		const lastEmbed = lastMessage.embeds[0];
-		console.log(lastEmbed.thumbnail);
 		const embed = new EmbedBuilder()
 			.setColor(lastEmbed.color)
 			.setAuthor(lastEmbed.author)
-			.setThumbnail(lastEmbed.thumbnail)
+			.setThumbnail(lastEmbed.thumbnail.url)
 			.setTitle(lastEmbed.title)
 			.setURL(lastEmbed.url)
 			.setDescription(lastEmbed.description)
