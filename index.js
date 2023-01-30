@@ -209,6 +209,7 @@ async function getGame(game_id) {
 
 async function getVideo(user_id) {
 	const video = await twitch.getVideos({ user_id: user_id });
+	console.log(video);
 	if (video.data.length > 0) {
 		const video_data = {
 			id: video.data[0].id,
@@ -217,7 +218,6 @@ async function getVideo(user_id) {
 				.replace("{width}", "1280")
 				.replace("{height}", "720"),
 		};
-		console.log(video_data);
 		return video_data;
 	} else return false;
 }
