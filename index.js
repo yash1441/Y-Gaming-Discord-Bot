@@ -292,6 +292,7 @@ async function sendOfflineEmbed(stream, video, channelId) {
 				iconURL:
 					"https://www.tailorbrands.com/wp-content/uploads/2021/04/twitch-logo.png",
 			});
+		console.log(video.thumbnail_url);
 
 		const button = new ButtonBuilder()
 			.setLabel("Watch VOD")
@@ -302,7 +303,7 @@ async function sendOfflineEmbed(stream, video, channelId) {
 		const row = new ActionRowBuilder().addComponents(button);
 
 		lastMessage.edit({
-			content: `${stream.user_login} went offline!`,
+			content: `${lastEmbed.author.name} went offline!`,
 			embeds: [embed],
 			component: [row],
 		});
