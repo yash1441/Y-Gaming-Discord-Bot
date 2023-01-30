@@ -293,7 +293,6 @@ async function sendOfflineEmbed(stream, video, channelId) {
 				iconURL:
 					"https://www.tailorbrands.com/wp-content/uploads/2021/04/twitch-logo.png",
 			});
-		console.log(video.thumbnail_url);
 
 		const button = new ButtonBuilder()
 			.setLabel("Watch VOD")
