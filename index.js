@@ -218,6 +218,7 @@ async function getVideo(user_id) {
 				.replace("{width}", "1280")
 				.replace("{height}", "720"),
 		};
+		console.log(video_data);
 		return video_data;
 	} else return false;
 }
@@ -268,7 +269,7 @@ async function sendLiveEmbed(
 	channel.send({
 		content: message,
 		embeds: [embed],
-		component: [row],
+		components: [row],
 	});
 }
 
@@ -305,7 +306,7 @@ async function sendOfflineEmbed(stream, video, channelId) {
 		lastMessage.edit({
 			content: `${lastEmbed.author.name} went offline!`,
 			embeds: [embed],
-			component: [row],
+			components: [row],
 		});
 	}
 }
