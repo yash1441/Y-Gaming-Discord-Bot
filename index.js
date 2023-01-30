@@ -145,7 +145,7 @@ async function checkLive(channel) {
 		const video = await getVideo(user.id);
 		if (!video) return console.log("Video not found - " + user.id);
 
-		await sendOfflineEmbed(stream, video, "992356452368920607");
+		await sendOfflineEmbed(user, video, "992356452368920607", channel);
 
 		return;
 	} else if (stream && isLive) {
@@ -271,19 +271,26 @@ async function sendLiveEmbed(
 	});
 }
 
-async function sendOfflineEmbed(stream, video, channelId) {
+async function sendOfflineEmbed(stream, video, channelId, channel) {
 	const channel = client.channels.cache.get(channelId);
 	const messages = await channel.messages.fetch({ limit: 1 });
 	const lastMessage = messages.first();
 	if (lastMessage.author.id === client.user.id) {
-		const embed = lastMessage.embeds[0];
-		embed.setImage(video.thumbnail_url);
-		embed.setFooter({
-			text: "Last live",
-			iconURL:
-				"https://www.tailorbrands.com/wp-content/uploads/2021/04/twitch-logo.png",
-		});
-		embed.setTimestamp();
+		const lastEmbed = lastMessage.embeds[0];
+		const embed = new EmbedBuilder()
+			.setColor(lastEmbed.color)
+			.setAuthor(lastEmbed.author)
+			.setThumbnail(lastEmbed.thumbnail)
+			.setTitle(lastEmbed.title)
+			.setURL(lastEmbed.url)
+			.setDescription(lastEmbed.description)
+			.setImage(video.thumbnail_url)
+			.setTimestamp()
+			.setFooter({
+				text: "Last live",
+				iconURL:
+					"https://www.tailorbrands.com/wp-content/uploads/2021/04/twitch-logo.png",
+			});
 
 		const button = new ButtonBuilder()
 			.setLabel("Watch VOD")
