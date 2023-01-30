@@ -272,7 +272,7 @@ async function sendLiveEmbed(
 	});
 }
 
-async function sendOfflineEmbed(stream, video, channelId) {
+async function sendOfflineEmbed(user, video, channelId) {
 	const channel = client.channels.cache.get(channelId);
 	const messages = await channel.messages.fetch({ limit: 1 });
 	const lastMessage = messages.first();
@@ -285,7 +285,7 @@ async function sendOfflineEmbed(stream, video, channelId) {
 			.setTitle(lastEmbed.title)
 			.setURL(lastEmbed.url)
 			.setDescription(lastEmbed.description)
-			.setImage(video.thumbnail_url)
+			.setImage(user.offline_image_url)
 			.setTimestamp()
 			.setFooter({
 				text: "Last live",
