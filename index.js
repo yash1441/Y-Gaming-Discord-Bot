@@ -92,7 +92,7 @@ client.on("ready", async () => {
 		}
 	});
 
-	getVideo("tansmh");
+	getVideo();
 
 	setInterval(() => {
 		checkLive("tansmh");
@@ -200,8 +200,9 @@ async function getGame(game_id) {
 	} else return false;
 }
 
-async function getVideo(user_id) {
-	const video = await twitch.getVideos({ user_id: user_id });
+async function getVideo() {
+	const user = await getUser("tansmh");
+	const video = await twitch.getVideos({ user_id: user.id });
 	console.log(video);
 }
 
