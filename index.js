@@ -215,10 +215,9 @@ async function getVideo(user_id) {
 			id: video.data[0].id,
 			url: video.data[0].url,
 			thumbnail_url: video.data[0].thumbnail_url
-				.replace("{width}", "1280")
-				.replace("{height}", "720"),
+				.replace("%{width}", "1280")
+				.replace("%{height}", "720"),
 		};
-		console.log(video.data[0].thumbnail_url);
 		return video_data;
 	} else return false;
 }
