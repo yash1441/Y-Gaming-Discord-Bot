@@ -145,7 +145,7 @@ async function checkLive(channel) {
 		const video = await getVideo(user.id);
 		if (!video) return console.log("Video not found - " + user.id);
 
-		await sendOfflineEmbed(user, video, "992356452368920607", channel);
+		await sendOfflineEmbed(user, video, "992356452368920607");
 
 		return;
 	} else if (stream && isLive) {
@@ -271,7 +271,7 @@ async function sendLiveEmbed(
 	});
 }
 
-async function sendOfflineEmbed(stream, video, channelId, channel) {
+async function sendOfflineEmbed(stream, video, channelId) {
 	const channel = client.channels.cache.get(channelId);
 	const messages = await channel.messages.fetch({ limit: 1 });
 	const lastMessage = messages.first();
