@@ -30,7 +30,7 @@ const twitch = new TwitchApi({
 	client_secret: process.env.TWITCH_SECRET,
 });
 
-let isLive = true;
+let isLive = false;
 
 ////////////////////
 /// ADD COMMANDS ///
