@@ -139,10 +139,8 @@ async function checkLive(channel) {
 		// Stream went OFFLINE //
 		isLive = false;
 
-		const user = await getUser(stream.user_login);
-		if (!user) return console.log("User not found - " + stream.user_login);
-
-		console.log(user);
+		const user = await getUser(channel);
+		if (!user) return console.log("User not found - " + channel);
 
 		const video = await getVideo(user.id);
 		if (!video) return console.log("Video not found - " + user.id);
@@ -211,7 +209,6 @@ async function getGame(game_id) {
 
 async function getVideo(user_id) {
 	const video = await twitch.getVideos({ user_id: user_id });
-	console.log(video);
 	if (video.data.length > 0) {
 		const video_data = {
 			id: video.data[0].id,
