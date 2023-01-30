@@ -142,6 +142,8 @@ async function checkLive(channel) {
 		const user = await getUser(stream.user_login);
 		if (!user) return console.log("User not found - " + stream.user_login);
 
+		console.log(user);
+
 		const video = await getVideo(user.id);
 		if (!video) return console.log("Video not found - " + user.id);
 
