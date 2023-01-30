@@ -92,6 +92,8 @@ client.on("ready", async () => {
 		}
 	});
 
+	getVideo("tansmh");
+
 	setInterval(() => {
 		checkLive("tansmh");
 	}, 10000);
@@ -196,6 +198,11 @@ async function getGame(game_id) {
 		};
 		return game_data;
 	} else return false;
+}
+
+async function getVideo(user_id) {
+	const video = await twitch.getVideos({ user_id: user_id });
+	console.log(video);
 }
 
 async function sendLiveEmbed(
