@@ -29,7 +29,7 @@ const twitch = new TwitchApi({
 	client_secret: process.env.TWITCH_SECRET,
 });
 
-let isLive = false;
+let isLive = true;
 
 ////////////////////
 /// ADD COMMANDS ///
@@ -92,8 +92,6 @@ client.on("ready", async () => {
 		}
 	});
 
-	getVideo();
-
 	setInterval(() => {
 		checkLive("tansmh");
 	}, 10000);
@@ -140,6 +138,15 @@ async function checkLive(channel) {
 	} else if (!stream && isLive) {
 		// Stream went OFFLINE //
 		isLive = false;
+
+		const user = await getUser(stream.user_login);
+		if (!user) return console.log("User not found - " + stream.user_login);
+
+		const video = await getVideo(user.id);
+		if (!video) return console.log("Video not found - " + user.id);
+
+		await sendOfflineEmbed(stream, video, "992356452368920607");
+
 		return;
 	} else if (stream && isLive) {
 		// Stream LIVE update //
@@ -200,10 +207,18 @@ async function getGame(game_id) {
 	} else return false;
 }
 
-async function getVideo() {
-	const user = await getUser("tansmh");
-	const video = await twitch.getVideos({ user_id: user.id });
-	console.log(video);
+async function getVideo(user_id) {
+	const video = await twitch.getVideos({ user_id: user_id });
+	if (video.data.length > 0) {
+		const video_data = {
+			id: video.data[0].id,
+			url: video.data[0].url,
+			thumbnail_url: video.data[0].thumbnail_url
+				.replace("{width}", "1280")
+				.replace("{height}", "720"),
+		};
+		return video_data;
+	} else return false;
 }
 
 async function sendLiveEmbed(
@@ -254,4 +269,34 @@ async function sendLiveEmbed(
 		embeds: [embed],
 		component: [row],
 	});
+}
+
+async function sendOfflineEmbed(stream, video, channelId) {
+	const channel = client.channels.cache.get(channelId);
+	const messages = await channel.messages.fetch({ limit: 1 });
+	const lastMessage = messages.first();
+	if (lastMessage.author.id === client.user.id) {
+		const embed = lastMessage.embeds[0];
+		embed.setImage(video.thumbnail_url);
+		embed.setFooter({
+			text: "Last live",
+			iconURL:
+				"https://www.tailorbrands.com/wp-content/uploads/2021/04/twitch-logo.png",
+		});
+		embed.setTimestamp();
+
+		const button = new ButtonBuilder()
+			.setLabel("Watch VOD")
+			.setEmoji("<a:TanWiggle:961250315989049414>")
+			.setStyle(ButtonStyle.Link)
+			.setURL(video.url);
+
+		const row = new ActionRowBuilder().addComponents(button);
+
+		lastMessage.edit({
+			content: `${stream.user_login} went offline!`,
+			embeds: [embed],
+			component: [row],
+		});
+	}
 }
