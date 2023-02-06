@@ -11,8 +11,7 @@ module.exports = {
 	async execute(interaction) {
 		const embed = new EmbedBuilder()
 			.setTitle("Test")
-			.setDescription("This is a test")
-			.setColor("RANDOM");
+			.setDescription("This is a test");
 		await interaction.reply({ ephemeral: true, embeds: [embed] });
 	},
 };
