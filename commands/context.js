@@ -2,7 +2,7 @@ const {
 	ContextMenuCommandBuilder,
 	ApplicationCommandType,
 } = require("discord.js");
-const translate = require("google-translate-api");
+const translate = require("google-translate-api-x");
 
 module.exports = {
 	data: new ContextMenuCommandBuilder()
