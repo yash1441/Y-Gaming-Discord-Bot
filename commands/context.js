@@ -11,6 +11,7 @@ module.exports = {
 
 	async execute(interaction) {
 		const { message } = interaction.targetMessage;
+		console.log({ message });
 		translate(message.content, { to: "en" })
 			.then((res) => {
 				interaction.reply({ ephemeral: true, content: res.text });
