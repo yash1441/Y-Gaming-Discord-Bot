@@ -1,17 +1,22 @@
 const {
 	ContextMenuCommandBuilder,
 	ApplicationCommandType,
-	EmbedBuilder,
 } = require("discord.js");
+const translate = require("google-translate-api");
 
 module.exports = {
 	data: new ContextMenuCommandBuilder()
-		.setName("test")
-		.setType(ApplicationCommandType.User),
+		.setName("Translate")
+		.setType(ApplicationCommandType.Message),
+
 	async execute(interaction) {
-		const embed = new EmbedBuilder()
-			.setTitle("Test")
-			.setDescription("This is a test");
-		await interaction.reply({ ephemeral: true, embeds: [embed] });
+		const { message } = interaction.targetMessage;
+		translate(message.content, { to: "en" })
+			.then((res) => {
+				interaction.reply({ ephemeral: true, content: res.text });
+			})
+			.catch((err) => {
+				interaction.reply({ ephemeral: true, content: err });
+			});
 	},
 };
