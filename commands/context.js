@@ -10,8 +10,7 @@ module.exports = {
 		.setType(ApplicationCommandType.Message),
 
 	async execute(interaction) {
-		const { message } = interaction.targetMessage;
-		console.log({ message });
+		console.log(interaction.targetMessage);
 		translate(message.content, { to: "en" })
 			.then((res) => {
 				interaction.reply({ ephemeral: true, content: res.text });
