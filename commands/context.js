@@ -15,7 +15,7 @@ module.exports = {
 			.then((res) => {
 				interaction.reply({
 					ephemeral: true,
-					content: "**Translation**\n\n```" + res.text + "```",
+					content: "```" + res.text + "```",
 				});
 			})
 			.catch((err) => {
