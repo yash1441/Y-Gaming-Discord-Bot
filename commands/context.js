@@ -13,8 +13,10 @@ module.exports = {
 		const message = interaction.targetMessage.content;
 		translate(message, { to: "en" })
 			.then((res) => {
-				console.log(res.text);
-				interaction.reply({ ephemeral: true, content: "Translated." });
+				interaction.reply({
+					ephemeral: true,
+					content: "**Translation**\n\n```" + res.text + "```",
+				});
 			})
 			.catch((err) => {
 				console.log(err);
