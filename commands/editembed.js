@@ -44,7 +44,7 @@ module.exports = {
 			})
 			.catch((error) => {
 				console.log(error);
-				return interaction.reply({ content: "Timed out.", ephemeral: true });
+				return null;
 			});
 
 		if (submit) {
