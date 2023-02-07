@@ -54,6 +54,7 @@ module.exports = {
 				.setDescription(submit.fields.getTextInputValue("description"))
 				.setColor(embed.color);
 
+			if (message.id == submit.customId.substring(9)) console.log("true");
 			await message.edit({ embeds: [newEmbed] });
 
 			await submit.reply({ content: "Embed edited.", ephemeral: true });
