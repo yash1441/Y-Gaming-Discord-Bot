@@ -20,14 +20,12 @@ module.exports = {
 		const fields = {
 			title: new TextInputBuilder()
 				.setCustomId("title")
-				.setPlaceholder(embed.title)
 				.setStyle(TextInputStyle.Short)
 				.setLabel("Title")
 				.setMinLength(1)
 				.setMaxLength(256),
 			description: new TextInputBuilder()
 				.setCustomId("description")
-				.setPlaceholder(embed.description)
 				.setStyle(TextInputStyle.Long)
 				.setLabel("Description")
 				.setMinLength(1)
