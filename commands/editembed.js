@@ -49,10 +49,8 @@ module.exports = {
 
 		if (submit) {
 			let newEmbed = new EmbedBuilder()
-				.setTitle(submit.fields.getTextInputValue(fields.title.customId))
-				.setDescription(
-					submit.fields.getTextInputValue(fields.description.customId)
-				);
+				.setTitle(submit.fields.getTextInputValue("title"))
+				.setDescription(submit.fields.getTextInputValue("description"));
 
 			await message.edit({ embeds: [newEmbed] });
 
