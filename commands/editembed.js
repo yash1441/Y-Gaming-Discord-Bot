@@ -22,14 +22,10 @@ module.exports = {
 				.setCustomId("title")
 				.setStyle(TextInputStyle.Short)
 				.setLabel("Title")
-				.setMinLength(1)
-				.setMaxLength(256),
 			description: new TextInputBuilder()
 				.setCustomId("description")
 				.setStyle(TextInputStyle.Long)
 				.setLabel("Description")
-				.setMinLength(1)
-				.setMaxLength(4096),
 		};
 
 		const modal = new ModalBuilder()
