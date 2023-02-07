@@ -24,7 +24,7 @@ module.exports = {
 				.setLabel("Title"),
 			description: new TextInputBuilder()
 				.setCustomId("description")
-				.setStyle(TextInputStyle.Long)
+				.setStyle(TextInputStyle.Paragraph)
 				.setLabel("Description"),
 		};
 
