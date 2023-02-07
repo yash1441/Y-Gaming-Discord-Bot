@@ -21,11 +21,11 @@ module.exports = {
 			title: new TextInputBuilder()
 				.setCustomId("title")
 				.setStyle(TextInputStyle.Short)
-				.setLabel("Title")
+				.setLabel("Title"),
 			description: new TextInputBuilder()
 				.setCustomId("description")
 				.setStyle(TextInputStyle.Long)
-				.setLabel("Description")
+				.setLabel("Description"),
 		};
 
 		const modal = new ModalBuilder()
