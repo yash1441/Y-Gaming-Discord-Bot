@@ -50,7 +50,7 @@ module.exports = {
 			})
 			.catch((error) => {
 				console.log(error);
-				return await interaction.reply({ content: "Timed out.", ephemeral: true });
+				return interaction.reply({ content: "Timed out.", ephemeral: true });
 			});
 
 		if (submit) {
