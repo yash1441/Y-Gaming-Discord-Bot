@@ -56,6 +56,8 @@ module.exports = {
 			await message.edit({ embeds: [newEmbed] });
 
 			await submit.reply({ content: "Embed edited.", ephemeral: true });
+		} else {
+			await interaction.reply({ content: "Timed out.", ephemeral: true });
 		}
 	},
 };
