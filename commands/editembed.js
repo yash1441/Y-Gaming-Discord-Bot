@@ -56,7 +56,5 @@ module.exports = {
 
 			await submit.reply({ content: "Embed edited.", ephemeral: true });
 		}
-
-		console.log(embed);
 	},
 };
