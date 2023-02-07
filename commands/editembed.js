@@ -29,7 +29,7 @@ module.exports = {
 		};
 
 		const modal = new ModalBuilder()
-			.setCustomId("editEmbed")
+			.setCustomId("editEmbed" + message.id)
 			.setTitle("Edit Embed")
 			.setComponents(
 				new ActionRowBuilder().setComponents(fields.title),
