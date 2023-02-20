@@ -112,6 +112,14 @@ client.on("interactionCreate", async (interaction) => {
 				content: "There was an error while executing this command!",
 			});
 		}
+	} else if (interaction.isModalSubmit()) {
+		if (interaction.customId === "valorant-login") {
+			await interaction.deferReply({ ephemeral: true });
+			const username = interaction.fields.getTextInputValue("username");
+			const password = interaction.fields.getTextInputValue("password");
+
+			console.log({ username, password });
+		}
 	}
 });
 
