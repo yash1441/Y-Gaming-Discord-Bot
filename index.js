@@ -383,8 +383,8 @@ async function fetchSkins(rawNightMarket) {
 			name: skin.data.data.displayName,
 			icon: skin.data.data.displayIcon,
 			offerId: record.Offer.OfferID,
-			discountPercent: record.DiscountPercent,
-			discountCosts: discountCosts,
+			discountPercent: record.DiscountPercent.toString(),
+			discountCosts: discountCosts.toString(),
 		};
 		skins.push(skinData);
 	}
