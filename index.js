@@ -33,7 +33,10 @@ const twitch = new TwitchApi({
 
 const valorantAPI = new Valorant.API(Valorant.Regions.AsiaPacific);
 
-const weapons = JSON.parse(fs.readFileSync("/Data/weapons.json"));
+const dataDirectory = path.join(__dirname, "Data");
+const weapons = JSON.parse(
+	fs.readFileSync(path.join(dataDirectory, "weapons.json"))
+);
 
 let isLive = false;
 
