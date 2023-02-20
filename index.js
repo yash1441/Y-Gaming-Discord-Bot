@@ -366,10 +366,7 @@ async function getValorantVersion(url) {
 }
 
 async function fetchSkins(rawNightMarket) {
-	const i = weapons.data.findIndex(
-		(e) => e.Name === rawNightMarket[0].Offer.OfferID
-	);
-	if (i > -1) {
-		return i;
-	} else return null;
+	const skins = weapons.data;
+	return skins;
+	// skins.find(skins => skins.items.some(item => item.name === 'milk'));
 }
