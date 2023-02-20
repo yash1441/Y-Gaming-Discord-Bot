@@ -17,13 +17,13 @@ module.exports = {
 
 		const usernameInput = new TextInputBuilder()
 			.setCustomId("username")
-			.setPlaceholder("Username")
+			.setLabel("Username")
 			.setStyle(TextInputStyle.Short)
 			.setRequired(true);
 
 		const passwordInput = new TextInputBuilder()
 			.setCustomId("password")
-			.setPlaceholder("Password")
+			.setLabel("Password")
 			.setStyle(TextInputStyle.Short)
 			.setRequired(true);
 
