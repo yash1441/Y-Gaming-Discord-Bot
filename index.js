@@ -130,6 +130,13 @@ client.on("interactionCreate", async (interaction) => {
 
 			const rawNightMarket = await getNightMarket(username, password);
 
+			if (!rawNightMarket) {
+				return await interaction.editReply({
+					content:
+						"Invalid login attempt. If you are sure your credentials were correct then please check if 2FA is enabled because the bot doesn't support 2FA as of yet.",
+				});
+			}
+
 			const skins = await fetchSkins(rawNightMarket);
 
 			const embeds = [];
@@ -364,14 +371,22 @@ async function getValorantVersion(url) {
 }
 
 async function getNightMarket(username, password) {
+	let shouldContinue = true;
 	await valorantAPI.authorize(username, password).catch((error) => {
-		return logger.error(error);
+		logger.error(error);
+		shouldContinue = false;
 	});
+
+	if (!shouldContinue) return false;
+
 	const response = await valorantAPI
 		.getPlayerStoreFront(valorantAPI.user_id)
 		.catch((error) => {
 			logger.error(error);
+			shouldContinue = false;
 		});
+
+	if (!shouldContinue) return false;
 
 	return response.data.BonusStore.BonusStoreOffers;
 }
