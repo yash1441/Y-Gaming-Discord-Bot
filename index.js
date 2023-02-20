@@ -128,19 +128,24 @@ client.on("interactionCreate", async (interaction) => {
 			const username = interaction.fields.getTextInputValue("username");
 			const password = interaction.fields.getTextInputValue("password");
 
-			valorantAPI.authorize(username, password).then((response) => {
+			let rawNightMarket;
+
+			await valorantAPI.authorize(username, password).then((response) => {
 				valorantAPI
 					.getPlayerStoreFront(valorantAPI.user_id)
 					.then((response) => {
 						interaction.editReply({
 							content: "Success",
 						});
-						console.log(response.data.BonusStore.BonusStoreOffers);
+						rawNightMarket = response.data.BonusStore.BonusStoreOffers;
 					})
 					.catch((error) => {
-						console.log(error);
+						logger.error(error);
 					});
 			});
+
+			const skins = await fetchSkins(rawNightMarket);
+			logger.debug(skins);
 		}
 	}
 });
@@ -354,4 +359,13 @@ async function getValorantVersion(url) {
 			" | Valorant API Client Version: " +
 			valorantAPI.client_version
 	);
+}
+
+async function fetchSkins(rawNightMarket) {
+	const i = weapons.findIndex(
+		(e) => e.Name === rawNightMarket[0].Offer.OfferID
+	);
+	if (i > -1) {
+		return i;
+	} else return null;
 }
