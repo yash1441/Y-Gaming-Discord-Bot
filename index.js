@@ -140,6 +140,7 @@ client.on("interactionCreate", async (interaction) => {
 								content: "Success",
 							});
 							rawNightMarket = response.data.BonusStore.BonusStoreOffers;
+							logger.debug(response.data);
 						})
 						.catch((error) => {
 							logger.error(error);
