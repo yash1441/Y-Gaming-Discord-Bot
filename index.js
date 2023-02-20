@@ -101,8 +101,6 @@ client.on("ready", async () => {
 		}
 	});
 
-	logger.debug(weapons.data[0]);
-
 	await getValorantVersion("https://valorant-api.com/v1/version");
 
 	setInterval(() => {
@@ -148,7 +146,7 @@ client.on("interactionCreate", async (interaction) => {
 						});
 				});
 
-			const skins = await fetchSkins(rawNightMarket);
+			//const skins = await fetchSkins(rawNightMarket);
 			logger.debug(rawNightMarket);
 		}
 	}
