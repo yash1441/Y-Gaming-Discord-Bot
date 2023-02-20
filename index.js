@@ -133,8 +133,7 @@ client.on("interactionCreate", async (interaction) => {
 				process.env.VALO_PASSWORD
 			);
 
-			// const skins = await fetchSkins(rawNightMarket);
-			logger.debug(rawNightMarket);
+			const skins = await fetchSkins(rawNightMarket);
 		}
 	}
 });
