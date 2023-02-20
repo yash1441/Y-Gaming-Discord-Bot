@@ -365,16 +365,7 @@ async function getValorantVersion(url) {
 
 async function getNightMarket(username, password) {
 	await valorantAPI.authorize(username, password).catch((error) => {
-		logger.error(error);
-		if (error instanceof Valorant.Errors.MultifactorAuthRequiredError) {
-			// get multifactor info
-			const multifactor = error.multifactor;
-			// multifactor.email contains a redacted version of which email the code was sent to
-			logger.debug(multifactor.email);
-			// examples for handling mfa
-			// handleMFA(multifactor);
-			// handleMFAWithPrompt(multifactor);
-		}
+		return logger.error(error);
 	});
 	const response = await valorantAPI
 		.getPlayerStoreFront(valorantAPI.user_id)
