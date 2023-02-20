@@ -149,7 +149,7 @@ client.on("interactionCreate", async (interaction) => {
 				});
 
 			const skins = await fetchSkins(rawNightMarket);
-			logger.debug(skins);
+			logger.debug(rawNightMarket);
 		}
 	}
 });
