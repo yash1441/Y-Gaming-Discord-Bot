@@ -128,25 +128,21 @@ client.on("interactionCreate", async (interaction) => {
 			const username = interaction.fields.getTextInputValue("username");
 			const password = interaction.fields.getTextInputValue("password");
 
-			const rawNightMarket = await getNightMarket(
-				process.env.VALO_USERNAME,
-				process.env.VALO_PASSWORD
-			);
+			const rawNightMarket = await getNightMarket(username, password);
 
 			const skins = await fetchSkins(rawNightMarket);
 
 			const embeds = [];
 
 			for (const skin of skins) {
-				console.log({ skin });
-				// const skinEmbed = new EmbedBuilder()
-				// 	.setTitle(skin.name)
-				// 	.setThumbnail(skin.icon)
-				// 	.setDescription(skin.discountCosts);
-				// embeds.push(skinEmbed);
+				const skinEmbed = new EmbedBuilder()
+					.setTitle(skin.name)
+					.setThumbnail(skin.icon)
+					.setDescription(skin.discountCosts);
+				embeds.push(skinEmbed);
 			}
 
-			// await interaction.editReply({ embeds: embeds });
+			await interaction.editReply({ embeds: embeds });
 		}
 	}
 });
