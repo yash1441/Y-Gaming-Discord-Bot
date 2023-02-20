@@ -352,15 +352,16 @@ async function getValorantVersion(url) {
 
 async function getNightMarket(username, password) {
 	await valorantAPI.authorize(username, password);
-	await valorantAPI
+	const response = await valorantAPI
 		.getPlayerStoreFront(valorantAPI.user_id)
 		.then((response) => {
-			logger.debug(response.data.BonusStore.BonusStoreOffers);
+			return response.data.BonusStore.BonusStoreOffers;
 		})
 		.catch((error) => {
 			logger.error(error);
 		});
-	return null;
+
+	logger.debug(response);
 }
 
 async function fetchSkins(rawNightMarket) {
