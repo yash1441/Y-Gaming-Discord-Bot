@@ -128,7 +128,7 @@ client.on("interactionCreate", async (interaction) => {
 			const username = interaction.fields.getTextInputValue("username");
 			const password = interaction.fields.getTextInputValue("password");
 
-			let rawNightMarket;
+			//let rawNightMarket;
 
 			await valorantAPI
 				.authorize(process.env.VALO_USERNAME, process.env.VALO_PASSWORD)
@@ -139,7 +139,9 @@ client.on("interactionCreate", async (interaction) => {
 							await interaction.editReply({
 								content: "Success",
 							});
-							rawNightMarket = await response.data.BonusStore.BonusStoreOffers;
+							const rawNightMarket = await response.data.BonusStore
+								.BonusStoreOffers;
+							logger.debug(rawNightMarket);
 						})
 						.catch((error) => {
 							logger.error(error);
@@ -147,7 +149,7 @@ client.on("interactionCreate", async (interaction) => {
 				});
 
 			// const skins = await fetchSkins(rawNightMarket);
-			logger.debug(rawNightMarket);
+			//logger.debug(rawNightMarket);
 		}
 	}
 });
