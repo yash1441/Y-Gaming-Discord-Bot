@@ -140,7 +140,6 @@ client.on("interactionCreate", async (interaction) => {
 								content: "Success",
 							});
 							rawNightMarket = response.data.BonusStore.BonusStoreOffers;
-							logger.debug(response.data.BonusStore.BonusStoreOffers);
 						})
 						.catch((error) => {
 							logger.error(error);
@@ -148,7 +147,7 @@ client.on("interactionCreate", async (interaction) => {
 				});
 
 			// const skins = await fetchSkins(rawNightMarket);
-			// logger.debug(rawNightMarket);
+			logger.debug(rawNightMarket);
 		}
 	}
 });
