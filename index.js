@@ -138,7 +138,7 @@ client.on("interactionCreate", async (interaction) => {
 			const embeds = [];
 
 			for (const skin of skins) {
-				logger.debug(skin);
+				logger.debug({ skin });
 				// const skinEmbed = new EmbedBuilder()
 				// 	.setTitle(skin.name)
 				// 	.setThumbnail(skin.icon)
