@@ -101,7 +101,7 @@ client.on("ready", async () => {
 		}
 	});
 
-	if (weapons.data.length > 1) logger.debug("Weapons loaded successfully");
+	logger.debug(weapons.data[0]);
 
 	await getValorantVersion("https://valorant-api.com/v1/version");
 
