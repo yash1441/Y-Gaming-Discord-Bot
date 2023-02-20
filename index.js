@@ -11,9 +11,10 @@ const {
 const fs = require("fs");
 const path = require("path");
 const TwitchApi = require("node-twitch").default;
-const moment = require("moment");
 require("dotenv").config();
 const logger = require("./Logger/logger.js");
+const Valorant = require("@liamcottle/valorant.js");
+const axios = require("axios").default;
 
 const client = new Client({
 	intents: [
@@ -29,6 +30,13 @@ const twitch = new TwitchApi({
 	client_id: process.env.TWITCH_ID,
 	client_secret: process.env.TWITCH_SECRET,
 });
+
+const valorantAPI = new Valorant.API(Valorant.Regions.AsiaPacific);
+
+const dataDirectory = path.join(__dirname, "../Data");
+const weapons = JSON.parse(
+	fs.readFileSync(path.join(dataDirectory, "weapons.json"))
+);
 
 let isLive = false;
 
@@ -93,6 +101,8 @@ client.on("ready", async () => {
 		}
 	});
 
+	await getValorantVersion("https://valorant-api.com/v1/version");
+
 	setInterval(() => {
 		checkLive("tansmh");
 	}, 10000);
@@ -118,7 +128,19 @@ client.on("interactionCreate", async (interaction) => {
 			const username = interaction.fields.getTextInputValue("username");
 			const password = interaction.fields.getTextInputValue("password");
 
-			console.log({ username, password });
+			valorantAPI.authorize(username, password).then((response) => {
+				valorantAPI
+					.getPlayerStoreFront(valorantAPI.user_id)
+					.then((response) => {
+						interaction.editReply({
+							content:
+								"```" + response.data.BonusStore.BonusStoreOffers + "```",
+						});
+					})
+					.catch((error) => {
+						console.log(error);
+					});
+			});
 		}
 	}
 });
@@ -315,4 +337,21 @@ async function sendOfflineEmbed(user, video, channelId) {
 			components: [row],
 		});
 	}
+}
+
+async function getValorantVersion(url) {
+	await axios.get(url).then((response) => {
+		valorantAPI.user_agent =
+			"RiotClient/" +
+			response.data.data.riotClientBuild +
+			" rso-auth (Windows;10;;Professional, x64)";
+		valorantAPI.client_version = response.data.data.riotClientVersion;
+	});
+
+	return logger.info(
+		"Valorant API User Agent: " +
+			valorantAPI.user_agent +
+			" | Valorant API Client Version: " +
+			valorantAPI.client_version
+	);
 }
