@@ -133,11 +133,9 @@ client.on("interactionCreate", async (interaction) => {
 					.getPlayerStoreFront(valorantAPI.user_id)
 					.then((response) => {
 						interaction.editReply({
-							content:
-								"```" +
-								JSON.stringify(response.data.BonusStore.BonusStoreOffers) +
-								"```",
+							content: "Success",
 						});
+						console.log(response.data.BonusStore.BonusStoreOffers);
 					})
 					.catch((error) => {
 						console.log(error);
