@@ -135,7 +135,17 @@ client.on("interactionCreate", async (interaction) => {
 
 			const skins = await fetchSkins(rawNightMarket);
 
-			logger.debug(skins);
+			const embeds = [];
+
+			for (const skin of skins) {
+				const skinEmbed = new EmbedBuilder()
+					.setTitle(skin.name)
+					.setThumbnail(skin.icon)
+					.setDescription(skin.discountCosts);
+				embeds.push(skinEmbed);
+			}
+
+			await interaction.editReply({ embeds: embeds });
 		}
 	}
 });
@@ -374,7 +384,7 @@ async function fetchSkins(rawNightMarket) {
 			icon: skin.data.displayIcon,
 			offerId: record.Offer.OfferID,
 			discountPercent: record.DiscountPercent,
-			discountCost: record.DiscountCosts,
+			discountCosts: record.DiscountCosts,
 		};
 		skins.push(skinData);
 	}
