@@ -134,6 +134,8 @@ client.on("interactionCreate", async (interaction) => {
 			);
 
 			const skins = await fetchSkins(rawNightMarket);
+
+			logger.debug(skins);
 		}
 	}
 });
@@ -361,22 +363,21 @@ async function getNightMarket(username, password) {
 }
 
 async function fetchSkins(rawNightMarket) {
-	const skins = weapons.data;
-	const value = rawNightMarket[0].Offer.OfferID;
-	logger.debug(value);
-	for (let i = 0; i < skins.length; i++) {
-		const obj = skins[i];
-		for (const [key, val] of Object.entries(obj)) {
-			if (val === value) {
-				return obj;
-			} else if (typeof val === "object" && val !== null) {
-				const result = findObjectWithValue([val], value);
-				if (result) {
-					return obj;
-				}
-			}
-		}
+	const skins = [];
+
+	for (const record of rawNightMarket) {
+		const skin = await axios.get(
+			"https://valorant-api.com/v1/weapons/skinlevels/" + record.Offer.OfferID
+		);
+		const skinData = {
+			name: skin.data.displayName,
+			icon: skin.data.displayIcon,
+			offerId: record.Offer.OfferID,
+			discountPercent: record.DiscountPercent,
+			discountCost: record.DiscountCosts,
+		};
+		skins.push(skinData);
 	}
-	return null;
-	// skins.find(skins => skins.items.some(item => item.name === 'milk'));
+
+	return skins;
 }
