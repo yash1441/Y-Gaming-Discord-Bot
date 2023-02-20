@@ -136,7 +136,6 @@ client.on("interactionCreate", async (interaction) => {
 
 			for (const skin of skins) {
 				const skinEmbed = new EmbedBuilder()
-					.setAuthor()
 					.setColor("#36393F")
 					.setTitle(skin.name)
 					.setThumbnail(skin.icon)
