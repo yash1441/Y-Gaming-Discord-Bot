@@ -128,28 +128,13 @@ client.on("interactionCreate", async (interaction) => {
 			const username = interaction.fields.getTextInputValue("username");
 			const password = interaction.fields.getTextInputValue("password");
 
-			//let rawNightMarket;
-
-			await valorantAPI
-				.authorize(process.env.VALO_USERNAME, process.env.VALO_PASSWORD)
-				.then((response) => {
-					valorantAPI
-						.getPlayerStoreFront(valorantAPI.user_id)
-						.then(async (response) => {
-							await interaction.editReply({
-								content: "Success",
-							});
-							const rawNightMarket = await response.data.BonusStore
-								.BonusStoreOffers;
-							logger.debug(rawNightMarket);
-						})
-						.catch((error) => {
-							logger.error(error);
-						});
-				});
+			const rawNightMarket = await getNightMarket(
+				process.env.VALO_USERNAME,
+				process.env.VALO_PASSWORD
+			);
 
 			// const skins = await fetchSkins(rawNightMarket);
-			//logger.debug(rawNightMarket);
+			logger.debug(rawNightMarket);
 		}
 	}
 });
@@ -363,6 +348,22 @@ async function getValorantVersion(url) {
 			" | Valorant API Client Version: " +
 			valorantAPI.client_version
 	);
+}
+
+async function getNightMarket(username, password) {
+	await valorantAPI
+		.authorize(process.env.VALO_USERNAME, process.env.VALO_PASSWORD)
+		.then(() => {
+			valorantAPI
+				.getPlayerStoreFront(valorantAPI.user_id)
+				.then((response) => {
+					return response.data.BonusStore.BonusStoreOffers;
+				})
+				.catch((error) => {
+					logger.error(error);
+				});
+		});
+	return null;
 }
 
 async function fetchSkins(rawNightMarket) {
