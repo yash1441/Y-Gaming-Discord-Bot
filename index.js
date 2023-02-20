@@ -367,6 +367,21 @@ async function getValorantVersion(url) {
 
 async function fetchSkins(rawNightMarket) {
 	const skins = weapons.data;
-	return skins;
+	const value = rawNightMarket[0].Offer.OfferID;
+	logger.debug(value);
+	for (let i = 0; i < skins.length; i++) {
+		const obj = skins[i];
+		for (const [key, val] of Object.entries(obj)) {
+			if (val === value) {
+				return obj;
+			} else if (typeof val === "object" && val !== null) {
+				const result = findObjectWithValue([val], value);
+				if (result) {
+					return obj;
+				}
+			}
+		}
+	}
+	return null;
 	// skins.find(skins => skins.items.some(item => item.name === 'milk'));
 }
