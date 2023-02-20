@@ -138,14 +138,15 @@ client.on("interactionCreate", async (interaction) => {
 			const embeds = [];
 
 			for (const skin of skins) {
-				const skinEmbed = new EmbedBuilder()
-					.setTitle(skin.name)
-					.setThumbnail(skin.icon)
-					.setDescription(skin.discountCosts);
-				embeds.push(skinEmbed);
+				logger.debug(skins);
+				// const skinEmbed = new EmbedBuilder()
+				// 	.setTitle(skin.name)
+				// 	.setThumbnail(skin.icon)
+				// 	.setDescription(skin.discountCosts);
+				// embeds.push(skinEmbed);
 			}
 
-			await interaction.editReply({ embeds: embeds });
+			// await interaction.editReply({ embeds: embeds });
 		}
 	}
 });
