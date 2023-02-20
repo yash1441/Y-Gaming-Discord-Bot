@@ -351,17 +351,14 @@ async function getValorantVersion(url) {
 }
 
 async function getNightMarket(username, password) {
+	await valorantAPI.authorize(username, password);
 	await valorantAPI
-		.authorize(process.env.VALO_USERNAME, process.env.VALO_PASSWORD)
-		.then(() => {
-			valorantAPI
-				.getPlayerStoreFront(valorantAPI.user_id)
-				.then((response) => {
-					return response.data.BonusStore.BonusStoreOffers;
-				})
-				.catch((error) => {
-					logger.error(error);
-				});
+		.getPlayerStoreFront(valorantAPI.user_id)
+		.then((response) => {
+			return response.data.BonusStore.BonusStoreOffers;
+		})
+		.catch((error) => {
+			logger.error(error);
 		});
 	return null;
 }
