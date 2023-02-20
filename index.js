@@ -130,21 +130,28 @@ client.on("interactionCreate", async (interaction) => {
 
 			let rawNightMarket;
 
-			await valorantAPI
-				.authorize(process.env.VALO_USERNAME, process.env.VALO_PASSWORD)
-				.then((response) => {
-					valorantAPI
-						.getPlayerStoreFront(valorantAPI.user_id)
-						.then((response) => {
-							interaction.editReply({
-								content: "Success",
-							});
-							rawNightMarket = response.data.BonusStore.BonusStoreOffers;
-						})
-						.catch((error) => {
-							logger.error(error);
-						});
-				});
+			const auth = await valorantAPI.authorize(
+				process.env.VALO_USERNAME,
+				process.env.VALO_PASSWORD
+			);
+
+			logger.debug(auth);
+
+			// await valorantAPI
+			// 	.authorize(process.env.VALO_USERNAME, process.env.VALO_PASSWORD)
+			// 	.then((response) => {
+			// 		valorantAPI
+			// 			.getPlayerStoreFront(valorantAPI.user_id)
+			// 			.then((response) => {
+			// 				interaction.editReply({
+			// 					content: "Success",
+			// 				});
+			// 				rawNightMarket = response.data.BonusStore.BonusStoreOffers;
+			// 			})
+			// 			.catch((error) => {
+			// 				logger.error(error);
+			// 			});
+			// 	});
 
 			// const skins = await fetchSkins(rawNightMarket);
 			logger.debug(rawNightMarket);
