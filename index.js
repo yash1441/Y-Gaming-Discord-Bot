@@ -364,7 +364,9 @@ async function getValorantVersion(url) {
 }
 
 async function getNightMarket(username, password) {
-	await valorantAPI.authorize(username, password);
+	await valorantAPI.authorize(username, password).catch((error) => {
+		logger.error(error);
+	});
 	const response = await valorantAPI
 		.getPlayerStoreFront(valorantAPI.user_id)
 		.catch((error) => {
