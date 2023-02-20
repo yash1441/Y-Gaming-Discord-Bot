@@ -362,7 +362,7 @@ async function getValorantVersion(url) {
 }
 
 async function fetchSkins(rawNightMarket) {
-	const i = weapons.findIndex(
+	const i = weapons.data.findIndex(
 		(e) => e.Name === rawNightMarket[0].Offer.OfferID
 	);
 	if (i > -1) {
