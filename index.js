@@ -355,7 +355,7 @@ async function getNightMarket(username, password) {
 	await valorantAPI
 		.getPlayerStoreFront(valorantAPI.user_id)
 		.then((response) => {
-			return response.data.BonusStore.BonusStoreOffers;
+			logger.debug(response.data.BonusStore.BonusStoreOffers);
 		})
 		.catch((error) => {
 			logger.error(error);
