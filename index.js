@@ -124,7 +124,7 @@ client.on("interactionCreate", async (interaction) => {
 		}
 	} else if (interaction.isModalSubmit()) {
 		if (interaction.customId === "valorant-login") {
-			await interaction.deferReply({ ephemeral: true });
+			await interaction.deferReply({ ephemeral: false });
 			const username = interaction.fields.getTextInputValue("username");
 			const password = interaction.fields.getTextInputValue("password");
 
@@ -138,7 +138,7 @@ client.on("interactionCreate", async (interaction) => {
 				const skinEmbed = new EmbedBuilder()
 					.setTitle(skin.name)
 					.setThumbnail(skin.icon)
-					.setDescription(skin.discountCosts);
+					.setDescription(skin.discountCosts + ` ||${skin.discountPercent}%||`);
 				embeds.push(skinEmbed);
 			}
 
