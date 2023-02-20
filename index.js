@@ -380,10 +380,9 @@ async function fetchSkins(rawNightMarket) {
 		const skin = await axios.get(
 			"https://valorant-api.com/v1/weapons/skinlevels/" + record.Offer.OfferID
 		);
-		console.log({ skin });
 		const skinData = {
-			name: skin.data.displayName,
-			icon: skin.data.displayIcon,
+			name: skin.data.data.displayName,
+			icon: skin.data.data.displayIcon,
 			offerId: record.Offer.OfferID,
 			discountPercent: record.DiscountPercent,
 			discountCosts: record.DiscountCosts,
