@@ -134,7 +134,9 @@ client.on("interactionCreate", async (interaction) => {
 					.then((response) => {
 						interaction.editReply({
 							content:
-								"```" + response.data.BonusStore.BonusStoreOffers + "```",
+								"```" +
+								JSON.stringify(response.data.BonusStore.BonusStoreOffers) +
+								"```",
 						});
 					})
 					.catch((error) => {
