@@ -101,6 +101,8 @@ client.on("ready", async () => {
 		}
 	});
 
+	if (weapons.data.length > 1) logger.debug("Weapons loaded successfully");
+
 	await getValorantVersion("https://valorant-api.com/v1/version");
 
 	setInterval(() => {
@@ -130,19 +132,21 @@ client.on("interactionCreate", async (interaction) => {
 
 			let rawNightMarket;
 
-			await valorantAPI.authorize(username, password).then((response) => {
-				valorantAPI
-					.getPlayerStoreFront(valorantAPI.user_id)
-					.then((response) => {
-						interaction.editReply({
-							content: "Success",
+			await valorantAPI
+				.authorize(process.env.VALO_USERNAME, process.env.VALO_PASSWORD)
+				.then((response) => {
+					valorantAPI
+						.getPlayerStoreFront(valorantAPI.user_id)
+						.then((response) => {
+							interaction.editReply({
+								content: "Success",
+							});
+							rawNightMarket = response.data.BonusStore.BonusStoreOffers;
+						})
+						.catch((error) => {
+							logger.error(error);
 						});
-						rawNightMarket = response.data.BonusStore.BonusStoreOffers;
-					})
-					.catch((error) => {
-						logger.error(error);
-					});
-			});
+				});
 
 			const skins = await fetchSkins(rawNightMarket);
 			logger.debug(skins);
