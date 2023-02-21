@@ -53,7 +53,7 @@ module.exports = {
 				.setTitle(submit.fields.getTextInputValue("title"))
 				.setDescription(
 					submit.fields.getTextInputValue("description") +
-						"<:RAUL_INDENT:700506263167172738>"
+						" <:RAUL_INDENT:700506263167172738>"
 				)
 				.setColor(embed.color);
 
