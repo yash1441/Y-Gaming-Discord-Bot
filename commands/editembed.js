@@ -51,13 +51,16 @@ module.exports = {
 		if (submit) {
 			let newEmbed = new EmbedBuilder()
 				.setTitle(submit.fields.getTextInputValue("title"))
-				.setDescription(submit.fields.getTextInputValue("description"))
+				.setDescription(
+					submit.fields.getTextInputValue("description") +
+						"<:RAUL_INDENT:700506263167172738>"
+				)
 				.setColor(embed.color);
 
 			if (message.id == submit.customId.substring(9)) {
 				await message.edit({ embeds: [newEmbed] });
 				await submit.reply({
-					content: "<:RAUL_INDENT:700506263167172738> Embed edited.",
+					content: "Embed edited.",
 					ephemeral: true,
 				});
 			}
