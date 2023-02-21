@@ -56,7 +56,10 @@ module.exports = {
 
 			if (message.id == submit.customId.substring(9)) {
 				await message.edit({ embeds: [newEmbed] });
-				await submit.reply({ content: "Embed edited.", ephemeral: true });
+				await submit.reply({
+					content: "<:RAUL_INDENT:700506263167172738> Embed edited.",
+					ephemeral: true,
+				});
 			}
 		} else {
 			await interaction.reply({ content: "Timed out.", ephemeral: true });
