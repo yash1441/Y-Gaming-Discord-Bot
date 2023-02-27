@@ -4,7 +4,7 @@ const path = require("path");
 const HenrikDevValorantAPI = require("unofficial-valorant-api");
 const vapi = new HenrikDevValorantAPI();
 const Jimp = require("jimp");
-const logger = require("./Logger/logger.js");
+const logger = require("../Logger/logger.js");
 
 const dataDirectory = path.join(__dirname, "../Data");
 const agents = JSON.parse(
