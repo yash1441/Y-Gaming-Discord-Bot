@@ -275,7 +275,8 @@ async function createScoreboard(interaction, players, map, date, file) {
 
 	for (i = 0, id = 0; i < 500; i += 100, id += 1) {
 		// Agent
-		if (!players.red[id].character == undefined) logger.debug(players.red[id]);
+		logger.debug(players.red[id]);
+
 		mapImage.composite(
 			eval(players.red[id].character.replace("/", "_")),
 			agentX,
