@@ -4,6 +4,7 @@ const path = require("path");
 const HenrikDevValorantAPI = require("unofficial-valorant-api");
 const vapi = new HenrikDevValorantAPI();
 const Jimp = require("jimp");
+const logger = require("./Logger/logger.js");
 
 const dataDirectory = path.join(__dirname, "../Data");
 const agents = JSON.parse(
@@ -165,6 +166,8 @@ async function createScoreboard(players, map, date, file) {
 	const scoreboardImage = await Jimp.read("ValorantScoreboardOverlay.png");
 	let mapImage;
 
+	logger.debug("Loading agent images...");
+
 	const Fade = await Jimp.read(agents.Fade["displayIcon"]);
 	const Breach = await Jimp.read(agents.Breach["displayIcon"]);
 	const Raze = await Jimp.read(agents.Raze["displayIcon"]);
@@ -207,6 +210,8 @@ async function createScoreboard(players, map, date, file) {
 	Phoenix.resize(64, 64);
 	Harbor.resize(64, 64);
 
+	logger.debug("Loading map images...");
+
 	switch (map) {
 		case "Ascent":
 			mapImage = await Jimp.read(maps.Ascent["splash"]);
@@ -234,6 +239,7 @@ async function createScoreboard(players, map, date, file) {
 			break;
 		case "Lotus":
 			mapImage = await Jimp.read(maps.Lotus["splash"]);
+			logger.debug("Lotus map image loaded.");
 			break;
 		default:
 			mapImage = await Jimp.read(maps["The Range"]);
