@@ -244,7 +244,9 @@ async function createScoreboard(players, map, date, file) {
 			mapImage = await Jimp.read(maps["The Range"]);
 			break;
 	}
-	mapImage.resize(1920, 1080);
+	await mapImage.resize(1920, 1080);
+
+	logger.debug("Loading fonts...");
 
 	const font32 = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE);
 	const font64 = await Jimp.loadFont(Jimp.FONT_SANS_64_WHITE);
@@ -265,6 +267,8 @@ async function createScoreboard(players, map, date, file) {
 	const mapX = 960,
 		mapY = 10,
 		mapDiff = 12.5;
+
+	logger.debug("Creating scoreboard...");
 
 	mapImage.composite(scoreboardImage, 0, 0);
 
