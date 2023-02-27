@@ -74,6 +74,7 @@ module.exports = {
 			})
 			.then((response) => {
 				match = response;
+				console.log(response);
 			})
 			.catch((er) => {
 				console.log(er);
@@ -152,8 +153,6 @@ module.exports = {
 
 			players.blue.push(temp);
 		}
-
-		console.log({ players });
 
 		await createScoreboard(interaction, players, map, date, file);
 
