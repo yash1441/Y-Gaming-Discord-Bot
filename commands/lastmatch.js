@@ -64,17 +64,19 @@ module.exports = {
 			match;
 		valoId = interaction.options.getString("username").split("#", 2);
 
+		const region = interaction.options.getString("region");
+		const mode = interaction.options.getString("mode");
+
 		await vapi
 			.getMatches({
-				region: interaction.options.getString("region"),
+				region: region,
 				name: valoId[0],
 				tag: valoId[1],
 				size: 1,
-				filter: interaction.options.getString("mode"),
+				filter: mode,
 			})
 			.then((response) => {
 				match = response;
-				console.log(response);
 			})
 			.catch((er) => {
 				console.log(er);
@@ -99,6 +101,12 @@ module.exports = {
 			});
 			return;
 		}
+
+		if (mode == "Custom" && match.data[0].metadata.queue != "Standard")
+			return await interaction.editReply({
+				content:
+					"Last custom match was not a Standard game which is the only type of Custom game that is supported.",
+			});
 
 		const players = {
 			red: [],
