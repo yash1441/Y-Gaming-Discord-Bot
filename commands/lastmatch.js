@@ -275,11 +275,13 @@ async function createScoreboard(interaction, players, map, date, file) {
 
 	for (i = 0, id = 0; i < 500; i += 100, id += 1) {
 		// Agent
+		logger.debug("Agent: " + players.red[id].character);
 		mapImage.composite(
 			eval(players.red[id].character.replace("/", "_")),
 			agentX,
 			agentY + i
 		); //Red
+		logger.debug("Agent: " + players.blue[id].character);
 		mapImage.composite(
 			eval(players.blue[id].character.replace("/", "_")),
 			agentX + agentDiff,
