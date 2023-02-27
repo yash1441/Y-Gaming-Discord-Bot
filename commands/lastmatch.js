@@ -210,7 +210,7 @@ async function createScoreboard(players, map, date, file) {
 	Phoenix.resize(64, 64);
 	Harbor.resize(64, 64);
 
-	logger.debug("Loading map image for " + map + "...");
+	logger.debug("Loading map image for " + map + "...\n" + maps.Lotus["splash"]);
 
 	switch (map) {
 		case "Ascent":
