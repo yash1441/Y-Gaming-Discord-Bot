@@ -45,7 +45,7 @@ module.exports = {
 					{ name: "Unrated", value: "Unrated" },
 					{ name: "Swiftplay", value: "Swiftplay" },
 					{ name: "Replication", value: "Replication" },
-					{ name: "Spike Rush", value: "Spikerush" },
+					{ name: "Spikerush", value: "Spikerush" },
 					{ name: "Custom", value: "Custom" }
 				)
 		),
@@ -155,7 +155,7 @@ module.exports = {
 
 		await createScoreboard(interaction, players, map, date, file);
 
-		await interaction.editReply({ files: [file] });
+		await interaction.editReply({ content: "", files: [file] });
 
 		fs.unlinkSync(file);
 	},
@@ -269,7 +269,7 @@ async function createScoreboard(interaction, players, map, date, file) {
 		mapY = 10,
 		mapDiff = 12.5;
 
-	logger.debug("Creating scoreboard...");
+	await interaction.editReply({ content: "Creating scoreboard..." });
 
 	mapImage.composite(scoreboardImage, 0, 0);
 
