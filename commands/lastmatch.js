@@ -275,13 +275,14 @@ async function createScoreboard(interaction, players, map, date, file) {
 
 	for (i = 0, id = 0; i < 500; i += 100, id += 1) {
 		// Agent
-		if (!players.red[id] == undefined) logger.debug(players.red[id]);
+		if (!players.red[id].character == undefined) logger.debug(players.red[id]);
 		mapImage.composite(
 			eval(players.red[id].character.replace("/", "_")),
 			agentX,
 			agentY + i
 		); //Red
-		if (!players.blue[id] == undefined) logger.debug(players.blue[id]);
+		if (!players.blue[id].character == undefined)
+			logger.debug(players.blue[id]);
 		mapImage.composite(
 			eval(players.blue[id].character.replace("/", "_")),
 			agentX + agentDiff,
