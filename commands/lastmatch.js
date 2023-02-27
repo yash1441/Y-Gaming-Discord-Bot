@@ -238,7 +238,7 @@ async function createScoreboard(players, map, date, file) {
 			mapImage = await Jimp.read(maps.Pearl["splash"]);
 			break;
 		case "Lotus":
-			mapImage = await Jimp.read(maps.Lotus["splash"]);
+			mapImage = await Jimp.read("./Images/Maps/Lotus.png");
 			break;
 		default:
 			mapImage = await Jimp.read(maps["The Range"]);
