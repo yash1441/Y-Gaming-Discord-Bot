@@ -10,7 +10,6 @@ const dataDirectory = path.join(__dirname, "../Data");
 const agents = JSON.parse(
 	fs.readFileSync(path.join(dataDirectory, "agents.json"))
 );
-const maps = JSON.parse(fs.readFileSync(path.join(dataDirectory, "maps.json")));
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -46,7 +45,7 @@ module.exports = {
 					{ name: "Unrated", value: "Unrated" },
 					{ name: "Swiftplay", value: "Swiftplay" },
 					{ name: "Replication", value: "Replication" },
-					{ name: "Spike Rush", value: "Spike Rush" },
+					{ name: "Spike Rush", value: "Spikerush" },
 					{ name: "Custom", value: "Custom" }
 				)
 		),
@@ -154,7 +153,7 @@ module.exports = {
 			players.blue.push(temp);
 		});
 
-		await createScoreboard(players, map, date, file);
+		await createScoreboard(interaction, players, map, date, file);
 
 		await interaction.editReply({ files: [file] });
 
@@ -162,11 +161,11 @@ module.exports = {
 	},
 };
 
-async function createScoreboard(players, map, date, file) {
+async function createScoreboard(interaction, players, map, date, file) {
 	const scoreboardImage = await Jimp.read("ValorantScoreboardOverlay.png");
 	let mapImage;
 
-	logger.debug("Loading agent images...");
+	await interaction.editReply({ content: "Loading agent images..." });
 
 	const Fade = await Jimp.read(agents.Fade["displayIcon"]);
 	const Breach = await Jimp.read(agents.Breach["displayIcon"]);
@@ -210,43 +209,45 @@ async function createScoreboard(players, map, date, file) {
 	Phoenix.resize(64, 64);
 	Harbor.resize(64, 64);
 
-	logger.debug("Loading map image for " + map + "...\n" + maps.Lotus["splash"]);
+	await interaction.editReply({
+		content: "Loading map image for " + map + "...",
+	});
 
 	switch (map) {
 		case "Ascent":
-			mapImage = await Jimp.read(maps.Ascent["splash"]);
+			mapImage = await Jimp.read("./Images/Maps/Ascent.png");
 			break;
 		case "Bind":
-			mapImage = await Jimp.read(maps.Bind["splash"]);
+			mapImage = await Jimp.read("./Images/Maps/Bind.png");
 			break;
 		case "Haven":
-			mapImage = await Jimp.read(maps.Haven["splash"]);
+			mapImage = await Jimp.read("./Images/Maps/Haven.png");
 			break;
 		case "Split":
-			mapImage = await Jimp.read(maps.Split["splash"]);
+			mapImage = await Jimp.read("./Images/Maps/Split.png");
 			break;
 		case "Icebox":
-			mapImage = await Jimp.read(maps.Icebox["splash"]);
+			mapImage = await Jimp.read("./Images/Maps/Icebox.png");
 			break;
 		case "Breeze":
-			mapImage = await Jimp.read(maps.Breeze["splash"]);
+			mapImage = await Jimp.read("./Images/Maps/Breeze.png");
 			break;
 		case "Fracture":
-			mapImage = await Jimp.read(maps.Fracture["splash"]);
+			mapImage = await Jimp.read("./Images/Maps/Fracture.png");
 			break;
 		case "Pearl":
-			mapImage = await Jimp.read(maps.Pearl["splash"]);
+			mapImage = await Jimp.read("./Images/Maps/Pearl.png");
 			break;
 		case "Lotus":
 			mapImage = await Jimp.read("./Images/Maps/Lotus.png");
 			break;
 		default:
-			mapImage = await Jimp.read(maps["The Range"]);
+			mapImage = await Jimp.read("./Images/Maps/The Range.png");
 			break;
 	}
 	await mapImage.resize(1920, 1080);
 
-	logger.debug("Loading fonts...");
+	await interaction.editReply({ content: "Loading fonts..." });
 
 	const font32 = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE);
 	const font64 = await Jimp.loadFont(Jimp.FONT_SANS_64_WHITE);
