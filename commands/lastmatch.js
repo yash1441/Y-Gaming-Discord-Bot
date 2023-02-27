@@ -99,20 +99,20 @@ module.exports = {
 			return;
 		}
 
-		let players = {
+		const players = {
 			red: [],
 			blue: [],
 			red_score: match.data[0].teams.red.rounds_won,
 			blue_score: match.data[0].teams.blue.rounds_won,
 		};
 
-		let map = match.data[0].metadata.map;
-		let date = match.data[0].metadata.game_start_patched;
-		let matchid = match.data[0].metadata.matchid;
-		let file = `${matchid}.png`;
+		const map = match.data[0].metadata.map;
+		const date = match.data[0].metadata.game_start_patched;
+		const matchid = match.data[0].metadata.matchid;
+		const file = `${matchid}.png`;
 
-		match.data[0].players.red.forEach(function (player) {
-			let temp = {
+		for (const player of match.data[0].players.red) {
+			const temp = {
 				puuid: player.puuid,
 				name: player.name,
 				tag: player.tag,
@@ -130,10 +130,10 @@ module.exports = {
 			};
 
 			players.red.push(temp);
-		});
+		}
 
-		match.data[0].players.blue.forEach(function (player) {
-			let temp = {
+		for (const player of match.data[0].players.blue) {
+			const temp = {
 				puuid: player.puuid,
 				name: player.name,
 				tag: player.tag,
@@ -151,7 +151,7 @@ module.exports = {
 			};
 
 			players.blue.push(temp);
-		});
+		}
 
 		await createScoreboard(interaction, players, map, date, file);
 
