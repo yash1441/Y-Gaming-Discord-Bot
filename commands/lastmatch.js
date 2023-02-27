@@ -34,6 +34,20 @@ module.exports = {
 				.setName("username")
 				.setDescription("Valorant username with hashtag. Example: Name#Tag")
 				.setRequired(true)
+		)
+		.addStringOption((option) =>
+			option
+				.setName("mode")
+				.setDescription("Valorant game mode")
+				.setRequired(false)
+				.addChoices(
+					{ name: "Competitive", value: "Competitive" },
+					{ name: "Unrated", value: "Unrated" },
+					{ name: "Swiftplay", value: "Swiftplay" },
+					{ name: "Replication", value: "Replication" },
+					{ name: "Spike Rush", value: "Spike Rush" },
+					{ name: "Custom", value: "Custom" }
+				)
 		),
 	async execute(interaction, client) {
 		await interaction.deferReply();
@@ -56,7 +70,7 @@ module.exports = {
 				name: valoId[0],
 				tag: valoId[1],
 				size: 1,
-				filter: "Competitive",
+				filter: interaction.options.getString("mode"),
 			})
 			.then((response) => {
 				match = response;
