@@ -210,7 +210,7 @@ async function createScoreboard(players, map, date, file) {
 	Phoenix.resize(64, 64);
 	Harbor.resize(64, 64);
 
-	logger.debug("Loading map images...");
+	logger.debug("Loading map image for " + map + "...");
 
 	switch (map) {
 		case "Ascent":
@@ -239,7 +239,6 @@ async function createScoreboard(players, map, date, file) {
 			break;
 		case "Lotus":
 			mapImage = await Jimp.read(maps.Lotus["splash"]);
-			logger.debug("Lotus map image loaded.");
 			break;
 		default:
 			mapImage = await Jimp.read(maps["The Range"]);
