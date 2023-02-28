@@ -41,6 +41,19 @@ module.exports = {
 				.setColor("FA4454")
 				.setImage(bundleData.data.data.displayIcon);
 
+			if (
+				bundleData.data.data.promoDescription !=
+				bundleData.data.data.extraDescription
+			) {
+				embed.setDescription(
+					bundleData.data.data.extraDescription +
+						"\n\n" +
+						bundleData.data.data.promoDescription
+				);
+			} else if (bundleData.data.data.extraDescription) {
+				embed.setDescription(bundleData.data.data.extraDescription);
+			}
+
 			embeds.push(embed);
 		}
 
