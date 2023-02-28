@@ -32,7 +32,7 @@ module.exports = {
 		const embeds = [];
 
 		for (const bundle of store.data) {
-			const bundleUUID = bundle.uuid;
+			const bundleUUID = bundle.bundle_uuid;
 			const bundleData = await axios.get(
 				`https://valorant-api.com/v1/bundles/${bundleUUID}`
 			);
