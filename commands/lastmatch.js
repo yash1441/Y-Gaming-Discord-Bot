@@ -196,6 +196,7 @@ async function createScoreboard(interaction, players, map, date, file) {
 	const Yoru = await Jimp.read(agents.Yoru["displayIcon"]);
 	const Phoenix = await Jimp.read(agents.Phoenix["displayIcon"]);
 	const Harbor = await Jimp.read(agents.Harbor["displayIcon"]);
+	const Gekko = await Jimp.read(agents.Gekko["displayIcon"]);
 
 	Fade.resize(64, 64);
 	Breach.resize(64, 64);
@@ -217,6 +218,7 @@ async function createScoreboard(interaction, players, map, date, file) {
 	Yoru.resize(64, 64);
 	Phoenix.resize(64, 64);
 	Harbor.resize(64, 64);
+	Gekko.resize(64, 64);
 
 	await interaction.editReply({
 		content: "Loading map image for " + map + "...",
