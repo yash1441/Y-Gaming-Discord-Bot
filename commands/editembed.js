@@ -17,6 +17,10 @@ module.exports = {
 		const message = interaction.targetMessage;
 		const embed = message.embeds[0];
 
+		if (embed == undefined) {
+			await interaction.reply({ content: "No embed found.", ephemeral: true });
+		}
+
 		const fields = {
 			title: new TextInputBuilder()
 				.setCustomId("title")
