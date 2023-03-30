@@ -18,7 +18,10 @@ module.exports = {
 		const embed = message.embeds[0];
 
 		if (embed == undefined) {
-			await interaction.reply({ content: "No embed found.", ephemeral: true });
+			return await interaction.reply({
+				content: "No embed found.",
+				ephemeral: true,
+			});
 		}
 
 		const fields = {
