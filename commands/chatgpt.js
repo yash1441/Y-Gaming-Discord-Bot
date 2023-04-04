@@ -1,6 +1,4 @@
 const { SlashCommandBuilder } = require("discord.js");
-const fs = require("fs");
-const request = require("request-promise");
 const { Configuration, OpenAIApi } = require("openai");
 
 const configuration = new Configuration({
