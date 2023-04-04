@@ -20,13 +20,21 @@ module.exports = {
 		),
 	async execute(interaction, client) {
 		await interaction.reply({ content: "Getting your login info..." });
-		let prompt = interaction.options.getString("prompt");
+		const prompt = interaction.options.getString("prompt");
 
-		let response = await openai.createImage({
+		console.log(prompt);
+
+		const response = await openai.createImage({
 			prompt: prompt,
+			n: 1,
+			size: "512x512",
+			response_format: "url",
+			user: interaction.user.id,
 		});
 
-		let url = response.data.data[0].url;
+		const url = response.data.data[0].url;
+
+		console.log(url);
 
 		await interaction.editReply({
 			content: "Just kidding, generating image...",
