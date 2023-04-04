@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require("discord.js");
 const fs = require("fs");
 const request = require("request-promise");
 const { Configuration, OpenAIApi } = require("openai");
+
 const configuration = new Configuration({
 	organization: process.env.OPENAI_ORG,
 	apiKey: process.env.OPENAI_KEY,
@@ -21,8 +22,6 @@ module.exports = {
 	async execute(interaction, client) {
 		await interaction.reply({ content: "Getting your login info..." });
 		const prompt = interaction.options.getString("prompt");
-
-		console.log(prompt);
 
 		const response = await openai.createImage({
 			prompt: prompt,
