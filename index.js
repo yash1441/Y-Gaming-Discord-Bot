@@ -190,7 +190,13 @@ client.on("interactionCreate", async (interaction) => {
 		}
 	} else if (interaction.isButton()) {
 		if (interaction.customId === "store-login") {
-			logger.debug(interaction.message.interaction.user.id);
+			if (interaction.user.id != interaction.message.interaction.user.id) {
+				return await interaction.reply({
+					content:
+						"This is not your button. Use the </store:1079997052198592572> command to get your own button. Button stealing is a crime.",
+					ephemeral: true,
+				});
+			}
 			const modal = new ModalBuilder()
 				.setCustomId("valorant-login-store")
 				.setTitle("Valorant Login");
