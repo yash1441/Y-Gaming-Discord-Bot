@@ -190,6 +190,7 @@ client.on("interactionCreate", async (interaction) => {
 		}
 	} else if (interaction.isButton()) {
 		if (interaction.customId === "store-login") {
+			logger.debug(interaction.commandInteraction.user.id);
 			const modal = new ModalBuilder()
 				.setCustomId("valorant-login-store")
 				.setTitle("Valorant Login");
