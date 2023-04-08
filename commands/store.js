@@ -1,9 +1,7 @@
 const {
 	SlashCommandBuilder,
 	EmbedBuilder,
-	ModalBuilder,
-	TextInputBuilder,
-	TextInputStyle,
+	ButtonBuilder,
 	ActionRowBuilder,
 } = require("discord.js");
 const HenrikDevValorantAPI = require("unofficial-valorant-api");
@@ -57,6 +55,14 @@ module.exports = {
 			embeds.push(embed);
 		}
 
-		await interaction.editReply({ embeds: embeds });
+		const loginButton = new ButtonBuilder()
+			.setCustomId("store-login")
+			.setLabel("Login")
+			.setStyle(ButtonStyle.Primary)
+			.setEmoji("🏪");
+
+		const row = new ActionRowBuilder().addComponents([loginButton]);
+
+		await interaction.editReply({ embeds: embeds, components: [row] });
 	},
 };

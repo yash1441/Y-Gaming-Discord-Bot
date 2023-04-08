@@ -12,7 +12,7 @@ module.exports = {
 		.setDescription("Check nightmarket in Valorant"),
 	async execute(interaction, client) {
 		const modal = new ModalBuilder()
-			.setCustomId("valorant-login")
+			.setCustomId("valorant-login-nightmarket")
 			.setTitle("Valorant Login");
 
 		const usernameInput = new TextInputBuilder()
