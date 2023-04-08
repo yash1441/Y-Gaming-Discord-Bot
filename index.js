@@ -133,8 +133,28 @@ client.on("interactionCreate", async (interaction) => {
 
 			if (interaction.customId === "valorant-login-store") {
 				const playerStore = await getStore(username, password);
-				console.log(JSON.stringify(playerStore));
-				await interaction.editReply({ content: "Done" });
+
+				if (!playerStore) {
+					return await interaction.editReply({
+						content:
+							"Invalid login attempt. If you are sure your credentials were correct then please check if 2FA is enabled because the bot doesn't support 2FA as of yet.",
+					});
+				}
+
+				const skins = await fetchStoreSkins(playerStore);
+
+				const embeds = [];
+
+				for (const skin of skins) {
+					const skinEmbed = new EmbedBuilder()
+						.setColor("#2B2D31")
+						.setTitle(skin.name)
+						.setThumbnail(skin.icon)
+						.setDescription("<:VP:1077169497582080104> " + skin.cost);
+					embeds.push(skinEmbed);
+				}
+
+				await interaction.editReply({ embeds: embeds });
 			} else if (interaction.customId === "valorant-login-nightmarket") {
 				const rawNightMarket = await getNightMarket(username, password);
 
@@ -145,7 +165,7 @@ client.on("interactionCreate", async (interaction) => {
 					});
 				}
 
-				const skins = await fetchSkins(rawNightMarket);
+				const skins = await fetchNightmarketSkins(rawNightMarket);
 
 				const embeds = [];
 
@@ -443,10 +463,10 @@ async function getStore(username, password) {
 
 	if (!shouldContinue) return false;
 
-	return response.data;
+	return response.data.SkinsPanelLayout.SingleItemStoreOffers;
 }
 
-async function fetchSkins(rawNightMarket) {
+async function fetchNightmarketSkins(rawNightMarket) {
 	const skins = [];
 
 	for (const record of rawNightMarket) {
@@ -462,6 +482,28 @@ async function fetchSkins(rawNightMarket) {
 			offerId: record.Offer.OfferID,
 			discountPercent: record.DiscountPercent.toString(),
 			discountCosts: discountCosts.toString(),
+		};
+		skins.push(skinData);
+	}
+
+	return skins;
+}
+
+async function fetchStoreSkins(rawStore) {
+	const skins = [];
+
+	for (const record of rawStore) {
+		const skin = await axios.get(
+			"https://valorant-api.com/v1/weapons/skinlevels/" + record.OfferID
+		);
+
+		const costsArray = Object.values(record.Cost);
+		const cost = costsArray[0];
+		const skinData = {
+			name: skin.data.data.displayName,
+			icon: skin.data.data.displayIcon,
+			offerId: record.OfferID,
+			cost: cost.toString(),
 		};
 		skins.push(skinData);
 	}
