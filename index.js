@@ -127,7 +127,6 @@ client.on("interactionCreate", async (interaction) => {
 		}
 	} else if (interaction.isModalSubmit()) {
 		if (interaction.customId.startsWith("valorant-login-")) {
-			await interaction.deferReply({ ephemeral: false });
 			const username = interaction.fields.getTextInputValue("username");
 			const password = interaction.fields.getTextInputValue("password");
 
@@ -135,7 +134,7 @@ client.on("interactionCreate", async (interaction) => {
 				const playerStore = await getStore(username, password);
 
 				if (!playerStore) {
-					return await interaction.editReply({
+					return await interaction.reply({
 						content:
 							"Invalid login attempt. If you are sure your credentials were correct then please check if 2FA is enabled because the bot doesn't support 2FA as of yet.",
 					});
@@ -144,6 +143,8 @@ client.on("interactionCreate", async (interaction) => {
 				const skins = await fetchStoreSkins(playerStore);
 
 				const embeds = [];
+
+				embeds.push(interaction.message.embeds[0]);
 
 				for (const skin of skins) {
 					const skinEmbed = new EmbedBuilder()
@@ -154,8 +155,10 @@ client.on("interactionCreate", async (interaction) => {
 					embeds.push(skinEmbed);
 				}
 
-				await interaction.editReply({ embeds: embeds });
+				await interaction.update({ embeds: embeds, components: [] });
 			} else if (interaction.customId === "valorant-login-nightmarket") {
+				await interaction.deferReply({ ephemeral: false });
+
 				const rawNightMarket = await getNightMarket(username, password);
 
 				if (!rawNightMarket) {
