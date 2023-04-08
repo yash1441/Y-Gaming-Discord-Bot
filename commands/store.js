@@ -2,6 +2,7 @@ const {
 	SlashCommandBuilder,
 	EmbedBuilder,
 	ButtonBuilder,
+	ButtonStyle,
 	ActionRowBuilder,
 } = require("discord.js");
 const HenrikDevValorantAPI = require("unofficial-valorant-api");
