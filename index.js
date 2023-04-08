@@ -7,6 +7,9 @@ const {
 	ButtonBuilder,
 	ButtonStyle,
 	ActionRowBuilder,
+	ModalBuilder,
+	TextInputBuilder,
+	TextInputStyle,
 } = require("discord.js");
 const fs = require("fs");
 const path = require("path");
