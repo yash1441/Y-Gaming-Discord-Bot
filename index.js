@@ -140,6 +140,8 @@ client.on("interactionCreate", async (interaction) => {
 					});
 				}
 
+				await interaction.deferUpdate();
+
 				const skins = await fetchStoreSkins(playerStore);
 
 				const embeds = [];
