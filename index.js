@@ -74,7 +74,9 @@ for (const file of commandFiles) {
 ////////////////////
 
 client.on("ready", async () => {
-	logger.info(`Discord bot went online. Username: ${client.user.tag}`);
+	logger.info(
+		`Discord bot went online. Username: ${client.user.tag} Servers: ${client.guilds.cache.size}`
+	);
 	client.user.setPresence({
 		activities: [
 			{
