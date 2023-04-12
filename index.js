@@ -140,7 +140,7 @@ client.on("interactionCreate", async (interaction) => {
 					});
 				}
 
-				await interaction.deferUpdate();
+				await interaction.deferUpdate({ ephemeral: false });
 
 				const skins = await fetchStoreSkins(playerStore);
 
@@ -157,7 +157,7 @@ client.on("interactionCreate", async (interaction) => {
 					embeds.push(skinEmbed);
 				}
 
-				await interaction.update({ embeds: embeds, components: [] });
+				await interaction.message.edit({ embeds: embeds, components: [] });
 			} else if (interaction.customId === "valorant-login-nightmarket") {
 				await interaction.deferReply({ ephemeral: false });
 
