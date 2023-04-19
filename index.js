@@ -108,9 +108,9 @@ client.on("ready", async () => {
 
 	await getValorantVersion("https://valorant-api.com/v1/version");
 
-	setInterval(() => {
-		checkLive("tansmh");
-	}, 10000);
+	// setInterval(() => {
+	// 	checkLive("tansmh");
+	// }, 10000);
 });
 
 client.on("interactionCreate", async (interaction) => {
