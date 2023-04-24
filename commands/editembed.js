@@ -60,7 +60,7 @@ module.exports = {
 				.setTitle(submit.fields.getTextInputValue("title"))
 				.setDescription(
 					submit.fields.getTextInputValue("description") +
-						"\n<:ThisBob:804354530664775742>"
+						"\n<:xplaygg:930809190841217074>"
 				)
 				.setColor(embed.color);
 
