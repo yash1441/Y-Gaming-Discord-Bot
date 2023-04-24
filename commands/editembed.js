@@ -58,7 +58,10 @@ module.exports = {
 		if (submit) {
 			let newEmbed = new EmbedBuilder()
 				.setTitle(submit.fields.getTextInputValue("title"))
-				.setDescription(submit.fields.getTextInputValue("description"))
+				.setDescription(
+					submit.fields.getTextInputValue("description") +
+						"\n<:ThisBob:804354530664775742>"
+				)
 				.setColor(embed.color);
 
 			if (message.id == submit.customId.substring(9)) {
