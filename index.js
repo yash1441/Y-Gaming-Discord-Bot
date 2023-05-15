@@ -142,7 +142,14 @@ client.on("interactionCreate", async (interaction) => {
 					});
 				}
 
-				await interaction.deferUpdate({ ephemeral: false });
+				let checkError = false;
+
+				await interaction.deferUpdate({ ephemeral: false }).catch(() => {
+					interaction.message.edit({ content: "There was an error, please try again or contact **Simon#0988** if it still doesn't work." });
+					checkError = true;
+				});
+
+				if (checkError) return;
 
 				const skins = await fetchStoreSkins(playerStore);
 
