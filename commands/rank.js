@@ -91,8 +91,6 @@ module.exports = {
 		if (playerRating == null) playerRating = 0;
 		let name = accountData.data.name;
 		let tag = accountData.data.tag;
-
-		logger.debug(tag);
 		//let playerCardSmall = accountData.data.card.small;
 		let playerCardWide = accountData.data.card.wide;
 		let puuid = accountData.data.puuid;
