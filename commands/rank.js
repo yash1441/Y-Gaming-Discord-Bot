@@ -89,7 +89,7 @@ module.exports = {
 		let playerRating = mmrData.data.current_data.ranking_in_tier;
 		if (playerRating == null) playerRating = 0;
 		let name = accountData.data.name;
-		//let tag = accountData.data.tag;
+		let tag = accountData.data.tag;
 		//let playerCardSmall = accountData.data.card.small;
 		let playerCardWide = accountData.data.card.wide;
 		let puuid = accountData.data.puuid;
@@ -140,7 +140,8 @@ module.exports = {
 			.setDiscriminator("0000")
 			.setCurrentXP(playerRating, ratingColor)
 			.setRequiredXP(ratingRequired)
-			.setBackground("IMAGE", playerCardWide);
+			.setBackground("IMAGE", playerCardWide)
+			.setDiscriminator(tag);
 
 		if (playerRankUnpatched == 27) rankCard.setLevel(leaderboard, "#", true);
 
