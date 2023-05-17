@@ -4,6 +4,7 @@ const path = require("path");
 const canvacord = require("canvacord");
 const HenrikDevValorantAPI = require("unofficial-valorant-api");
 const vapi = new HenrikDevValorantAPI();
+const logger = require("../Logger/logger.js");
 
 const dataDirectory = path.join(__dirname, "../Data");
 const rankThreshold = JSON.parse(
