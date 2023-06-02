@@ -90,7 +90,7 @@ client.on("ready", async () => {
 	let serverlist = "";
 	client.guilds.cache.forEach((guild) => {
 		serverlist = serverlist.concat(
-			" - " + guild.name + ": ID: " + guild.id + "\n"
+			"- " + guild.name + ": ID: " + guild.id + "\n"
 		);
 	});
 
