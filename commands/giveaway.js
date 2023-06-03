@@ -96,6 +96,8 @@ module.exports = {
             const giveawayMessage = channel.send({ embeds: [giveawayEmbed] });
             const giveawayMessageId = giveawayMessage.id;
 
+            console.log(giveawayMessage);
+
             const giveawayData = {
                 giveawayMessageId: {
                     "messageId": giveawayMessageId,
