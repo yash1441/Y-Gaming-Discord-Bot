@@ -113,9 +113,17 @@ module.exports = {
 
             storeGiveawayData(giveawayData);
 
+            const giveawayButton = new ButtonBuilder()
+                .setCustomId("giveaway_" + giveawayMessageId)
+                .setLabel("Join")
+                .setStyle("SUCCESS")
+                .setEmoji("🎉");
+
+            const row = new ActionRowBuilder().addComponents(giveawayButton);
+
             giveawayEmbed.setFooter(`Giveaway ID: ${giveawayMessageId}`);
 
-            giveawayMessage.edit({ embeds: [giveawayEmbed] });
+            giveawayMessage.edit({ embeds: [giveawayEmbed], components: [row] });
 
             await interaction.editReply({ content: `Giveaway successfully created in ${channel}` });
         }
