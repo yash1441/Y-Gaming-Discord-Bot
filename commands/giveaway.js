@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ChannelType, EmbedBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder } = require("discord.js");
+const { SlashCommandBuilder, ChannelType, EmbedBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const fs = require("fs");
 const path = require("path");
 const logger = require("../Logger/logger.js");
@@ -116,7 +116,7 @@ module.exports = {
             const giveawayButton = new ButtonBuilder()
                 .setCustomId("giveaway_" + giveawayMessageId)
                 .setLabel("Join")
-                .setStyle("SUCCESS")
+                .setStyle(ButtonStyle.Success)
                 .setEmoji("🎉");
 
             const row = new ActionRowBuilder().addComponents(giveawayButton);
