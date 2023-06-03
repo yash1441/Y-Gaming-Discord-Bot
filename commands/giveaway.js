@@ -97,9 +97,8 @@ module.exports = {
 
             channel.send({ embeds: [giveawayEmbed] }).then((message) => {
                 giveawayMessage = message;
+                console.log(message);
             });
-
-            console.log(giveawayMessage);
 
             const giveawayMessageId = giveawayMessage.id;
 
