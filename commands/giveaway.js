@@ -129,7 +129,7 @@ module.exports = {
                     if (writeError) {
                         logger.error("Error writing giveaways.json: " + writeError);
                     } else {
-                        logger.info(`${user} created giveaway: ${giveawayMessageId}`);
+                        logger.info(`${interaction.user} created giveaway: ${giveawayMessageId}`);
                     }
                 });
             });
