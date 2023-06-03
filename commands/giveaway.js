@@ -93,13 +93,16 @@ module.exports = {
                 )
                 .setColor("Random");
 
-            const giveawayMessage = channel.send({ embeds: [giveawayEmbed] });
+            let giveawayMessage;
+
+            channel.send({ embeds: [giveawayEmbed] }).then((message) => {
+                giveawayMessage = message;
+            });
+
             const giveawayMessageId = giveawayMessage.id;
 
-            console.log(giveawayMessage);
-
-            const giveawayData = {
-                giveawayMessageId: {
+            const giveawayData = {};
+            giveawayData[giveawayMessageId] = {
                     "messageId": giveawayMessageId,
                     "host": interaction.user.id,
                     "winners": winners,
