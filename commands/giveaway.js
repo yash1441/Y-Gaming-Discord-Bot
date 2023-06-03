@@ -91,7 +91,7 @@ module.exports = {
                     { name: "Entries", value: `0`, inline: true },
                     { name: "Ends", value: `<t:${endTime}:R>`, inline: true }
                 )
-                .setColor("RANDOM");
+                .setColor("Random");
 
             const giveawayMessage = channel.send({ embeds: [giveawayEmbed] });
             const giveawayMessageId = giveawayMessage.id;
