@@ -103,15 +103,14 @@ module.exports = {
 
             const giveawayData = {};
             giveawayData[giveawayMessageId] = {
-                    "messageId": giveawayMessageId,
-                    "host": interaction.user.id,
-                    "winners": winners,
-                    "endTime": endTime,
-                    "entries": [],
-                    "ended": false,
-                    "winner": null
-                }
-            }
+                "messageId": giveawayMessageId,
+                "host": interaction.user.id,
+                "winners": winners,
+                "endTime": endTime,
+                "entries": [],
+                "ended": false,
+                "winner": null
+            };
 
             fs.readFile('./Data/giveaways.json', 'utf8', (error, data) => {
                 if (error) {
