@@ -108,7 +108,7 @@ module.exports = {
                 }
             }
 
-            fs.readFile('../Data/giveaways.json', 'utf8', (error, data) => {
+            fs.readFile('./Data/giveaways.json', 'utf8', (error, data) => {
                 if (error) {
                     logger.error("Error reading giveaways.json: " + error);
                     return;
@@ -125,7 +125,7 @@ module.exports = {
                 }
                 oldData.push(giveawayData);
         
-                fs.writeFile('../Data/giveaways.json', JSON.stringify(log, null, 4), (writeError) => {
+                fs.writeFile('./Data/giveaways.json', JSON.stringify(log, null, 4), (writeError) => {
                     if (writeError) {
                         logger.error("Error writing giveaways.json: " + writeError);
                     } else {
