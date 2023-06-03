@@ -121,7 +121,7 @@ module.exports = {
 
             const row = new ActionRowBuilder().addComponents(giveawayButton);
 
-            giveawayEmbed.setFooter(`Giveaway ID: ${giveawayMessageId}`);
+            giveawayEmbed.setFooter({ text: `Giveaway ID: ${giveawayMessageId}`});
 
             giveawayMessage.edit({ embeds: [giveawayEmbed], components: [row] });
 
