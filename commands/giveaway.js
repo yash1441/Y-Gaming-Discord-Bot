@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ChannelType, EmbedBuilder } = require("discord.js");
+const { SlashCommandBuilder, ChannelType, EmbedBuilder, PermissionFlagsBits } = require("discord.js");
 const fs = require("fs");
 const path = require("path");
 const logger = require("../Logger/logger.js");
