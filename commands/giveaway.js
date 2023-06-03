@@ -99,6 +99,8 @@ module.exports = {
                 giveawayMessage = message;
             });
 
+            console.log(giveawayMessage);
+
             const giveawayMessageId = giveawayMessage.id;
 
             const giveawayData = {};
