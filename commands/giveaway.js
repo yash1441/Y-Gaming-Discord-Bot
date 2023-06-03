@@ -114,18 +114,18 @@ module.exports = {
                     return;
                 }
         
-                let oldData = [];
+                let fileData = [];
                 if (data.trim() !== '') {
                     try {
-                        oldData = JSON.parse(data);
+                        fileData = JSON.parse(data);
                     } catch (parseError) {
                         logger.error("Error parsing giveaways.json: " + parseError);
                         return;
                     }
                 }
-                oldData.push(giveawayData);
+                fileData.push(giveawayData);
         
-                fs.writeFile('./Data/giveaways.json', JSON.stringify(log, null, 4), (writeError) => {
+                fs.writeFile('./Data/giveaways.json', JSON.stringify(fileData, null, 4), (writeError) => {
                     if (writeError) {
                         logger.error("Error writing giveaways.json: " + writeError);
                     } else {
