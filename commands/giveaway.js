@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ChannelType, EmbedBuilder, PermissionFlagsBits } = require("discord.js");
+const { SlashCommandBuilder, ChannelType, EmbedBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder } = require("discord.js");
 const fs = require("fs");
 const path = require("path");
 const logger = require("../Logger/logger.js");
@@ -110,7 +110,7 @@ module.exports = {
 
             fs.readFile('../Data/giveaways.json', 'utf8', (error, data) => {
                 if (error) {
-                    logger.error(error);
+                    logger.error("Error reading giveaways.json: " + error);
                     return;
                 }
         
@@ -119,7 +119,7 @@ module.exports = {
                     try {
                         oldData = JSON.parse(data);
                     } catch (parseError) {
-                        logger.error(parseError);
+                        logger.error("Error parsing giveaways.json: " + parseError);
                         return;
                     }
                 }
@@ -127,7 +127,7 @@ module.exports = {
         
                 fs.writeFile('../Data/giveaways.json', JSON.stringify(log, null, 4), (writeError) => {
                     if (writeError) {
-                        logger.error(writeError);
+                        logger.error("Error writing giveaways.json: " + writeError);
                     } else {
                         logger.info(`${user} created giveaway: ${giveawayMessageId}`);
                     }
