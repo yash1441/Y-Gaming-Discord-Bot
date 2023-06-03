@@ -100,7 +100,6 @@ module.exports = {
             });
 
             const giveawayMessageId = giveawayMessage.id;
-
             const giveawayData = {};
             giveawayData[giveawayMessageId] = {
                 "messageId": giveawayMessageId,
@@ -112,31 +111,7 @@ module.exports = {
                 "winner": null
             };
 
-            fs.readFile('./Data/giveaways.json', 'utf8', (error, data) => {
-                if (error) {
-                    logger.error("Error reading giveaways.json: " + error);
-                    return;
-                }
-        
-                let fileData = [];
-                if (data.trim() !== '') {
-                    try {
-                        fileData = JSON.parse(data);
-                    } catch (parseError) {
-                        logger.error("Error parsing giveaways.json: " + parseError);
-                        return;
-                    }
-                }
-                fileData.push(giveawayData);
-        
-                fs.writeFile('./Data/giveaways.json', JSON.stringify(fileData, null, 4), (writeError) => {
-                    if (writeError) {
-                        logger.error("Error writing giveaways.json: " + writeError);
-                    } else {
-                        logger.info(`${interaction.user} created giveaway: ${giveawayMessageId}`);
-                    }
-                });
-            });
+            storeGiveawayData(giveawayData);
         }
 	},
 };
@@ -145,3 +120,28 @@ module.exports = {
 function getCurrentTime () {
     return Math.floor(Date.now() / 1000)
   }
+
+function storeGiveawayData(giveawayData) {
+    // Load existing giveawayData objects from the JSON file
+    let existingData = {};
+    try {
+        const data = fs.readFileSync('./Data/giveaways.json', 'utf8');
+        existingData = JSON.parse(data);
+    } catch (error) {
+        logger.error('Error reading giveawayData file:\n' + error);
+    }
+  
+    // Merge the new giveawayData with the existing data
+    const updatedData = {
+        ...existingData,
+        ...giveawayData
+    };
+  
+    // Write the updated data back to the JSON file
+    try {
+        fs.writeFileSync('./Data/giveaways.json', JSON.stringify(updatedData, null, 2));
+        logger.info('giveawayData successfully stored.');
+    } catch (error) {
+        logger.error('Error writing giveawayData file:\n' + error);
+    }
+}
