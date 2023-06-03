@@ -113,6 +113,10 @@ module.exports = {
 
             storeGiveawayData(giveawayData);
 
+            giveawayEmbed.setFooter(`Giveaway ID: ${giveawayMessageId}`);
+
+            giveawayMessage.edit({ embeds: [giveawayEmbed] });
+
             await interaction.editReply({ content: `Giveaway successfully created in ${channel}` });
         }
 	},
