@@ -112,6 +112,8 @@ module.exports = {
             };
 
             storeGiveawayData(giveawayData);
+
+            await interaction.editReply({ content: `Giveaway successfully created in ${channel}` });
         }
 	},
 };
