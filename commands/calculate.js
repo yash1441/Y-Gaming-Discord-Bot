@@ -19,7 +19,7 @@ module.exports = {
             while (math.length) {
                 total += parseFloat(math.shift());
             };
-            return total;
+            return total.toString();
         };
 
 		await interaction.reply({ content: compute(math), ephemeral: true });
