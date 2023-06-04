@@ -11,8 +11,8 @@ module.exports = {
 				.setDescription("Math expression to calculate")
 				.setRequired(true)
 		),
-	async execute(interaction, client) {
-		await interaction.deferReply({ ephemeral: true });
+	async execute(interaction) {
+		await interaction.reply({ content: `Calculating...`, ephemeral: true });
 
 		let math = interaction.options.getString("math");
         const compute = (math = '') => {
@@ -24,6 +24,6 @@ module.exports = {
             return total.toString();
         };
 
-		await interaction.editReply({ content: compute(math), ephemeral: true });
+		await interaction.editReply({ content: compute(math) });
 	},
 };
