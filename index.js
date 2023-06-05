@@ -230,6 +230,20 @@ client.on("interactionCreate", async (interaction) => {
 			modal.addComponents(firstInput, secondInput);
 
 			await interaction.showModal(modal);
+		} else if (interaction.customId.startsWith("giveaway_")) {
+			const giveawayId = interaction.customId.split("_")[1];
+			const embed = interaction.message.embeds[0];
+			
+			const entries = parseInt(embed.fields[2].value);
+
+			embed.fields[2].value = (entries + 1).toString();
+
+			await interaction.message.edit({ embeds: [embed] });
+
+			await interaction.reply({
+				content: "You have successfully entered the giveaway!",
+				ephemeral: true,
+			})
 		}
 	}
 });
