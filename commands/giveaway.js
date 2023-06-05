@@ -91,7 +91,8 @@ module.exports = {
                     { name: "Entries", value: `0`, inline: true },
                     { name: "Ends", value: `<t:${endTime}:R>`, inline: true }
                 )
-                .setColor("Random");
+                .setColor("#8766F7")
+                .setImage("https://i.ibb.co/5hJfvZt/Carl-bot-Giveaway-Image.png");
 
             let giveawayMessage;
 
