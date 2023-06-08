@@ -477,6 +477,8 @@ async function getNightMarket(username, password) {
 
 	if (!shouldContinue) return false;
 
+	if (response.data.BonusStore == undefined) return false;
+
 	return response.data.BonusStore.BonusStoreOffers;
 }
 
