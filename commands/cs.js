@@ -55,7 +55,7 @@ module.exports = {
             let sid = new SteamID(steamId);
             let url = "https://csgostats.gg/player/" + sid.getSteamID64();
 
-            const userStats = await getPlayerRank(url);
+            let userStats = await getPlayerRank(url);
 
             if (userStats === 0) {
                 return await interaction.editReply({ content: `No matches have been added for \`${steamId}\`.` });
