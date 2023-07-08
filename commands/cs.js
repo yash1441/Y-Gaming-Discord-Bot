@@ -63,10 +63,6 @@ module.exports = {
                 return await interaction.editReply({ content: `An error occured while fetching data for \`${steamId}\`.` });
             }
 
-            console.log({ userStats });
-
-            console.log(RANK_NAMES[userStats.rank], RANK_NAMES[userStats.bestRank]);
-
             const embed = new EmbedBuilder()
                 .setTitle(`${interaction.user}'s CS:GO Rank`)
                 .setThumbnail(`https://static.csgostats.gg/images/ranks/${userStats.rank}.png`)
@@ -97,6 +93,8 @@ async function getPlayerRank(url) {
 
         playerData.rank = getRank(0, rankImages);
         playerData.bestRank = getRank(1, rankImages);
+
+        console.log({ playerData });
 
         return playerData;
     } else return -1;
