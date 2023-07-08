@@ -88,7 +88,7 @@ async function getPlayerInfo(url) {
 
     const rankContainer = $('.player-ranks');
     const playerContainer = $('.player-ident-outer');
-    const playerName = playerContainer.find('#player-name').text();
+    const playerName = playerContainer.find('#player-name').text().trim();
     
     if (rankContainer.length > 0) {
         const rankImages = rankContainer.find('img[src]');
