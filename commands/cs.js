@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, ChannelType, EmbedBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const logger = require("../Logger/logger.js");
 const SteamID = require('steamid');
-const axios = require("axios").default;
+const cheerio = require("cheerio");
 const cloudscraper = require("cloudscraper");
 
 module.exports = {
@@ -34,7 +34,11 @@ module.exports = {
             let sid = new SteamID(steamId);
             let url = "https://csgostats.gg/player/" + sid.getSteamID64();
 
-            await getPlayerRank(url, interaction);
+            const stats = await getPlayerRank(url, interaction);
+
+            if (stats === 0) {
+                return await interaction.editReply({ content: `No matches have been added for \`${steamId}\`.` });
+            }
 
             await interaction.editReply({ content: `\`${steamId}\` is a valid Steam ID.` });
         }
@@ -42,5 +46,18 @@ module.exports = {
 };
 
 async function getPlayerRank(url, interaction) {
-    cloudscraper.get(url).then(console.log, console.error);
+    const html = await cloudscraper.get(url);
+
+    if (html.includes("No matches have been added for this player")) {
+        return 0;
+    }
+
+    const $ = cheerio.load(html);
+
+    const rankContainer = $('.player-ranks');
+    
+    if (rankContainer.length > 0) {
+      const rankImages = rankContainer.find('img[src]');
+      console.log(rankImages);
+    }
 }
