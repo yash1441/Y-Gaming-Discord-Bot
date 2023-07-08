@@ -63,6 +63,10 @@ module.exports = {
                 return await interaction.editReply({ content: `An error occured while fetching data for \`${steamId}\`.` });
             }
 
+            console.log({ userStats });
+
+            console.log(RANK_NAMES[userStats.rank], RANK_NAMES[userStats.bestRank]);
+
             const embed = new EmbedBuilder()
                 .setTitle(`${interaction.user}'s CS:GO Rank`)
                 .setThumbnail(`https://static.csgostats.gg/images/ranks/${userStats.rank}.png`)
@@ -76,7 +80,7 @@ module.exports = {
 	},
 };
 
-async function getPlayerRank(url, interaction) {
+async function getPlayerRank(url) {
     const html = await cloudscraper.get(url);
 
     if (html.includes("No matches have been added for this player")) {
