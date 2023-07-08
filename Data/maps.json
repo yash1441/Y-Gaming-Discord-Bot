@@ -28,5 +28,14 @@
 	},
 	"Lotus": {
 		"splash": "https://media.valorant-api.com/maps/2fe4ed3a-450a-948b-6d6b-e89a78e680a9/splash.png"
+	},
+	"District": {
+		"splash": "https://media.valorant-api.com/maps/690b3ed2-4dff-945b-8223-6da834e30d24/splash.png"
+	},
+	"Kasbah": {
+		"splash": "https://media.valorant-api.com/maps/12452a9d-48c3-0b02-e7eb-0381c3520404/splash.png"
+	},
+	"Piazza": {
+		"splash": "https://media.valorant-api.com/maps/de28aa9b-4cbe-1003-320e-6cb3ec309557/splash.png"
 	}
 }
