@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ChannelType, EmbedBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const logger = require("../Logger/logger.js");
 const SteamID = require("steamid");
 const cheerio = require("cheerio");
@@ -72,7 +72,7 @@ module.exports = {
                 )
                 .setColor("Random");
 
-            await interaction.editReply({ embeds: [embed] });
+            await interaction.editReply({ content: "", embeds: [embed] });
         }
 	},
 };
