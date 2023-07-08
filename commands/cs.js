@@ -44,11 +44,12 @@ async function getPlayerRank(url, interaction) {
     try {
         const response = await axios.get(url, { 
             headers: {
-                Cookie: "cookie=_ga=GA1.2.1019535976.1679595662;"
+                Cookie: "cookie=_ga=GA1.2.1019535976.1679595662;",
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
             }
         });
         console.log(response.data);
     } catch (error) {
-        console.error(error);
+        console.log('error');
     }
 }
