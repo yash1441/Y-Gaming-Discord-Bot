@@ -94,7 +94,7 @@ function getRank(index, rankImages) {
     }
 
     const imageSrc = rankImages.eq(index).attr('src');
-    const rankIndex = parseInt(imageSrc.split('ranks/')[1].split('.png')[0]) - 1;
+    const rankIndex = parseInt(imageSrc.split('/ranks/')[1].split('.png')[0]);
 
     return RANK_NAMES[rankIndex];
   };
