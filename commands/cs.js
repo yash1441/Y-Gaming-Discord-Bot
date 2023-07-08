@@ -68,7 +68,7 @@ module.exports = {
                 .setDescription(`## ` + RANK_NAMES[userStats.rank])
                 .setThumbnail(`https://static.csgostats.gg/images/ranks/${userStats.rank + 1}.png`)
                 .addFields(
-                    { name: "Best Rank", value: userStats.bestRank !== null ? RANK_NAMES[userStats.bestRank] : RANK_NAMES[userStats.rank], inline: false }
+                    { name: "Best Rank", value: RANK_NAMES[userStats.bestRank], inline: false }
                 )
                 .setColor("Random");
 
@@ -96,6 +96,9 @@ async function getPlayerInfo(url) {
 
         playerData.rank = getRank(0, rankImages);
         playerData.bestRank = getRank(1, rankImages);
+
+        if (playerData.bestRank == null) playerData.bestRank = playerData.rank;
+
         playerData.name = playerName;
 
         return playerData;
