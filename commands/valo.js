@@ -1,5 +1,4 @@
 const { SlashCommandBuilder,
-    SlashCommandBuilder,
     EmbedBuilder,
     ButtonBuilder,
     ButtonStyle,
