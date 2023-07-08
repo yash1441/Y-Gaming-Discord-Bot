@@ -2,6 +2,7 @@ const { SlashCommandBuilder, ChannelType, EmbedBuilder, PermissionFlagsBits, Act
 const logger = require("../Logger/logger.js");
 const SteamID = require("steamid");
 const cheerio = require("cheerio");
+const cloudscraper = require("cloudscraper");
 
 const RANK_NAMES = [
     "Silver I",
