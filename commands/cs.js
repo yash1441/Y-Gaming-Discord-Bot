@@ -44,7 +44,7 @@ module.exports = {
 		const subCommand = interaction.options.getSubcommand();
 
         if (subCommand === "rank") {
-            await interaction.reply({ content: "Checking if it is a valid Steam ID...", ephemeral: true });
+            await interaction.reply({ content: "Checking if it is a valid Steam ID..." });
             
             const steamId = interaction.options.getString("steam-id");
 
@@ -55,13 +55,23 @@ module.exports = {
             let sid = new SteamID(steamId);
             let url = "https://csgostats.gg/player/" + sid.getSteamID64();
 
-            const stats = await getPlayerRank(url, interaction);
+            const userStats = await getPlayerRank(url, interaction);
 
-            if (stats === 0) {
+            if (userStats === 0) {
                 return await interaction.editReply({ content: `No matches have been added for \`${steamId}\`.` });
+            } else if (userStats === -1) {
+                return await interaction.editReply({ content: `An error occured while fetching data for \`${steamId}\`.` });
             }
 
-            await interaction.editReply({ content: `\`${steamId}\` is a valid Steam ID.` });
+            const embed = new EmbedBuilder()
+                .setTitle(`${interaction.user}'s CS:GO Rank`)
+                .setThumbnail(`https://static.csgostats.gg/images/ranks/${userStats.rank}.png`)
+                .addFields(
+                    { name: "Rank", value: RANK_NAMES[userStats.rank], inline: false },
+                    { name: "Best Rank", value: RANK_NAMES[userStats.bestRank], inline: false }
+                );
+
+            await interaction.editReply({ embeds: [embed] });
         }
 	},
 };
@@ -83,9 +93,9 @@ async function getPlayerRank(url, interaction) {
 
         playerData.rank = getRank(0, rankImages);
         playerData.bestRank = getRank(1, rankImages);
+    } else return -1;
 
-        console.log(playerData);
-    }
+    return playerData;
 }
 
 function getRank(index, rankImages) {
@@ -96,5 +106,5 @@ function getRank(index, rankImages) {
     const imageSrc = rankImages.eq(index).attr('src');
     const rankIndex = parseInt(imageSrc.split('/ranks/')[1].split('.png')[0]) - 1;
 
-    return RANK_NAMES[rankIndex];
+    return rankIndex;
   };
