@@ -2,6 +2,7 @@ const { SlashCommandBuilder, ChannelType, EmbedBuilder, PermissionFlagsBits, Act
 const logger = require("../Logger/logger.js");
 const SteamID = require('steamid');
 const axios = require("axios").default;
+const osmosis = require('osmosis');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -33,13 +34,13 @@ module.exports = {
             let sid = new SteamID(steamId);
             let url = "https://csgostats.gg/player/" + sid.getSteamID64();
 
-            await axios.get(url).then((response) => {
-                logger.debug(response);
-            }).catch((error) => {
-                logger.error(error);
-            });
+            await getPlayerRank(url, interaction);
 
             await interaction.editReply({ content: `\`${steamId}\` is a valid Steam ID.` });
         }
 	},
 };
+
+async function getPlayerRank(url, interaction) {
+    await osmosis.get(url).log(logger.log).error(logger.error).debug(logger.debug);
+}
