@@ -108,4 +108,4 @@ function getRank(index, rankImages) {
     const rankIndex = parseInt(imageSrc.split('/ranks/')[1].split('.png')[0]) - 1;
 
     return rankIndex;
-  };
+};
