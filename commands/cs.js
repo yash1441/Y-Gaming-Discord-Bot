@@ -64,10 +64,10 @@ module.exports = {
             }
 
             const embed = new EmbedBuilder()
-                .setTitle(`${interaction.user}'s CS:GO Rank`)
+                .setTitle(`${interaction.user.username}'s CS:GO Rank`)
+                .setDescription(`## ` + RANK_NAMES[userStats.rank])
                 .setThumbnail(`https://static.csgostats.gg/images/ranks/${userStats.rank}.png`)
                 .addFields(
-                    { name: "Rank", value: RANK_NAMES[userStats.rank], inline: false },
                     { name: "Best Rank", value: RANK_NAMES[userStats.bestRank], inline: false }
                 );
 
