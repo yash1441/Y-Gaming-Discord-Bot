@@ -1,8 +1,29 @@
 const { SlashCommandBuilder, ChannelType, EmbedBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const logger = require("../Logger/logger.js");
-const SteamID = require('steamid');
+const SteamID = require("steamid");
 const cheerio = require("cheerio");
-const cloudscraper = require("cloudscraper");
+const { DOMParser } = require('xmldom');
+
+const RANK_NAMES = [
+    "Silver I",
+    "Silver II",
+    "Silver III",
+    "Silver IV",
+    "Silver Elite",
+    "Silver Elite Master",
+    "Gold Nova I",
+    "Gold Nova II",
+    "Gold Nova III",
+    "Gold Nova Master",
+    "Master Guardian I",
+    "Master Guardian II",
+    "Master Guardian Elite",
+    "Distinguished Master Guardian",
+    "Legendary Eagle",
+    "Legendary Eagle Master",
+    "Supreme Master First Class",
+    "The Global Elite",
+];
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -57,7 +78,23 @@ async function getPlayerRank(url, interaction) {
     const rankContainer = $('.player-ranks');
     
     if (rankContainer.length > 0) {
-      const rankImages = rankContainer.find('img[src]');
-      console.log(rankImages);
+        const rankImages = rankContainer.find('img[src]');
+        const playerData = {};
+
+        playerData.rank = getRank(0, rankImages);
+        playerData.bestRank = getRank(1, rankImages);
+
+        console.log(playerData);
     }
 }
+
+function getRank(index, rankImages) {
+    if (index >= rankImages.length) {
+      return null;
+    }
+
+    const imageSrc = rankImages.eq(index).attr('src');
+    const rankIndex = parseInt(imageSrc.split('ranks/')[1].split('.png')[0]) - 1;
+
+    return RANK_NAMES[rankIndex];
+  };
