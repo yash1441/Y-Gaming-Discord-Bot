@@ -47,7 +47,9 @@ module.exports = {
             status.push({ name, steamId });
         }
 
-        let rankString = "";
+        const embed = new EmbedBuilder()
+            .setTitle("CS:GO Status Ranks")
+            .setColor("Random");
 
         for (const player of status) {
             let sid = new SteamID(player.steamId);
@@ -56,18 +58,14 @@ module.exports = {
             let userStats = await getPlayerRank(url);
 
             if (userStats === 0) {
-                rankString = rankString + `### ${player.name}\nUnranked\n\n`;
+                embed.addField({ name: player.name, value: "Unranked", inline: true });
             } else if (userStats === -1) {
-                rankString = rankString + `### ${player.name}\nError\n\n`;
+                embed.addField({ name: player.name, value: "Error", inline: true });
             } else {
-                rankString = rankString + `### ${player.name}\n${RANK_NAMES[userStats.rank]}\n\n`;
+                if (RANK_NAMES[userStats.rank] == undefined) embed.addField({ name: player.name, value: "Unranked", inline: true });
+                else embed.addField({ name: player.name, value: RANK_NAMES[userStats.rank], inline: true });
             }
         }
-
-        const embed = new EmbedBuilder()
-            .setTitle("CS:GO Status Ranks")
-            .setColor("Random")
-            .setDescription(rankString);
 
         await interaction.editReply({ content: "", embeds: [embed] });
 	},
