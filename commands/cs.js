@@ -42,5 +42,5 @@ module.exports = {
 };
 
 async function getPlayerRank(url, interaction) {
-    await osmosis.get(url).log(logger.log).error(logger.error).debug(logger.debug);
+    await osmosis.get(url).log(console.log).error(console.log).debug(console.log);
 }
