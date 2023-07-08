@@ -63,6 +63,8 @@ module.exports = {
                 return await interaction.editReply({ content: `An error occured while fetching data for \`${steamId}\`.` });
             }
 
+            console.log({ userStats });
+
             const embed = new EmbedBuilder()
                 .setTitle(`${interaction.user.username}'s CS:GO Rank`)
                 .setDescription(`## ` + RANK_NAMES[userStats.rank])
