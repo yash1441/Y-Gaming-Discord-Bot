@@ -31,20 +31,77 @@ module.exports = {
 		.setType(ApplicationCommandType.Message),
 
 	async execute(interaction) {
+        await interaction.reply({ content: "Checking if it is a valid CS:GO status message..." });
+
 		const message = interaction.targetMessage;
 		if (message.embeds.length > 0) {
-            return await interaction.reply({ content: "This is not a valid CS:GO status message." });
+            return await interaction.editReply({ content: "This is not a valid CS:GO status message." });
         }
 
         const regex = /(\d+)\s+(\d+)\s+"([^"]+)"\s+([^\s]+)/g;
         let match;
-        const namesAndUniqueIds = [];
+        const status = [];
 
         while ((match = regex.exec(message.content)) !== null) {
-            const [, userid, , name, uniqueid] = match;
-            namesAndUniqueIds.push({ name, uniqueid });
+            const [, userid, , name, steamId] = match;
+            status.push({ name, steamId });
         }
 
-        console.log(namesAndUniqueIds);
+        let rankString = "";
+
+        for (const player of status) {
+            let sid = new SteamID(player.steamId);
+            let url = "https://csgostats.gg/player/" + sid.getSteamID64();
+
+            let userStats = await getPlayerRank(url);
+
+            if (userStats === 0) {
+                rankString = rankString + `### ${player.name}\nUnranked\n\n`;
+            } else if (userStats === -1) {
+                rankString = rankString + `### ${player.name}\nError\n\n`;
+            } else {
+                rankString = rankString + `### ${player.name}\n${RANK_NAMES[userStats.rank]}\n\n`;
+            }
+        }
+
+        const embed = new EmbedBuilder()
+            .setTitle("CS:GO Status Ranks")
+            .setColor("Random")
+            .setDescription(rankString);
+
+        await interaction.editReply({ content: "", embeds: [embed] });
 	},
+};
+
+async function getPlayerRank(url) {
+    const html = await cloudscraper.get(url);
+
+    if (html.includes("No matches have been added for this player")) {
+        return 0;
+    }
+
+    const $ = cheerio.load(html);
+
+    const rankContainer = $('.player-ranks');
+    
+    if (rankContainer.length > 0) {
+        const rankImages = rankContainer.find('img[src]');
+        const playerData = {};
+
+        playerData.rank = getRank(0, rankImages);
+        playerData.bestRank = getRank(1, rankImages);
+
+        return playerData;
+    } else return -1;
+}
+
+function getRank(index, rankImages) {
+    if (index >= rankImages.length) {
+      return null;
+    }
+
+    const imageSrc = rankImages.eq(index).attr('src');
+    const rankIndex = parseInt(imageSrc.split('/ranks/')[1].split('.png')[0]) - 1;
+
+    return rankIndex;
 };
