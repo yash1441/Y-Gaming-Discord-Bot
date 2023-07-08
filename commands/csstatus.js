@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { ContextMenuCommandBuilder, EmbedBuilder } = require("discord.js");
 const logger = require("../Logger/logger.js");
 const SteamID = require("steamid");
 const cheerio = require("cheerio");
