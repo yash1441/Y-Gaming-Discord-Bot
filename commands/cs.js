@@ -93,9 +93,9 @@ async function getPlayerRank(url, interaction) {
 
         playerData.rank = getRank(0, rankImages);
         playerData.bestRank = getRank(1, rankImages);
-    } else return -1;
 
-    return playerData;
+        return playerData;
+    } else return -1;
 }
 
 function getRank(index, rankImages) {
