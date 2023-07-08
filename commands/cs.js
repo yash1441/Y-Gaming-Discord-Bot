@@ -2,12 +2,12 @@ const { SlashCommandBuilder, ChannelType, EmbedBuilder, PermissionFlagsBits, Act
 const fs = require("fs");
 const path = require("path");
 const logger = require("../Logger/logger.js");
+const SteamID = require('steamid');
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("cs")
 		.setDescription("Commands related to Counter-Strike.")
-		.setDMPermission(false)
 		.addSubcommand((subcommand) =>
 			subcommand
 				.setName("rank")
@@ -30,6 +30,10 @@ module.exports = {
             if (!steamId.startsWith("STEAM_")) {
                 return await interaction.editReply({ content: `\`${steamId}\` is an invalid Steam ID.` });
             }
+
+            let sid = new SteamID(steamId);
+
+            logger.debug(sid);
 
             await interaction.editReply({ content: `\`${steamId}\` is a valid Steam ID.` });
         }
