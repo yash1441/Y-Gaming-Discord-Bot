@@ -69,7 +69,8 @@ module.exports = {
                 .setThumbnail(`https://static.csgostats.gg/images/ranks/${userStats.rank + 1}.png`)
                 .addFields(
                     { name: "Best Rank", value: RANK_NAMES[userStats.bestRank], inline: false }
-                );
+                )
+                .setColor("Random");
 
             await interaction.editReply({ embeds: [embed] });
         }
