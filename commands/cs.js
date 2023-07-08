@@ -41,5 +41,10 @@ module.exports = {
 };
 
 async function getPlayerRank(url, interaction) {
-    await axios.get(url).then((response) => console.log(response.data)).catch((error) => console.log(error));
+    try {
+        const response = await axios.get(url);
+        console.log(response.data);
+    } catch (error) {
+        console.error(error);
+    }
 }
