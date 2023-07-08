@@ -1,8 +1,7 @@
 const { SlashCommandBuilder, ChannelType, EmbedBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
-const fs = require("fs");
-const path = require("path");
 const logger = require("../Logger/logger.js");
 const SteamID = require('steamid');
+const axios = require("axios").default;
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -32,8 +31,13 @@ module.exports = {
             }
 
             let sid = new SteamID(steamId);
+            let url = "https://csgostats.gg/player/" + sid.getSteamID64();
 
-            logger.debug(sid);
+            await axios.get(url).then((response) => {
+                logger.debug(response);
+            }).catch((error) => {
+                logger.error(error);
+            });
 
             await interaction.editReply({ content: `\`${steamId}\` is a valid Steam ID.` });
         }
