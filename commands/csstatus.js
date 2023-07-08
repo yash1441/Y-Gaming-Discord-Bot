@@ -58,12 +58,12 @@ module.exports = {
             let userStats = await getPlayerRank(url);
 
             if (userStats === 0) {
-                embed.addField({ name: player.name, value: "Unranked", inline: true });
+                embed.addFields({ name: player.name, value: "Unranked", inline: true });
             } else if (userStats === -1) {
-                embed.addField({ name: player.name, value: "Error", inline: true });
+                embed.addFields({ name: player.name, value: "Error", inline: true });
             } else {
-                if (RANK_NAMES[userStats.rank] == undefined) embed.addField({ name: player.name, value: "Unranked", inline: true });
-                else embed.addField({ name: player.name, value: RANK_NAMES[userStats.rank], inline: true });
+                if (RANK_NAMES[userStats.rank] == undefined) embed.addFields({ name: player.name, value: "Unranked", inline: true });
+                else embed.addFields({ name: player.name, value: RANK_NAMES[userStats.rank], inline: true });
             }
         }
 
