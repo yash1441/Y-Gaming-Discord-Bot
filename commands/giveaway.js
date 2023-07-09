@@ -290,15 +290,16 @@ module.exports = {
             }
 
             const serverId = interaction.guild.id;
-            const giveaways = Object.values(giveawayData).filter(giveaway => giveaway.serverId === serverId);
+            const giveaways = Object.values(giveawayData).filter(giveaway => giveaway.serverId === serverId && giveaway.ended === false);
 
             for (const giveaway of giveaways) {
-                if (giveaway.ended) {
-                    continue;
-                }
                 await interaction.guild.members.fetch(giveaway.host).then((member) => {
                     embed.addFields({ name: `Giveaway by ${member.user.username}`, value: `- https://discord.com/channels/${giveaway.serverId}/${giveaway.channelId}/${giveaway.messageId}` });
                 })
+            }
+
+            if (embed.fields.length === 0) {
+                embed.setDescription("There are no active giveaways.");
             }
 
             await interaction.editReply({ content: "", embeds: [embed] });
