@@ -41,8 +41,8 @@ module.exports = {
                 )
                 .addStringOption((option) =>
                     option
-                        .setName("title")
-                        .setDescription("Select the title of the giveaway.")
+                        .setName("prize")
+                        .setDescription("Enter the prize of the giveaway.")
                         .setRequired(true)
                 )
         )
@@ -81,14 +81,14 @@ module.exports = {
 
             const channel = interaction.options.getChannel("channel");
             const winners = interaction.options.getInteger("winners");
-            const title = interaction.options.getString("title");
+            const prize = interaction.options.getString("title");
 
             const giveawayEmbed = new EmbedBuilder()
-                .setTitle(title)
+                .setTitle(prize)
                 .setDescription(`Click the button below to join the giveaway!`)
                 .addFields(
-                    { name: "Winners", value: winners.toString(), inline: true },
                     { name: "Host", value: `${interaction.user}`, inline: true },
+                    { name: "Winners", value: winners.toString(), inline: true }
                 )
                 .setColor("#00FF00")
                 .setImage(GIVEAWAY_IMAGES[Math.floor(Math.random() * 5) + 5]);
@@ -106,6 +106,7 @@ module.exports = {
                 "channelId": channel.id,
                 "messageId": giveawayMessageId,
                 "host": interaction.user.id,
+                "prize": prize,
                 "winners": winners,
                 "entries": [],
                 "ended": false,
@@ -155,7 +156,7 @@ module.exports = {
             }
 
             const giveawayMessage = await interaction.guild.channels.cache.get(giveaway["channelId"]).messages.fetch(giveaway["messageId"]);
-            const prize = giveawayMessage.embeds[0].title;
+            const prize = giveawayData[messageId]["prize"];
 
             giveawayData[messageId]["ended"] = true;
 
@@ -225,7 +226,7 @@ module.exports = {
             }
 
             const giveawayMessage = await interaction.guild.channels.cache.get(giveaway["channelId"]).messages.fetch(giveaway["messageId"]);
-            const prize = giveawayMessage.embeds[0].title;
+            const prize = giveawayData[messageId]["prize"];
 
             let winners = giveaway["winners"];
             let entries = giveaway["entries"];
@@ -294,7 +295,7 @@ module.exports = {
 
             for (const giveaway of giveaways) {
                 await interaction.guild.members.fetch(giveaway.host).then((member) => {
-                    embed.addFields({ name: `Giveaway by ${member.user.username}`, value: `- https://discord.com/channels/${giveaway.serverId}/${giveaway.channelId}/${giveaway.messageId}` });
+                    embed.addFields({ name: giveaway.prize, value: `- https://discord.com/channels/${giveaway.serverId}/${giveaway.channelId}/${giveaway.messageId}` });
                 })
             }
 
