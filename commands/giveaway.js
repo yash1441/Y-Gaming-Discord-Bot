@@ -141,8 +141,7 @@ module.exports = {
 
             let giveawayData = {};
             try {
-                const data = fs.readFileSync('./Data/giveaways.json', 'utf8');
-                giveawayData = JSON.parse(data);
+                giveawayData = JSON.parse(fs.readFileSync('./Data/giveaways.json', 'utf8'););
             } catch (error) {
                 logger.error('Error reading giveawayData file:\n' + error);
             }
@@ -212,8 +211,7 @@ module.exports = {
 
             let giveawayData = {};
             try {
-                const data = fs.readFileSync('./Data/giveaways.json', 'utf8');
-                giveawayData = JSON.parse(data);
+                giveawayData = JSON.parse(fs.readFileSync('./Data/giveaways.json', 'utf8'););
             } catch (error) {
                 logger.error('Error reading giveawayData file:\n' + error);
             }
@@ -277,8 +275,26 @@ module.exports = {
             await interaction.editReply({ content: `Giveaway winners successfully rerolled.` });
 
         } else if (subCommand === "list") {
-            await interaction.reply({ content: "Generating the list of giveaways..."});
+            await interaction.reply({ content: "Generating the list of giveaways..." });
 
+            const embed = new EmbedBuilder()
+                .setTitle("Giveaway List")
+                .setImage("https://i.ibb.co/D47Zpr2/Giveaway-List.png");
+
+            let giveawayData = {};
+            try {
+                giveawayData = JSON.parse(fs.readFileSync('./Data/giveaways.json', 'utf8'));
+            } catch (error) {
+                logger.error('Error reading giveawayData file:\n' + error);
+            }
+
+            const serverId = interaction.guild.id;
+
+            const giveaways = Object.entries(data).filter(([key, value]) => value.serverId === serverId);
+
+            console.log(giveaways);
+
+            await interaction.editReply({ embeds: [embed] });
         }
     },
 };
