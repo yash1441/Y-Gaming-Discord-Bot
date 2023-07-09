@@ -190,8 +190,8 @@ client.on("interactionCreate", async (interaction) => {
 						.setThumbnail(skin.icon)
 						.setDescription(
 							"<:VP:1077169497582080104> " +
-								skin.discountCosts +
-								`    ||*-${skin.discountPercent}%*||`
+							skin.discountCosts +
+							`    ||*-${skin.discountPercent}%*||`
 						);
 					embeds.push(skinEmbed);
 				}
@@ -233,12 +233,35 @@ client.on("interactionCreate", async (interaction) => {
 		} else if (interaction.customId.startsWith("giveaway_")) {
 			const giveawayId = interaction.customId.split("_")[1];
 			const embed = interaction.message.embeds[0];
-			
-			const entries = parseInt(embed.fields[2].value);
 
-			embed.fields[2].value = (entries + 1).toString();
+			const success = await giveawayEntry(giveawayId, interaction.user.id);
 
-			await interaction.message.edit({ embeds: [embed] });
+			if (success == -1) {
+				return await interaction.reply({ content: "You have already entered this giveaway!", ephemeral: true });
+			} else if (success == 0) {
+				return await interaction.reply({ content: "There was an error. Please try again later.", ephemeral: true });
+			}
+
+			let entries = 0;
+
+			interaction.message.components.find((row) => row.components.find((button) => entries = parseInt(button.label)));
+
+			const giveawayButton = new ButtonBuilder()
+                .setCustomId("giveaway_" + giveawayId)
+                .setLabel("Join")
+                .setStyle(ButtonStyle.Success)
+                .setEmoji("🎉");
+
+            const disableButton = new ButtonBuilder()
+                .setCustomId("disabledGiveaway")
+                .setLabel((entries + 1).toString())
+                .setStyle(ButtonStyle.Secondary)
+                .setDisabled(true)
+                .setEmoji("👤");
+
+            const row = new ActionRowBuilder().addComponents(giveawayButton, disableButton);
+
+			interaction.message.edit({ components: [row] })
 
 			await interaction.reply({
 				content: "You have successfully entered the giveaway!",
@@ -453,9 +476,9 @@ async function getValorantVersion(url) {
 
 	return logger.info(
 		"Valorant API User Agent: " +
-			valorantAPI.user_agent +
-			" | Valorant API Client Version: " +
-			valorantAPI.client_version
+		valorantAPI.user_agent +
+		" | Valorant API Client Version: " +
+		valorantAPI.client_version
 	);
 }
 
@@ -546,4 +569,22 @@ async function fetchStoreSkins(rawStore) {
 	}
 
 	return skins;
+}
+
+async function giveawayEntry(giveawayId, entryId) {
+	let success = 1;
+	const dataPath = path.join(__dirname, "../Data");
+	const jsonFile = JSON.parse(
+		fs.readFileSync(path.join(dataPath, "giveaways.json"), "utf8")
+	);
+	const giveaways = JSON.parse(jsonFile);
+	const giveaway = jsonObject[giveawayId];
+
+	if (giveaway.entries.includes(entryId)) return -1;
+
+	giveaway.entries.push(entryId).catch(() => success = 0);
+
+	fs.writeFileSync(path.join(dataPath, "giveaways.json"), JSON.stringify(giveaways, null, 2), "utf8").catch(() => success = 0);
+
+	return success;
 }
