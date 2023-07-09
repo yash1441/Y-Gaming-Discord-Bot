@@ -127,6 +127,8 @@ module.exports = {
 
             const messageId = interaction.options.getString("message-id");
 
+            logger.debug(`Message ID: ${messageId}`);
+
             let giveawayData = {};
             try {
                 const data = fs.readFileSync('./Data/giveaways.json', 'utf8');
@@ -135,16 +137,23 @@ module.exports = {
                 logger.error('Error reading giveawayData file:\n' + error);
             }
 
+            logger.debug(`Giveaway Data: ${data}`);
+
             const giveaway = giveawayData[messageId];
             if (giveaway === undefined) {
                 await interaction.editReply({ content: "Giveaway not found." });
                 return;
             }
 
+            logger.debug(`Giveaway: ${JSON.stringify(giveaway)}`);
+
             giveawayData[messageId]["ended"] = true;
 
             let winners = giveaway["winners"];
             let entries = giveaway["entries"];
+
+            logger.debug(`Winners: ${winners.toString()}`);
+            logger.debug(`Entries: ${entries}`);
 
             if (entries.length < winners) {
                 winners = entries.length;
@@ -161,14 +170,14 @@ module.exports = {
 
             fs.writeFileSync("./Data/giveaways.json", JSON.stringify(giveawayData, null, 2), "utf8");
 
-            logger.debug(giveawayData[messageId]["winner"].join(", "));
+            logger.debug(`Giveaway Winners: ` + giveawayData[messageId]["winner"].join(", "));
 
             const giveawayEmbed = new EmbedBuilder()
                 .setTitle("Giveaway Ended")
                 .setDescription(`The giveaway has ended!`)
                 .addFields(
                     { name: "Winners", value: giveawayData[messageId]["winner"].join(", "), inline: true },
-                    { name: "Host", value: `<@${giveaway["host"]}>`, inline: true },
+                    { name: "Host", value: `<@${giveaway["host"]}>`, inline: true }
                 )
                 .setColor("#FF0000")
                 .setImage("https://i.ibb.co/5hJfvZt/Carl-bot-Giveaway-Image.png");
