@@ -290,7 +290,7 @@ module.exports = {
 
             const serverId = interaction.guild.id;
 
-            const giveaways = Object.entries(data).filter(([key, value]) => value.serverId === serverId);
+            const giveaways = Object.entries(giveawayData).filter(([key, value]) => value.serverId === serverId);
 
             console.log(giveaways);
 
