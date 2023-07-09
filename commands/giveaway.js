@@ -137,7 +137,7 @@ module.exports = {
                 logger.error('Error reading giveawayData file:\n' + error);
             }
 
-            logger.debug(`Giveaway Data: ${data}`);
+            logger.debug(`Giveaway Data: ${JSON.stringify(giveawayData)}`);
 
             const giveaway = giveawayData[messageId];
             if (giveaway === undefined) {
