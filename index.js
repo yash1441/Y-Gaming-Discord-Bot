@@ -82,7 +82,7 @@ client.on("ready", async () => {
 			{
 				name: `in ${client.guilds.cache.size} servers`,
 				type: ActivityType.Streaming,
-				url: "https://twitch.tv/Tansmh",
+				url: "https://www.youtube.com/@tanityshop",
 			},
 		],
 		status: `dnd`,
