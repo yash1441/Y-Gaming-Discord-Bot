@@ -290,12 +290,12 @@ module.exports = {
             }
 
             const serverId = interaction.guild.id;
-
             const giveaways = Object.values(giveawayData).filter(giveaway => giveaway.serverId === serverId);
 
             for (const giveaway of giveaways) {
-                const messageLink = `https://discord.com/channels/${giveaway.serverId}/${giveaway.channelId}/${giveaway.messageId}`;
-                embed.addFields({ name: `Giveaway by <@${giveaway.host}>`, value: messageLink });
+                await interaction.guild.members.fetch(giveaway.host).then((member) => {
+                    embed.addFields({ name: `Giveaway by ${member.username}`, value: `- https://discord.com/channels/${giveaway.serverId}/${giveaway.channelId}/${giveaway.messageId}` });
+                })
             }
 
             await interaction.editReply({ content: "", embeds: [embed] });
