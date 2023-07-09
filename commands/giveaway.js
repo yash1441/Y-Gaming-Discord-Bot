@@ -161,6 +161,8 @@ module.exports = {
 
             fs.writeFileSync("./Data/giveaways.json", JSON.stringify(giveawayData, null, 2), "utf8");
 
+            logger.debug(giveawayData[messageId]["winner"].join(", "));
+
             const giveawayEmbed = new EmbedBuilder()
                 .setTitle("Giveaway Ended")
                 .setDescription(`The giveaway has ended!`)
