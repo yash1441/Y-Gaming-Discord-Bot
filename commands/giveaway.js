@@ -293,12 +293,9 @@ module.exports = {
 
             const giveaways = Object.values(giveawayData).filter(giveaway => giveaway.serverId === serverId);
 
-            console.log(giveaways);
-
-            for (const [key, entry] of Object.entries(giveaways)) {
-                const { messageId, serverId, channelId } = entry;
-                const messageLink = `https://discord.com/channels/${serverId}/${channelId}/${messageId}`;
-                embed.addFields({ name: entry.prize, value: messageLink });
+            for (const giveaway of giveaways) {
+                const messageLink = `https://discord.com/channels/${giveaway.serverId}/${giveaway.channelId}/${giveaway.messageId}`;
+                embed.addFields({ name: `Giveaway by <@${giveaway.host}>`, value: messageLink });
             }
 
             await interaction.editReply({ content: "", embeds: [embed] });
