@@ -78,7 +78,6 @@ module.exports = {
                     { name: "Winners", value: winners.toString(), inline: true },
                     { name: "Host", value: `${interaction.user}`, inline: true },
                     { name: "Entries", value: `0`, inline: true },
-                    { name: "Ends", value: `<t:${endTime}:R>`, inline: true }
                 )
                 .setColor("#8766F7")
                 .setImage("https://i.ibb.co/5hJfvZt/Carl-bot-Giveaway-Image.png");
