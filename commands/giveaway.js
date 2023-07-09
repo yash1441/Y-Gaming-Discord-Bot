@@ -129,7 +129,7 @@ module.exports = {
 
             let giveawayData = {};
             try {
-                const data = fs.readFileSync('../Data/giveaways.json', 'utf8');
+                const data = fs.readFileSync('./Data/giveaways.json', 'utf8');
                 giveawayData = JSON.parse(data);
             } catch (error) {
                 logger.error('Error reading giveawayData file:\n' + error);
@@ -158,7 +158,7 @@ module.exports = {
                 giveawayData[messageId]["winner"].push(winner);
             }
 
-            fs.writeFileSync("../Data/giveaways.json", JSON.stringify(giveawayData, null, 2), "utf8");
+            fs.writeFileSync("./Data/giveaways.json", JSON.stringify(giveawayData, null, 2), "utf8");
 
             const giveawayEmbed = new EmbedBuilder()
                 .setTitle("Giveaway Ended")
