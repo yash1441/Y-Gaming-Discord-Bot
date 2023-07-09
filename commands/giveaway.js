@@ -298,8 +298,8 @@ module.exports = {
                 })
             }
 
-            if (embed.fields.length === 0) {
-                embed.setDescription("There are no active giveaways.");
+            if (giveaways.length === 0) {
+                embed.setDescription("There are no ongoing giveaways.");
             }
 
             await interaction.editReply({ content: "", embeds: [embed] });
