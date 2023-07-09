@@ -294,7 +294,7 @@ module.exports = {
 
             for (const giveaway of giveaways) {
                 await interaction.guild.members.fetch(giveaway.host).then((member) => {
-                    embed.addFields({ name: `Giveaway by ${member.username}`, value: `- https://discord.com/channels/${giveaway.serverId}/${giveaway.channelId}/${giveaway.messageId}` });
+                    embed.addFields({ name: `Giveaway by ${member.user.username}`, value: `- https://discord.com/channels/${giveaway.serverId}/${giveaway.channelId}/${giveaway.messageId}` });
                 })
             }
 
