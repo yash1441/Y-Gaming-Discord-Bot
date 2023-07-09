@@ -293,10 +293,11 @@ module.exports = {
 
             const giveaways = Object.entries(giveawayData).filter(([key, value]) => value.serverId === serverId);
 
+            console.log(giveaways);
+
             for (const [key, entry] of Object.entries(giveaways)) {
                 const { messageId, serverId, channelId } = entry;
                 const messageLink = `https://discord.com/channels/${serverId}/${channelId}/${messageId}`;
-                console.log({ messageId, serverId, channelId });
                 embed.addFields({ name: entry.prize, value: messageLink });
             }
 
