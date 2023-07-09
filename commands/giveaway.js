@@ -296,6 +296,7 @@ module.exports = {
             for (const entry of giveaways) {
                 const { messageId, serverId, channelId } = entry;
                 const messageLink = `https://discord.com/channels/${serverId}/${channelId}/${messageId}`;
+                console.log({entry, messageLink});
                 embed.addFields({ name: entry.prize, value: messageLink });
             }
 
