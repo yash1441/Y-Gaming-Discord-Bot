@@ -126,8 +126,6 @@ module.exports = {
             await interaction.reply({ content: "Ending the giveaway...", ephemeral: true });
 
             const messageId = interaction.options.getString("message-id");
-            const giveawayMessage = await interaction.guild.channels.cache.get(giveaway["channelId"]).messages.fetch(giveaway["messageId"]);
-            const prize = giveawayMessage.embeds[0].title;
 
             let giveawayData = {};
             try {
@@ -138,10 +136,14 @@ module.exports = {
             }
 
             const giveaway = giveawayData[messageId];
+
             if (giveaway === undefined) {
                 await interaction.editReply({ content: "Giveaway not found." });
                 return;
             }
+
+            const giveawayMessage = await interaction.guild.channels.cache.get(giveaway["channelId"]).messages.fetch(giveaway["messageId"]);
+            const prize = giveawayMessage.embeds[0].title;
 
             giveawayData[messageId]["ended"] = true;
 
