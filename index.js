@@ -579,7 +579,7 @@ async function giveawayEntry(giveawayId, entryId) {
 
 	if (giveaway.entries.includes(entryId)) return -1;
 
-	giveaway.entries.push(entryId).catch(() => success = 0);
+	giveaway.entries.push(entryId);
 
 	fs.writeFileSync("./Data/giveaways.json", JSON.stringify(giveaways, null, 2), "utf8").catch(() => success = 0);
 
