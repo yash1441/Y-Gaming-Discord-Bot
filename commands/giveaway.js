@@ -141,7 +141,7 @@ module.exports = {
 
             let giveawayData = {};
             try {
-                giveawayData = JSON.parse(fs.readFileSync('./Data/giveaways.json', 'utf8'););
+                giveawayData = JSON.parse(fs.readFileSync('./Data/giveaways.json', 'utf8'));
             } catch (error) {
                 logger.error('Error reading giveawayData file:\n' + error);
             }
@@ -211,7 +211,7 @@ module.exports = {
 
             let giveawayData = {};
             try {
-                giveawayData = JSON.parse(fs.readFileSync('./Data/giveaways.json', 'utf8'););
+                giveawayData = JSON.parse(fs.readFileSync('./Data/giveaways.json', 'utf8'));
             } catch (error) {
                 logger.error('Error reading giveawayData file:\n' + error);
             }
