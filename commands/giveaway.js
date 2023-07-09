@@ -193,6 +193,77 @@ module.exports = {
             giveawayMessage.edit({ embeds: [giveawayEmbed], components: [row] });
 
             await interaction.editReply({ content: `Giveaway successfully ended.` });
+        } else if (subCommand === "reroll") {
+            await interaction.reply({ content: "Rerolling the giveaway...", ephemeral: true });
+
+            const messageId = interaction.options.getString("message-id");
+
+            let giveawayData = {};
+            try {
+                const data = fs.readFileSync('./Data/giveaways.json', 'utf8');
+                giveawayData = JSON.parse(data);
+            } catch (error) {
+                logger.error('Error reading giveawayData file:\n' + error);
+            }
+
+            const giveaway = giveawayData[messageId];
+
+            if (giveaway === undefined) {
+                return await interaction.editReply({ content: "Giveaway not found." });
+            } else if (giveaway["ended"] === false) {
+                return await interaction.editReply({ content: "Giveaway has not ended yet." });
+            }
+
+            const giveawayMessage = await interaction.guild.channels.cache.get(giveaway["channelId"]).messages.fetch(giveaway["messageId"]);
+            const prize = giveawayMessage.embeds[0].title;
+
+            let winners = giveaway["winners"];
+            let entries = giveaway["entries"];
+
+            if (entries.length <= winners) {
+                winners = entries.length;
+                giveawayData[messageId]["winner"] = entries;
+            } else {
+                giveawayData[messageId]["winner"] = [];
+                while (giveawayData[messageId]["winner"].length < winners) {
+                    let winnerIndex = [];
+                    let randomIndex = Math.floor(Math.random() * entries.length);
+
+                    while (winnerIndex.includes(randomIndex)) {
+                        randomIndex = Math.floor(Math.random() * entries.length);
+                    }
+                    winnerIndex.push(randomIndex);
+                    giveawayData[messageId]["winner"].push(entries[randomIndex]);
+                }
+            }
+
+            fs.writeFileSync("./Data/giveaways.json", JSON.stringify(giveawayData, null, 2), "utf8");
+
+            const giveawayEmbed = new EmbedBuilder()
+                .setTitle(prize)
+                .setDescription(`The giveaway has ended!`)
+                .addFields(
+                    { name: "Winners", value: giveawayData[messageId]["winner"].map(id => `<@${id}>`).join(", "), inline: true },
+                    { name: "Host", value: `<@${giveaway["host"]}>`, inline: true }
+                )
+                .setColor("#FF0000")
+                .setImage("https://i.ibb.co/5hJfvZt/Carl-bot-Giveaway-Image.png");
+
+            const giveawayButton = new ButtonBuilder()
+                .setCustomId("disabledGiveaway")
+                .setLabel(giveaway["entries"].length.toString())
+                .setStyle(ButtonStyle.Secondary)
+                .setDisabled(true)
+                .setEmoji("👤");
+
+            const row = new ActionRowBuilder().addComponents(giveawayButton);
+
+            giveawayEmbed.setFooter({ text: `Message ID: ${giveaway["messageId"]}` });
+
+            giveawayMessage.edit({ embeds: [giveawayEmbed], components: [row] });
+
+            await interaction.editReply({ content: `Giveaway winners successfully rerolled.` });
+
         }
     },
 };
