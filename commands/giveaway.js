@@ -27,13 +27,6 @@ module.exports = {
                         .setMinValue(1)
                         .setRequired(true)
                 )
-                .addIntegerOption((option) =>
-                    option
-                        .setName("duration")
-                        .setDescription("Select the duration of the giveaway in minutes.")
-                        .setMinValue(1)
-                        .setRequired(true)
-                )
                 .addStringOption((option) =>
                     option
                         .setName("title")
@@ -76,11 +69,7 @@ module.exports = {
             
             const channel = interaction.options.getChannel("channel");
             const winners = interaction.options.getInteger("winners");
-            const duration = interaction.options.getInteger("duration");
             const title = interaction.options.getString("title");
-
-            const currentTime = getCurrentTime();
-            const endTime = currentTime + (duration * 60);
 
             const giveawayEmbed = new EmbedBuilder()
                 .setTitle(title)
@@ -103,10 +92,11 @@ module.exports = {
             const giveawayMessageId = giveawayMessage.id;
             const giveawayData = {};
             giveawayData[giveawayMessageId] = {
+                "serverId": interaction.guild.id,
+                "channelId": channel.id,
                 "messageId": giveawayMessageId,
                 "host": interaction.user.id,
                 "winners": winners,
-                "endTime": endTime,
                 "entries": [],
                 "ended": false,
                 "winner": null
@@ -120,7 +110,14 @@ module.exports = {
                 .setStyle(ButtonStyle.Success)
                 .setEmoji("🎉");
 
-            const row = new ActionRowBuilder().addComponents(giveawayButton);
+            const disableButton = new ButtonBuilder()
+                .setCustomId("disabledGiveaway")
+                .setLabel("0")
+                .setStyle(ButtonStyle.Secondary)
+                .setDisabled(true)
+                .setEmoji("👤");
+
+            const row = new ActionRowBuilder().addComponents(giveawayButton, disableButton);
 
             giveawayEmbed.setFooter({ text: `Giveaway ID: ${giveawayMessageId}`});
 
