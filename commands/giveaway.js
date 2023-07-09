@@ -279,7 +279,8 @@ module.exports = {
 
             const embed = new EmbedBuilder()
                 .setTitle("Giveaway List")
-                .setImage("https://i.ibb.co/D47Zpr2/Giveaway-List.png");
+                .setImage("https://i.ibb.co/D47Zpr2/Giveaway-List.png")
+                .setColor("#0000FF");
 
             let giveawayData = {};
             try {
