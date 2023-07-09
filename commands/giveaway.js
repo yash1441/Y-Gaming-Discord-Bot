@@ -173,8 +173,8 @@ module.exports = {
                 .setTitle(prize)
                 .setDescription(`The giveaway has ended!`)
                 .addFields(
-                    { name: "Winners", value: giveawayData[messageId]["winner"].map(id => `<@${id}>`).join(", "), inline: true },
-                    { name: "Host", value: `<@${giveaway["host"]}>`, inline: true }
+                    { name: "Host", value: `<@${giveaway["host"]}>`, inline: true },
+                    { name: "Winners", value: giveawayData[messageId]["winner"].map(id => `<@${id}>`).join(", "), inline: true }
                 )
                 .setColor("#FF0000")
                 .setImage("https://i.ibb.co/5hJfvZt/Carl-bot-Giveaway-Image.png");
@@ -243,8 +243,8 @@ module.exports = {
                 .setTitle(prize)
                 .setDescription(`The giveaway has ended!`)
                 .addFields(
-                    { name: "Winners", value: giveawayData[messageId]["winner"].map(id => `<@${id}>`).join(", "), inline: true },
-                    { name: "Host", value: `<@${giveaway["host"]}>`, inline: true }
+                    { name: "Host", value: `<@${giveaway["host"]}>`, inline: true },
+                    { name: "Winners", value: giveawayData[messageId]["winner"].map(id => `<@${id}>`).join(", "), inline: true }
                 )
                 .setColor("#FF0000")
                 .setImage("https://i.ibb.co/5hJfvZt/Carl-bot-Giveaway-Image.png");
