@@ -91,7 +91,7 @@ module.exports = {
                     { name: "Host", value: `${interaction.user}`, inline: true },
                 )
                 .setColor("#00FF00")
-                .setImage(GIVEAWAY_IMAGES[Math.floor(Math.random() * 5)]);
+                .setImage(GIVEAWAY_IMAGES[Math.floor(Math.random() * 5) + 5]);
 
             let giveawayMessage;
 
@@ -257,7 +257,7 @@ module.exports = {
                     { name: "Winners", value: giveawayData[messageId]["winner"].map(id => `<@${id}>`).join(", "), inline: true }
                 )
                 .setColor("#FF0000")
-                .setImage(GIVEAWAY_IMAGES[Math.floor(Math.random() * 5) + 5]);
+                .setImage(GIVEAWAY_IMAGES[Math.floor(Math.random() * 5)]);
 
             const giveawayButton = new ButtonBuilder()
                 .setCustomId("disabledGiveaway")
@@ -293,6 +293,9 @@ module.exports = {
             const giveaways = Object.values(giveawayData).filter(giveaway => giveaway.serverId === serverId);
 
             for (const giveaway of giveaways) {
+                if (giveaway.ended) {
+                    continue;
+                }
                 await interaction.guild.members.fetch(giveaway.host).then((member) => {
                     embed.addFields({ name: `Giveaway by ${member.user.username}`, value: `- https://discord.com/channels/${giveaway.serverId}/${giveaway.channelId}/${giveaway.messageId}` });
                 })
