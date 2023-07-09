@@ -117,7 +117,7 @@ module.exports = {
 
             const row = new ActionRowBuilder().addComponents(giveawayButton, disableButton);
 
-            giveawayEmbed.setFooter({ text: `Giveaway ID: ${giveawayMessageId}` });
+            giveawayEmbed.setFooter({ text: `Message ID: ${giveawayMessageId}` });
 
             giveawayMessage.edit({ embeds: [giveawayEmbed], components: [row] });
 
@@ -188,7 +188,7 @@ module.exports = {
 
             const row = new ActionRowBuilder().addComponents(giveawayButton);
 
-            giveawayEmbed.setFooter({ text: `Giveaway ID: ${giveaway["messageId"]}` });
+            giveawayEmbed.setFooter({ text: `Message ID: ${giveaway["messageId"]}` });
 
             giveawayMessage.edit({ embeds: [giveawayEmbed], components: [row] });
 
