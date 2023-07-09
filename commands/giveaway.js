@@ -81,7 +81,7 @@ module.exports = {
 
             const channel = interaction.options.getChannel("channel");
             const winners = interaction.options.getInteger("winners");
-            const prize = interaction.options.getString("title");
+            const prize = interaction.options.getString("prize");
 
             const giveawayEmbed = new EmbedBuilder()
                 .setTitle(prize)
