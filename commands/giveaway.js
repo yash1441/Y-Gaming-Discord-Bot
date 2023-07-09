@@ -138,8 +138,9 @@ module.exports = {
             const giveaway = giveawayData[messageId];
 
             if (giveaway === undefined) {
-                await interaction.editReply({ content: "Giveaway not found." });
-                return;
+                return await interaction.editReply({ content: "Giveaway not found." });
+            } else if (giveaway["ended"] === true) {
+                return await interaction.editReply({ content: "Giveaway has already ended." });
             }
 
             const giveawayMessage = await interaction.guild.channels.cache.get(giveaway["channelId"]).messages.fetch(giveaway["messageId"]);
