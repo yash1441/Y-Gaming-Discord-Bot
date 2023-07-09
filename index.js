@@ -232,7 +232,6 @@ client.on("interactionCreate", async (interaction) => {
 			await interaction.showModal(modal);
 		} else if (interaction.customId.startsWith("giveaway_")) {
 			const giveawayId = interaction.customId.split("_")[1];
-			const embed = interaction.message.embeds[0];
 
 			const success = await giveawayEntry(giveawayId, interaction.user.id);
 
