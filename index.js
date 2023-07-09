@@ -239,6 +239,8 @@ client.on("interactionCreate", async (interaction) => {
 				return await interaction.reply({ content: "You have already entered this giveaway!", ephemeral: true });
 			} else if (success == 0) {
 				return await interaction.reply({ content: "There was an error. Please try again later.", ephemeral: true });
+			} else if (success == -2) {
+				return await interaction.reply({ content: "This giveaway has ended.", ephemeral: true });
 			}
 
 			let entries = 0;
