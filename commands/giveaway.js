@@ -298,7 +298,7 @@ module.exports = {
                 embed.addFields({ name: entry.prize, value: messageLink });
             }
 
-            await interaction.editReply({ embeds: [embed] });
+            await interaction.editReply({ content: "", embeds: [embed] });
         }
     },
 };
