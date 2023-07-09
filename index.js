@@ -583,7 +583,7 @@ async function giveawayEntry(giveawayId, entryId) {
 
 	giveaway.entries.push(entryId).catch(() => success = 0);
 
-	fs.writeFileSync(path.join(dataPath, "giveaways.json"), JSON.stringify(giveaways, null, 2), "utf8").catch(() => success = 0);
+	fs.writeFileSync("./Data/giveaways.json", JSON.stringify(giveaways, null, 2), "utf8").catch(() => success = 0);
 
 	return success;
 }
