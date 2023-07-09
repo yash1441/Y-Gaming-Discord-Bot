@@ -578,10 +578,12 @@ async function giveawayEntry(giveawayId, entryId) {
 	const giveaway = giveaways[giveawayId];
 
 	if (giveaway.entries.includes(entryId)) return -1;
+	if (giveaway.ended) return -2;
+	if (giveaway == undefined) return 0;
 
 	giveaway.entries.push(entryId);
 
-	fs.writeFileSync("./Data/giveaways.json", JSON.stringify(giveaways, null, 2), "utf8").catch(() => success = 0);
+	fs.writeFileSync("./Data/giveaways.json", JSON.stringify(giveaways, null, 2), "utf8");
 
 	return success;
 }
