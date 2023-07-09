@@ -126,8 +126,8 @@ module.exports = {
             await interaction.reply({ content: "Ending the giveaway...", ephemeral: true });
 
             const messageId = interaction.options.getString("message-id");
-
-            logger.debug(`Message ID: ${messageId}`);
+            const giveawayMessage = await interaction.guild.channels.cache.get(giveaway["channelId"]).messages.fetch(giveaway["messageId"]);
+            const prize = giveawayMessage.embeds[0].title;
 
             let giveawayData = {};
             try {
@@ -137,43 +137,37 @@ module.exports = {
                 logger.error('Error reading giveawayData file:\n' + error);
             }
 
-            logger.debug(`Giveaway Data: ${JSON.stringify(giveawayData)}`);
-
             const giveaway = giveawayData[messageId];
             if (giveaway === undefined) {
                 await interaction.editReply({ content: "Giveaway not found." });
                 return;
             }
 
-            logger.debug(`Giveaway: ${JSON.stringify(giveaway)}`);
-
             giveawayData[messageId]["ended"] = true;
 
             let winners = giveaway["winners"];
             let entries = giveaway["entries"];
 
-            logger.debug(`Winners: ${winners.toString()}`);
-            logger.debug(`Entries: ${entries}`);
-
             if (entries.length <= winners) {
                 winners = entries.length;
                 giveawayData[messageId]["winner"] = entries;
             } else {
-                entries = entries.slice();
-
                 while (giveawayData[messageId]["winner"].length < winners) {
-                    const randomIndex = entries[Math.floor(Math.random() * entries.length)];
-                    const winner = entries.splice(randomIndex, 1)[0];
-                    giveawayData[messageId]["winner"].push(winner);
+                    let winnerIndex = [];
+                    let randomIndex = Math.floor(Math.random() * entries.length);
+
+                    while (winnerIndex.includes(randomIndex)) {
+                        randomIndex = Math.floor(Math.random() * entries.length);
+                    }
+                    winnerIndex.push(randomIndex);
+                    giveawayData[messageId]["winner"].push(entries[randomIndex]);
                 }
             }
 
             fs.writeFileSync("./Data/giveaways.json", JSON.stringify(giveawayData, null, 2), "utf8");
 
-            logger.debug(`Giveaway Winners: ` + giveawayData[messageId]["winner"].join(", "));
-
             const giveawayEmbed = new EmbedBuilder()
-                .setTitle("Giveaway Ended")
+                .setTitle(prize)
                 .setDescription(`The giveaway has ended!`)
                 .addFields(
                     { name: "Winners", value: giveawayData[messageId]["winner"].join(", "), inline: true },
@@ -181,8 +175,6 @@ module.exports = {
                 )
                 .setColor("#FF0000")
                 .setImage("https://i.ibb.co/5hJfvZt/Carl-bot-Giveaway-Image.png");
-
-            const giveawayMessage = await interaction.guild.channels.cache.get(giveaway["channelId"]).messages.fetch(giveaway["messageId"]);
 
             const giveawayButton = new ButtonBuilder()
                 .setCustomId("disabledGiveaway")
