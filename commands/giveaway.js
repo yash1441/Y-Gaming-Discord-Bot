@@ -1,7 +1,19 @@
 const { SlashCommandBuilder, ChannelType, EmbedBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const fs = require("fs");
-const path = require("path");
 const logger = require("../Logger/logger.js");
+
+const GIVEAWAY_IMAGES = [
+    "https://i.ibb.co/0FZMTLb/Giveaway-End1.png",
+    "https://i.ibb.co/LpzrXQ4/Giveaway-End2.png",
+    "https://i.ibb.co/89sy4DC/Giveaway-End3.png",
+    "https://i.ibb.co/QQ4Wnj0/Giveaway-End4.png",
+    "https://i.ibb.co/x2NCndK/Giveaway-End5.png",
+    "https://i.ibb.co/5Rhg7Rj/Giveaway-Start1.png",
+    "https://i.ibb.co/Rz8zqYd/Giveaway-Start2.png",
+    "https://i.ibb.co/xDkRZ0t/Giveaway-Start3.png",
+    "https://i.ibb.co/gMWyV21/Giveaway-Start4.png",
+    "https://i.ibb.co/Tc9kVQ5/Giveaway-Start5.png"
+]
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -79,7 +91,7 @@ module.exports = {
                     { name: "Host", value: `${interaction.user}`, inline: true },
                 )
                 .setColor("#00FF00")
-                .setImage("https://i.ibb.co/5hJfvZt/Carl-bot-Giveaway-Image.png");
+                .setImage(GIVEAWAY_IMAGES[Math.floor(Math.random() * 5)]);
 
             let giveawayMessage;
 
@@ -177,7 +189,7 @@ module.exports = {
                     { name: "Winners", value: giveawayData[messageId]["winner"].map(id => `<@${id}>`).join(", "), inline: true }
                 )
                 .setColor("#FF0000")
-                .setImage("https://i.ibb.co/5hJfvZt/Carl-bot-Giveaway-Image.png");
+                .setImage(GIVEAWAY_IMAGES[Math.floor(Math.random() * 5)]);
 
             const giveawayButton = new ButtonBuilder()
                 .setCustomId("disabledGiveaway")
@@ -247,7 +259,7 @@ module.exports = {
                     { name: "Winners", value: giveawayData[messageId]["winner"].map(id => `<@${id}>`).join(", "), inline: true }
                 )
                 .setColor("#FF0000")
-                .setImage("https://i.ibb.co/5hJfvZt/Carl-bot-Giveaway-Image.png");
+                .setImage(GIVEAWAY_IMAGES[Math.floor(Math.random() * 5) + 5]);
 
             const giveawayButton = new ButtonBuilder()
                 .setCustomId("disabledGiveaway")
@@ -263,6 +275,9 @@ module.exports = {
             giveawayMessage.edit({ embeds: [giveawayEmbed], components: [row] });
 
             await interaction.editReply({ content: `Giveaway winners successfully rerolled.` });
+
+        } else if (subCommand === "list") {
+            await interaction.reply({ content: "Generating the list of giveaways..."});
 
         }
     },
