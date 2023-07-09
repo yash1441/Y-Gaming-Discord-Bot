@@ -332,7 +332,6 @@ function storeGiveawayData(giveawayData) {
     // Write the updated data back to the JSON file
     try {
         fs.writeFileSync('./Data/giveaways.json', JSON.stringify(updatedData, null, 2));
-        logger.info('giveawayData successfully stored.');
     } catch (error) {
         logger.error('Error writing giveawayData file:\n' + error);
     }
