@@ -4,21 +4,21 @@ const path = require("path");
 const logger = require("../Logger/logger.js");
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName("giveaway")
-		.setDescription("Organize and manage giveaways.")
-		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-		.setDMPermission(false)
-		.addSubcommand((subcommand) =>
-			subcommand
-				.setName("create")
-				.setDescription("Create a giveaway.")
+    data: new SlashCommandBuilder()
+        .setName("giveaway")
+        .setDescription("Organize and manage giveaways.")
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+        .setDMPermission(false)
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName("create")
+                .setDescription("Create a giveaway.")
                 .addChannelOption((option) =>
-                option
-                    .setName("channel")
-                    .setDescription("Select the channel to host the giveaway in.")
-                    .addChannelTypes(ChannelType.GuildText)
-                    .setRequired(true)
+                    option
+                        .setName("channel")
+                        .setDescription("Select the channel to host the giveaway in.")
+                        .addChannelTypes(ChannelType.GuildText)
+                        .setRequired(true)
                 )
                 .addIntegerOption((option) =>
                     option
@@ -33,40 +33,40 @@ module.exports = {
                         .setDescription("Select the title of the giveaway.")
                         .setRequired(true)
                 )
-		)
-		.addSubcommand((subcommand) =>
-			subcommand
-				.setName("reroll")
-				.setDescription("Reroll a giveaway winner.")
+        )
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName("reroll")
+                .setDescription("Reroll a giveaway winner.")
                 .addStringOption((option) =>
                     option
                         .setName("message-id")
                         .setDescription("Select the message ID of the giveaway to reroll.")
                         .setRequired(true)
                 )
-		)
-		.addSubcommand((subcommand) =>
-			subcommand
-				.setName("end")
-				.setDescription("End a giveaway prematurely.")
+        )
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName("end")
+                .setDescription("End a giveaway prematurely.")
                 .addStringOption((option) =>
                     option
                         .setName("message-id")
                         .setDescription("Select the message ID of the giveaway to end.")
                         .setRequired(true)
                 )
-		)
-		.addSubcommand((subcommand) =>
-			subcommand
-				.setName("list")
-				.setDescription("List of ongoing giveaways.")
-		),
-	async execute(interaction) {
-		const subCommand = interaction.options.getSubcommand();
+        )
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName("list")
+                .setDescription("List of ongoing giveaways.")
+        ),
+    async execute(interaction) {
+        const subCommand = interaction.options.getSubcommand();
 
         if (subCommand === "create") {
             await interaction.reply({ content: "Creating the giveaway...", ephemeral: true });
-            
+
             const channel = interaction.options.getChannel("channel");
             const winners = interaction.options.getInteger("winners");
             const title = interaction.options.getString("title");
@@ -117,7 +117,7 @@ module.exports = {
 
             const row = new ActionRowBuilder().addComponents(giveawayButton, disableButton);
 
-            giveawayEmbed.setFooter({ text: `Giveaway ID: ${giveawayMessageId}`});
+            giveawayEmbed.setFooter({ text: `Giveaway ID: ${giveawayMessageId}` });
 
             giveawayMessage.edit({ embeds: [giveawayEmbed], components: [row] });
 
@@ -148,14 +148,15 @@ module.exports = {
 
             if (entries.length < winners) {
                 winners = entries.length;
-            }
+                giveawayData[messageId]["winner"] = entries;
+            } else {
+                entries = entries.slice();
 
-            entries = entries.slice();
-
-            while (giveawayData[messageId]["winner"].length < winners) {
-                const randomIndex = entries[Math.floor(Math.random() * entries.length)];
-                const winner = entries.splice(randomIndex, 1)[0];
-                giveawayData[messageId]["winner"].push(winner);
+                while (giveawayData[messageId]["winner"].length < winners) {
+                    const randomIndex = entries[Math.floor(Math.random() * entries.length)];
+                    const winner = entries.splice(randomIndex, 1)[0];
+                    giveawayData[messageId]["winner"].push(winner);
+                }
             }
 
             fs.writeFileSync("./Data/giveaways.json", JSON.stringify(giveawayData, null, 2), "utf8");
@@ -181,19 +182,19 @@ module.exports = {
 
             const row = new ActionRowBuilder().addComponents(giveawayButton);
 
-            giveawayEmbed.setFooter({ text: `Giveaway ID: ${giveaway["messageId"]}`});
+            giveawayEmbed.setFooter({ text: `Giveaway ID: ${giveaway["messageId"]}` });
 
             giveawayMessage.edit({ embeds: [giveawayEmbed], components: [row] });
 
             await interaction.editReply({ content: `Giveaway successfully ended.` });
         }
-	},
+    },
 };
 
 
-function getCurrentTime () {
+function getCurrentTime() {
     return Math.floor(Date.now() / 1000)
-  }
+}
 
 function storeGiveawayData(giveawayData) {
     // Load existing giveawayData objects from the JSON file
@@ -204,13 +205,13 @@ function storeGiveawayData(giveawayData) {
     } catch (error) {
         logger.error('Error reading giveawayData file:\n' + error);
     }
-  
+
     // Merge the new giveawayData with the existing data
     const updatedData = {
         ...existingData,
         ...giveawayData
     };
-  
+
     // Write the updated data back to the JSON file
     try {
         fs.writeFileSync('./Data/giveaways.json', JSON.stringify(updatedData, null, 2));
