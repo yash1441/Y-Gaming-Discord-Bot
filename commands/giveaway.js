@@ -155,7 +155,7 @@ module.exports = {
             logger.debug(`Winners: ${winners.toString()}`);
             logger.debug(`Entries: ${entries}`);
 
-            if (entries.length < winners) {
+            if (entries.length <= winners) {
                 winners = entries.length;
                 giveawayData[messageId]["winner"] = entries;
             } else {
