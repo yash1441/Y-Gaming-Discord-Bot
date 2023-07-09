@@ -575,7 +575,7 @@ async function giveawayEntry(giveawayId, entryId) {
 	let success = 1;
 	const jsonFile = fs.readFileSync("./Data/giveaways.json", "utf8");
 	const giveaways = JSON.parse(jsonFile);
-	const giveaway = jsonObject[giveawayId];
+	const giveaway = giveaways[giveawayId];
 
 	if (giveaway.entries.includes(entryId)) return -1;
 
