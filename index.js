@@ -573,9 +573,7 @@ async function fetchStoreSkins(rawStore) {
 
 async function giveawayEntry(giveawayId, entryId) {
 	let success = 1;
-	const jsonFile = JSON.parse(
-		fs.readFileSync("./Data/giveaways.json", "utf8")
-	);
+	const jsonFile = fs.readFileSync("./Data/giveaways.json", "utf8");
 	const giveaways = JSON.parse(jsonFile);
 	const giveaway = jsonObject[giveawayId];
 
