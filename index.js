@@ -18,7 +18,14 @@ require("dotenv").config();
 const logger = require("./Logger/logger.js");
 const Valorant = require("@liamcottle/valorant.js");
 const axios = require("axios").default;
-const db = require('./dbInit');
+
+const Sequelize = require('sequelize');
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
+	host: process.env.DB_IP,
+	dialect: 'mysql',
+	logging: false
+});
+const valoLogin = require("./Models/valoLogin")(sequelize, Sequelize.DataTypes);
 
 const client = new Client({
 	intents: [
@@ -250,19 +257,19 @@ client.on("interactionCreate", async (interaction) => {
 			interaction.message.components.find((row) => row.components.find((button) => entries = parseInt(button.label)));
 
 			const giveawayButton = new ButtonBuilder()
-                .setCustomId("giveaway_" + giveawayId)
-                .setLabel("Join")
-                .setStyle(ButtonStyle.Success)
-                .setEmoji("🎉");
+				.setCustomId("giveaway_" + giveawayId)
+				.setLabel("Join")
+				.setStyle(ButtonStyle.Success)
+				.setEmoji("🎉");
 
-            const disableButton = new ButtonBuilder()
-                .setCustomId("disabledGiveaway")
-                .setLabel((entries + 1).toString())
-                .setStyle(ButtonStyle.Secondary)
-                .setDisabled(true)
-                .setEmoji("👤");
+			const disableButton = new ButtonBuilder()
+				.setCustomId("disabledGiveaway")
+				.setLabel((entries + 1).toString())
+				.setStyle(ButtonStyle.Secondary)
+				.setDisabled(true)
+				.setEmoji("👤");
 
-            const row = new ActionRowBuilder().addComponents(giveawayButton, disableButton);
+			const row = new ActionRowBuilder().addComponents(giveawayButton, disableButton);
 
 			interaction.message.edit({ components: [row] })
 
@@ -592,5 +599,10 @@ async function giveawayEntry(giveawayId, entryId) {
 }
 
 async function dbInit() {
-	db.authenticate().then(() => logger.info("Database logged in.")).catch((error) => logger.error(error));
+	const force = process.argv.includes('--force') || process.argv.includes('-f');
+
+	sequelize.sync({ force }).then(async () => {
+		logger.info('Database synced.');
+		sequelize.close();
+	}).catch(logger.error);
 }
