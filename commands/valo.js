@@ -499,9 +499,7 @@ module.exports = {
             }
 
             await interaction.deferReply({ ephemeral: false });
-
             const rawNightMarket = await getNightMarket(userCreds.username, userCreds.password);
-
             if (!rawNightMarket) {
                 return await interaction.editReply({
                     content:
@@ -510,7 +508,6 @@ module.exports = {
             }
 
             const skins = await fetchNightmarketSkins(rawNightMarket);
-
             const embeds = [];
 
             for (const skin of skins) {
@@ -688,15 +685,40 @@ module.exports = {
                 embeds.push(embed);
             }
 
-            const loginButton = new ButtonBuilder()
-                .setCustomId("store-login")
-                .setLabel("Login")
-                .setStyle(ButtonStyle.Primary)
-                .setEmoji("🏪");
+            const userCreds = await valoLogin.findOne({ where: { id: interaction.user.id } });
 
-            const row = new ActionRowBuilder().addComponents([loginButton]);
+            if (!userCreds) {
+                const loginButton = new ButtonBuilder()
+                    .setCustomId("store-login")
+                    .setLabel("Login")
+                    .setStyle(ButtonStyle.Primary)
+                    .setEmoji("🏪");
 
-            await interaction.editReply({ embeds: embeds, components: [row] });
+                const row = new ActionRowBuilder().addComponents([loginButton]);
+
+                return await interaction.editReply({ embeds: embeds, components: [row] });
+            }
+
+            const playerStore = await getStore(username, password);
+            if (!playerStore) {
+                return await interaction.editReply({
+                    content:
+                        "Invalid login attempt. If you are sure your credentials were correct then please check if 2FA is enabled because the bot doesn't support 2FA as of yet.",
+                });
+            }
+
+            const skins = await fetchStoreSkins(playerStore);
+
+            for (const skin of skins) {
+                const skinEmbed = new EmbedBuilder()
+                    .setColor("#2B2D31")
+                    .setTitle(skin.name)
+                    .setThumbnail(skin.icon)
+                    .setDescription("<:VP:1077169497582080104> " + skin.cost);
+                embeds.push(skinEmbed);
+            }
+
+            await interaction.editReply({ embeds: embeds });
         } else if (subCommand === "login") {
             const modal = new ModalBuilder()
                 .setCustomId("valoLogin")
