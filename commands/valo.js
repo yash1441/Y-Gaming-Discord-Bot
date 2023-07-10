@@ -481,34 +481,12 @@ module.exports = {
                 embeds: embeds,
             });
         } else if (subCommand === "nightmarket") {
+            await interaction.deferReply();
             const userCreds = await valoLogin.findOne({ where: { id: interaction.user.id } });
-
             if (!userCreds) {
-                const modal = new ModalBuilder()
-                    .setCustomId("valorant-login-nightmarket")
-                    .setTitle("Valorant Login");
-
-                const usernameInput = new TextInputBuilder()
-                    .setCustomId("username")
-                    .setLabel("Username")
-                    .setStyle(TextInputStyle.Short)
-                    .setRequired(true);
-
-                const passwordInput = new TextInputBuilder()
-                    .setCustomId("password")
-                    .setLabel("Password")
-                    .setStyle(TextInputStyle.Short)
-                    .setRequired(true);
-
-                const firstInput = new ActionRowBuilder().addComponents(usernameInput);
-                const secondInput = new ActionRowBuilder().addComponents(passwordInput);
-
-                modal.addComponents(firstInput, secondInput);
-
-                return await interaction.showModal(modal);
+                return await interaction.editReply({ content: `Please use the </valo login:1127207637738606603> command first then try again.`})
             }
 
-            await interaction.deferReply({ ephemeral: false });
             const rawNightMarket = await getNightMarket(userCreds.username, userCreds.password);
             if (!rawNightMarket) {
                 return await interaction.editReply({
@@ -655,6 +633,12 @@ module.exports = {
             fs.unlinkSync(file);
         } else if (subCommand === "store") {
             await interaction.deferReply();
+
+            const userCreds = await valoLogin.findOne({ where: { id: interaction.user.id } });
+            if (!userCreds) {
+                return await interaction.editReply({ content: `Please use the </valo login:1127207637738606603> command first then try again.`})
+            }
+
             let store;
             await vapi
                 .getFeaturedItems({
@@ -693,20 +677,6 @@ module.exports = {
                 }
 
                 embeds.push(embed);
-            }
-
-            const userCreds = await valoLogin.findOne({ where: { id: interaction.user.id } });
-
-            if (!userCreds) {
-                const loginButton = new ButtonBuilder()
-                    .setCustomId("store-login")
-                    .setLabel("Login")
-                    .setStyle(ButtonStyle.Primary)
-                    .setEmoji("🏪");
-
-                const row = new ActionRowBuilder().addComponents([loginButton]);
-
-                return await interaction.editReply({ embeds: embeds, components: [row] });
             }
 
             const playerStore = await getStore(userCreds.username, userCreds.password);
@@ -1072,7 +1042,7 @@ async function createScoreboard(interaction, players, map, date, file) {
 
 async function getNightMarket(username, password) {
     await getValorantVersion();
-    
+
     let shouldContinue = true;
     await valorantAPI.authorize(username, password).catch((error) => {
         logger.error(error);
