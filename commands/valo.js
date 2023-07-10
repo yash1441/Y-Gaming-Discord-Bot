@@ -12,14 +12,17 @@ const canvacord = require("canvacord");
 const HenrikDevValorantAPI = require("unofficial-valorant-api");
 const Jimp = require("jimp");
 const vapi = new HenrikDevValorantAPI();
+const Valorant = require("@liamcottle/valorant.js");
 const axios = require("axios");
 const logger = require("../Logger/logger.js");
 
+const valorantAPI = new Valorant.API(Valorant.Regions.AsiaPacific);
+
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
-	host: process.env.DB_IP,
-	dialect: 'mysql',
-	logging: false
+    host: process.env.DB_IP,
+    dialect: 'mysql',
+    logging: false
 });
 const valoLogin = require("../Models/valoLogin")(sequelize, Sequelize.DataTypes);
 
@@ -468,28 +471,62 @@ module.exports = {
                 embeds: embeds,
             });
         } else if (subCommand === "nightmarket") {
-            const modal = new ModalBuilder()
-                .setCustomId("valorant-login-nightmarket")
-                .setTitle("Valorant Login");
+            const userCreds = await valoLogin.findOne({ where: { id: interaction.user.id } });
 
-            const usernameInput = new TextInputBuilder()
-                .setCustomId("username")
-                .setLabel("Username")
-                .setStyle(TextInputStyle.Short)
-                .setRequired(true);
+            if (!userCreds) {
+                const modal = new ModalBuilder()
+                    .setCustomId("valorant-login-nightmarket")
+                    .setTitle("Valorant Login");
 
-            const passwordInput = new TextInputBuilder()
-                .setCustomId("password")
-                .setLabel("Password")
-                .setStyle(TextInputStyle.Short)
-                .setRequired(true);
+                const usernameInput = new TextInputBuilder()
+                    .setCustomId("username")
+                    .setLabel("Username")
+                    .setStyle(TextInputStyle.Short)
+                    .setRequired(true);
 
-            const firstInput = new ActionRowBuilder().addComponents(usernameInput);
-            const secondInput = new ActionRowBuilder().addComponents(passwordInput);
+                const passwordInput = new TextInputBuilder()
+                    .setCustomId("password")
+                    .setLabel("Password")
+                    .setStyle(TextInputStyle.Short)
+                    .setRequired(true);
 
-            modal.addComponents(firstInput, secondInput);
+                const firstInput = new ActionRowBuilder().addComponents(usernameInput);
+                const secondInput = new ActionRowBuilder().addComponents(passwordInput);
 
-            await interaction.showModal(modal);
+                modal.addComponents(firstInput, secondInput);
+
+                return await interaction.showModal(modal);
+            }
+
+            await interaction.deferReply({ ephemeral: false });
+
+            const rawNightMarket = await getNightMarket(userCreds.username, userCreds.password);
+
+            if (!rawNightMarket) {
+                return await interaction.editReply({
+                    content:
+                        "Invalid login attempt. If you are sure your credentials were correct then please check if 2FA is enabled because the bot doesn't support 2FA as of yet.",
+                });
+            }
+
+            const skins = await fetchNightmarketSkins(rawNightMarket);
+
+            const embeds = [];
+
+            for (const skin of skins) {
+                const skinEmbed = new EmbedBuilder()
+                    .setColor("#2B2D31")
+                    .setTitle(skin.name)
+                    .setThumbnail(skin.icon)
+                    .setDescription(
+                        "<:VP:1077169497582080104> " +
+                        skin.discountCosts +
+                        `    ||*-${skin.discountPercent}%*||`
+                    );
+                embeds.push(skinEmbed);
+            }
+
+            await interaction.editReply({ embeds: embeds });
         } else if (subCommand === "rank") {
             await interaction.deferReply({ ephemeral: false });
             if (!interaction.options.getString("username").includes("#")) {
@@ -999,4 +1036,110 @@ async function createScoreboard(interaction, players, map, date, file) {
     );
 
     await mapImage.writeAsync(file);
+}
+
+async function getValorantVersion(url) {
+    await axios.get(url).then((response) => {
+        valorantAPI.user_agent =
+            "RiotClient/" +
+            response.data.data.riotClientBuild +
+            " rso-auth (Windows;10;;Professional, x64)";
+        valorantAPI.client_version = response.data.data.riotClientVersion;
+    });
+
+    return logger.info(
+        "Valorant API User Agent: " +
+        valorantAPI.user_agent +
+        " | Valorant API Client Version: " +
+        valorantAPI.client_version
+    );
+}
+
+async function getNightMarket(username, password) {
+    let shouldContinue = true;
+    await valorantAPI.authorize(username, password).catch((error) => {
+        logger.error(error);
+        shouldContinue = false;
+    });
+
+    if (!shouldContinue) return false;
+
+    const response = await valorantAPI
+        .getPlayerStoreFront(valorantAPI.user_id)
+        .catch((error) => {
+            logger.error(error);
+            shouldContinue = false;
+        });
+
+    if (!shouldContinue) return false;
+
+    if (response.data.BonusStore == undefined) return false;
+
+    return response.data.BonusStore.BonusStoreOffers;
+}
+
+async function getStore(username, password) {
+    let shouldContinue = true;
+    await valorantAPI.authorize(username, password).catch((error) => {
+        logger.error(error);
+        shouldContinue = false;
+    });
+
+    if (!shouldContinue) return false;
+
+    const response = await valorantAPI
+        .getPlayerStoreFront(valorantAPI.user_id)
+        .catch((error) => {
+            logger.error(error);
+            shouldContinue = false;
+        });
+
+    if (!shouldContinue) return false;
+
+    return response.data.SkinsPanelLayout.SingleItemStoreOffers;
+}
+
+async function fetchNightmarketSkins(rawNightMarket) {
+    const skins = [];
+
+    for (const record of rawNightMarket) {
+        const skin = await axios.get(
+            "https://valorant-api.com/v1/weapons/skinlevels/" + record.Offer.OfferID
+        );
+
+        const discountCostsArray = Object.values(record.DiscountCosts);
+        const discountCosts = discountCostsArray[0];
+        const skinData = {
+            name: skin.data.data.displayName,
+            icon: skin.data.data.displayIcon,
+            offerId: record.Offer.OfferID,
+            discountPercent: record.DiscountPercent.toString(),
+            discountCosts: discountCosts.toString(),
+        };
+        skins.push(skinData);
+    }
+
+    return skins;
+}
+
+async function fetchStoreSkins(rawStore) {
+    const skins = [];
+
+    for (const record of rawStore) {
+        const skin = await axios.get(
+            "https://valorant-api.com/v1/weapons/skinlevels/" + record.OfferID
+        );
+
+        const costsArray = Object.values(record.Cost);
+        const cost = costsArray[0];
+        const skinData = {
+            name: skin.data.data.displayName,
+            icon: skin.data.data.displayIcon,
+            offerId: record.OfferID,
+            cost: cost.toString(),
+        };
+        skins.push(skinData);
+    }
+
+    return skins;
 }
