@@ -6,17 +6,26 @@ const { SlashCommandBuilder,
     TextInputBuilder,
     TextInputStyle,
     ActionRowBuilder, } = require("discord.js");
+
+
 const fs = require("fs");
 const path = require("path");
-const canvacord = require("canvacord");
-const HenrikDevValorantAPI = require("unofficial-valorant-api");
-const Jimp = require("jimp");
-const vapi = new HenrikDevValorantAPI();
-const Valorant = require("@liamcottle/valorant.js");
 const axios = require("axios");
+
+
+const canvacord = require("canvacord");
+const Jimp = require("jimp");
+
+
+require("dotenv").config();
 const logger = require("../Logger/logger.js");
 
+
+const HenrikDevValorantAPI = require("unofficial-valorant-api");
+const vapi = new HenrikDevValorantAPI();
+const Valorant = require("@liamcottle/valorant.js");
 const valorantAPI = new Valorant.API(Valorant.Regions.AsiaPacific);
+
 
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
@@ -25,6 +34,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
     logging: false
 });
 const valoLogin = require("../Models/valoLogin")(sequelize, Sequelize.DataTypes);
+
 
 const dataDirectory = path.join(__dirname, "../Data");
 const rankThreshold = JSON.parse(
@@ -699,9 +709,6 @@ module.exports = {
                 return await interaction.editReply({ embeds: embeds, components: [row] });
             }
 
-            logger.debug(userCreds.username);
-            logger.debug(userCreds.password);
-
             const playerStore = await getStore(userCreds.username, userCreds.password);
             if (!playerStore) {
                 return await interaction.editReply({
@@ -1089,7 +1096,7 @@ async function getNightMarket(username, password) {
 async function getStore(username, password) {
     let shouldContinue = true;
     await valorantAPI.authorize(username, password).catch((error) => {
-        logger.error(error);
+        console.error(error);
         shouldContinue = false;
     });
 
@@ -1098,7 +1105,7 @@ async function getStore(username, password) {
     const response = await valorantAPI
         .getPlayerStoreFront(valorantAPI.user_id)
         .catch((error) => {
-            logger.error(error);
+            console.error(error);
             shouldContinue = false;
         });
 
