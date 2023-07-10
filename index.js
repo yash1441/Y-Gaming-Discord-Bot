@@ -18,6 +18,7 @@ require("dotenv").config();
 const logger = require("./Logger/logger.js");
 const Valorant = require("@liamcottle/valorant.js");
 const axios = require("axios").default;
+const db = require('dbInit');
 
 const client = new Client({
 	intents: [
@@ -107,6 +108,7 @@ client.on("ready", async () => {
 	});
 
 	await getValorantVersion("https://valorant-api.com/v1/version");
+	await dbInit();
 
 	// setInterval(() => {
 	// 	checkLive("tansmh");
@@ -587,4 +589,8 @@ async function giveawayEntry(giveawayId, entryId) {
 	fs.writeFileSync("./Data/giveaways.json", JSON.stringify(giveaways, null, 2), "utf8");
 
 	return success;
+}
+
+async function dbInit() {
+	db.authenticate().then(() => logger.info("Database logged in.")).catch((error) => logger.error(error));
 }
