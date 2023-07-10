@@ -702,7 +702,7 @@ module.exports = {
                 const credentials = await valoLogin.findOne({ where: { id: id } });
 
                 if (credentials) {
-                    await valoLogin.update({ username: username, password: password });
+                    await valoLogin.update({ username: username, password: password }, { where: { id: id } });
                     return await interaction.reply({ content: `Successfully updated your Valorant credentials.` })
                 }
 
