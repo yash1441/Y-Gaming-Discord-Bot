@@ -703,7 +703,7 @@ module.exports = {
 
                 if (credentials) {
                     await valoLogin.update({ username: username, password: password }, { where: { id: id } });
-                    return await submit.reply({ content: `Successfully updated your Valorant credentials.` })
+                    return await submit.reply({ content: `Successfully updated your Valorant credentials.`, ephemeral: true })
                 }
 
                 await valoLogin.create({
@@ -711,7 +711,7 @@ module.exports = {
                     username: username,
                     password: password,
                 });
-                return await submit.reply({ content: `Successfully stored your Valorant credentials.` })
+                return await submit.reply({ content: `Successfully stored your Valorant credentials.`, ephemeral: true })
             } else {
                 await interaction.reply({ content: "Request timed out. Please try again.", ephemeral: true });
             }
