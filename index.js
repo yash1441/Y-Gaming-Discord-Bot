@@ -18,7 +18,7 @@ require("dotenv").config();
 const logger = require("./Logger/logger.js");
 const Valorant = require("@liamcottle/valorant.js");
 const axios = require("axios").default;
-const db = require('dbInit.js');
+const db = require('./dbInit');
 
 const client = new Client({
 	intents: [
