@@ -699,7 +699,7 @@ module.exports = {
                 return await interaction.editReply({ embeds: embeds, components: [row] });
             }
 
-            const playerStore = await getStore(username, password);
+            const playerStore = await getStore(userCreds.username, userCreds.password);
             if (!playerStore) {
                 return await interaction.editReply({
                     content:
