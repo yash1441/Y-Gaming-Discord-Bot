@@ -1071,6 +1071,8 @@ async function createScoreboard(interaction, players, map, date, file) {
 }
 
 async function getNightMarket(username, password) {
+    await getValorantVersion();
+    
     let shouldContinue = true;
     await valorantAPI.authorize(username, password).catch((error) => {
         logger.error(error);
