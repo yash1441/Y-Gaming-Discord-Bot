@@ -699,6 +699,9 @@ module.exports = {
                 return await interaction.editReply({ embeds: embeds, components: [row] });
             }
 
+            logger.debug(userCreds.username);
+            logger.debug(userCreds.password);
+
             const playerStore = await getStore(userCreds.username, userCreds.password);
             if (!playerStore) {
                 return await interaction.editReply({
@@ -1058,23 +1061,6 @@ async function createScoreboard(interaction, players, map, date, file) {
     );
 
     await mapImage.writeAsync(file);
-}
-
-async function getValorantVersion(url) {
-    await axios.get(url).then((response) => {
-        valorantAPI.user_agent =
-            "RiotClient/" +
-            response.data.data.riotClientBuild +
-            " rso-auth (Windows;10;;Professional, x64)";
-        valorantAPI.client_version = response.data.data.riotClientVersion;
-    });
-
-    return logger.info(
-        "Valorant API User Agent: " +
-        valorantAPI.user_agent +
-        " | Valorant API Client Version: " +
-        valorantAPI.client_version
-    );
 }
 
 async function getNightMarket(username, password) {
