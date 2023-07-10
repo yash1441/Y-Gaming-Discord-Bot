@@ -1094,12 +1094,13 @@ async function getNightMarket(username, password) {
 }
 
 async function getStore(username, password) {
+    await getValorantVersion();
+
     let shouldContinue = true;
     await valorantAPI.authorize(username, password).catch((error) => {
         console.error(error);
         shouldContinue = false;
     });
-
     if (!shouldContinue) return false;
 
     const response = await valorantAPI
@@ -1108,10 +1109,19 @@ async function getStore(username, password) {
             console.error(error);
             shouldContinue = false;
         });
-
     if (!shouldContinue) return false;
 
     return response.data.SkinsPanelLayout.SingleItemStoreOffers;
+}
+
+async function getValorantVersion() {
+	await axios.get("https://valorant-api.com/v1/version").then((response) => {
+		valorantAPI.user_agent =
+			"RiotClient/" +
+			response.data.data.riotClientBuild +
+			" rso-auth (Windows;10;;Professional, x64)";
+		valorantAPI.client_version = response.data.data.riotClientVersion;
+	});
 }
 
 async function fetchNightmarketSkins(rawNightMarket) {
