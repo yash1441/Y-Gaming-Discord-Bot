@@ -14,6 +14,7 @@ const Jimp = require("jimp");
 const vapi = new HenrikDevValorantAPI();
 const axios = require("axios");
 const logger = require("../Logger/logger.js");
+const valoLogin = require("../Models/valoLogin")(sequelize, Sequelize.DataTypes);
 
 const dataDirectory = path.join(__dirname, "../Data");
 const rankThreshold = JSON.parse(
@@ -194,6 +195,11 @@ module.exports = {
             subcommand
                 .setName("store")
                 .setDescription("Check your store."),
+        )
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName("login")
+                .setDescription("Store your Valorant login for easier access to commands."),
         ),
     async execute(interaction) {
         const subCommand = interaction.options.getSubcommand();
@@ -647,6 +653,61 @@ module.exports = {
             const row = new ActionRowBuilder().addComponents([loginButton]);
 
             await interaction.editReply({ embeds: embeds, components: [row] });
+        } else if (subCommand === "login") {
+            const modal = new ModalBuilder()
+                .setCustomId("valoLogin")
+                .setTitle("Valorant Login");
+
+            const usernameInput = new TextInputBuilder()
+                .setCustomId("username")
+                .setLabel("Username")
+                .setStyle(TextInputStyle.Short)
+                .setRequired(true);
+
+            const passwordInput = new TextInputBuilder()
+                .setCustomId("password")
+                .setLabel("Password")
+                .setStyle(TextInputStyle.Short)
+                .setRequired(true);
+
+            const firstInput = new ActionRowBuilder().addComponents(usernameInput);
+            const secondInput = new ActionRowBuilder().addComponents(passwordInput);
+
+            modal.addComponents(firstInput, secondInput);
+
+            await interaction.showModal(modal);
+
+            const submit = await interaction
+                .awaitModalSubmit({
+                    time: 60000,
+                    filter: (i) => i.user.id === interaction.user.id,
+                })
+                .catch((error) => {
+                    logger.log(error);
+                    return null;
+                });
+
+            if (submit) {
+                let username = submit.fields.getTextInputValue("username");
+                let password = submit.fields.getTextInputValue("password");
+                let id = interaction.user.id;
+
+                const credentials = await valoLogin.findOne({ where: { id: id } });
+
+                if (credentials) {
+                    await valoLogin.update({ username: username, password: password });
+                    return await interaction.reply({ content: `Successfully updated your Valorant credentials.` })
+                }
+
+                await valoLogin.create({
+                    id: id,
+                    username: username,
+                    password: password,
+                });
+                return await interaction.reply({ content: `Successfully stored your Valorant credentials.` })
+            } else {
+                await interaction.reply({ content: "Request timed out. Please try again.", ephemeral: true });
+            }
         }
     },
 };

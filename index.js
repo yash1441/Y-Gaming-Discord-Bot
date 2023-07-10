@@ -19,13 +19,20 @@ const logger = require("./Logger/logger.js");
 const Valorant = require("@liamcottle/valorant.js");
 const axios = require("axios").default;
 
+
+////////////////////
+///   DATABASE   ///
+////////////////////
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
 	host: process.env.DB_IP,
 	dialect: 'mysql',
 	logging: false
 });
-const valoLogin = require("./Models/valoLogin")(sequelize, Sequelize.DataTypes);
+
+////////////////////
+///    DEFINE    ///
+////////////////////
 
 const client = new Client({
 	intents: [
@@ -47,7 +54,7 @@ const valorantAPI = new Valorant.API(Valorant.Regions.AsiaPacific);
 // const dataDirectory = path.join(__dirname, "Data");
 // const weapons = JSON.parse(
 // 	fs.readFileSync(path.join(dataDirectory, "weapons.json"))
-// );
+// ); 
 
 let isLive = false;
 
