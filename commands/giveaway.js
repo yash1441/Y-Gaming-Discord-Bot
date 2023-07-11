@@ -183,7 +183,7 @@ module.exports = {
                 .setDescription(`The giveaway has ended!`)
                 .addFields(
                     { name: "Host", value: `<@${host}>`, inline: true },
-                    { name: "Winners", value: selectedWinners.map(discord_id => `<@${discord_id}>`).join(", "), inline: true }
+                    { name: "Winners", value: selectedWinners.map(win => `<@${win.discord_id}>`).join(", "), inline: true }
                 )
                 .setColor("#FF0000")
                 .setImage(GIVEAWAY_IMAGES[Math.floor(Math.random() * 5)]);
