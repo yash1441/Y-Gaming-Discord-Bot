@@ -145,11 +145,9 @@ module.exports = {
 
             const messageId = interaction.options.getString("message-id");
 
-            const giveaway = await giveawayData.findOne({ where: { message_id: messageId } });
+            const giveaway = await giveawayData.findOne({ where: { message_id: messageId, active: false } });
             const entries = await giveawayEntries.findAll({ where: { message_id: messageId } });
             const entriesCount = entries.length;
-            const prize = giveaway.prize;
-            const host = giveaway.host;
 
             if (!giveaway) {
                 return await interaction.editReply({ content: `Cannot find a giveaway with the Message ID: \`${messageId}\`` });
@@ -157,6 +155,8 @@ module.exports = {
                 return await interaction.editReply({ content: `The giveaway hass already ended.` });
             }
 
+            const prize = giveaway.prize;
+            const host = giveaway.host;
             const giveawayMessage = await interaction.guild.channels.cache.get(giveaway.channel_id).messages.fetch(giveaway.message_id);
             const winners = giveaway.winners;
             if (entriesCount == 0) {
@@ -182,7 +182,6 @@ module.exports = {
                 return await interaction.editReply({ content: `No entry found for this giveaway. No winner was selected. Giveaway successfully ended.` });
             }
             const selectedWinners = randomizeWinners(entries, (entriesCount < winners) ? entriesCount : winners);
-            console.log(selectedWinners[0].discord_id);
 
             const giveawayEmbed = new EmbedBuilder()
                 .setTitle(prize)
@@ -214,75 +213,54 @@ module.exports = {
 
             const messageId = interaction.options.getString("message-id");
 
-            let giveawayData = {};
-            try {
-                giveawayData = JSON.parse(fs.readFileSync('./Data/giveaways.json', 'utf8'));
-            } catch (error) {
-                logger.error('Error reading giveawayData file:\n' + error);
+            const giveaway = await giveawayData.findOne({ where: { message_id: messageId, active: false } });
+            const entries = await giveawayEntries.findAll({ where: { message_id: messageId } });
+            const entriesCount = entries.length;
+            if (!giveaway) {
+                return await interaction.editReply({ content: `Cannot find a giveaway with the Message ID: \`${messageId}\`` });
+            } else if (!giveaway.active) {
+                return await interaction.editReply({ content: `The giveaway hass already ended.` });
+            } else if (entriesCount == 0) {
+                return await interaction.editReply({ content: `No entry found for this giveaway. Reroll failed.` });
             }
 
-            const giveaway = giveawayData[messageId];
-
-            if (giveaway === undefined) {
-                return await interaction.editReply({ content: "Giveaway not found." });
-            } else if (giveaway["ended"] === false) {
-                return await interaction.editReply({ content: "Giveaway has not ended yet." });
-            }
-
-            const giveawayMessage = await interaction.guild.channels.cache.get(giveaway["channelId"]).messages.fetch(giveaway["messageId"]);
-            const prize = giveawayData[messageId]["prize"];
-
-            let winners = giveaway["winners"];
-            let entries = giveaway["entries"];
-
-            if (entries.length <= winners) {
-                winners = entries.length;
-                giveawayData[messageId]["winner"] = entries;
-            } else {
-                giveawayData[messageId]["winner"] = [];
-                while (giveawayData[messageId]["winner"].length < winners) {
-                    let winnerIndex = [];
-                    let randomIndex = Math.floor(Math.random() * entries.length);
-
-                    while (winnerIndex.includes(randomIndex)) {
-                        randomIndex = Math.floor(Math.random() * entries.length);
-                    }
-                    winnerIndex.push(randomIndex);
-                    giveawayData[messageId]["winner"].push(entries[randomIndex]);
-                }
-            }
-
-            fs.writeFileSync("./Data/giveaways.json", JSON.stringify(giveawayData, null, 2), "utf8");
+            const prize = giveaway.prize;
+            const host = giveaway.host;
+            const giveawayMessage = await interaction.guild.channels.cache.get(giveaway.channel_id).messages.fetch(giveaway.message_id);
+            const winners = giveaway.winners;
+            const selectedWinners = randomizeWinners(entries, (entriesCount < winners) ? entriesCount : winners);
 
             const giveawayEmbed = new EmbedBuilder()
                 .setTitle(prize)
                 .setDescription(`The giveaway has ended!`)
                 .addFields(
-                    { name: "Host", value: `<@${giveaway["host"]}>`, inline: true },
-                    { name: "Winners", value: giveawayData[messageId]["winner"].map(id => `<@${id}>`).join(", "), inline: true }
+                    { name: "Host", value: `<@${host}>`, inline: true },
+                    { name: "Winners", value: selectedWinners.map(win => `<@${win.discord_id}>`).join(", "), inline: true }
                 )
                 .setColor("#FF0000")
                 .setImage(GIVEAWAY_IMAGES[Math.floor(Math.random() * 5)]);
-
             const giveawayButton = new ButtonBuilder()
                 .setCustomId("disabledGiveaway")
-                .setLabel(giveaway["entries"].length.toString())
+                .setLabel(entriesCount.toString())
                 .setStyle(ButtonStyle.Secondary)
                 .setDisabled(true)
                 .setEmoji("👤");
-
             const row = new ActionRowBuilder().addComponents(giveawayButton);
-
-            giveawayEmbed.setFooter({ text: `Message ID: ${giveaway["messageId"]}` });
-
+            giveawayEmbed.setFooter({ text: `Message ID: ${giveaway.message_id}` });
             giveawayMessage.edit({ embeds: [giveawayEmbed], components: [row] });
+
+            await giveawayEntries.update({ won: false }, { where: { message_id: messageId, won: true } });
+
+            for (const entry of selectedWinners) {
+                await giveawayEntries.update({ won: true }, { where: { message_id: messageId, discord_id: entry.discord_id } });
+            }
 
             await interaction.editReply({ content: `Giveaway winners successfully rerolled.` });
 
         } else if (subCommand === "list") {
             await interaction.reply({ content: "Generating the list of giveaways..." });
 
-            const active = (interaction.options.getBoolean("active") || interaction.options.getBoolean("active") == null)   ? true : false;
+            const active = (interaction.options.getBoolean("active") || interaction.options.getBoolean("active") == null) ? true : false;
             logger.debug(active);
 
             const embed = new EmbedBuilder()
