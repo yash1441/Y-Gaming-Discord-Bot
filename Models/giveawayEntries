@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
         won: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
+            defaultValue: false,
         },
 	}, {
 		timestamps: true,
