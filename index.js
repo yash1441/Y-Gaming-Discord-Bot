@@ -30,6 +30,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
 	logging: false
 });
 const giveawayEntries = require("./Models/giveawayEntries")(sequelize, Sequelize.DataTypes);
+const giveawayData = require("../Models/giveawayData")(sequelize, Sequelize.DataTypes);
 
 ////////////////////
 ///    DEFINE    ///
