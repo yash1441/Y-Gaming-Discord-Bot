@@ -139,8 +139,8 @@ module.exports = {
 
             const messageId = interaction.options.getString("message-id");
 
-            const giveaway = await valoLogin.findOne({ where: { message_id: messageId } });
-            const entries = await valoLogin.findAll({ where: { message_id: messageId } });
+            const giveaway = await giveawayData.findOne({ where: { message_id: messageId } });
+            const entries = await giveawayEntries.findAll({ where: { message_id: messageId } });
             const entriesCount = entries.length;
             const prize = giveaway.prizes;
             const host = giveaway.host;
