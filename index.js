@@ -29,7 +29,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
 	dialect: 'mysql',
 	logging: false
 });
-const giveawayEntries = require("../Models/giveawayEntries")(sequelize, Sequelize.DataTypes);
+const giveawayEntries = require("./Models/giveawayEntries")(sequelize, Sequelize.DataTypes);
 
 ////////////////////
 ///    DEFINE    ///
