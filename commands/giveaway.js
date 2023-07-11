@@ -146,21 +146,13 @@ module.exports = {
             const host = giveaway.host;
 
             if (!giveaway) {
-                return await interaction.reply({ content: `Cannot find a giveaway with the Message ID: \`${messageId}\`` });
+                return await interaction.editReply({ content: `Cannot find a giveaway with the Message ID: \`${messageId}\`` });
             } else if (!giveaway.active) {
-                return await interaction.reply({ content: `The giveaway hass already ended.` });
+                return await interaction.editReply({ content: `The giveaway hass already ended.` });
             }
 
             const giveawayMessage = await interaction.guild.channels.cache.get(giveaway.channel_id).messages.fetch(giveaway.message_id);
-
             const winners = giveaway.winners;
-
-            if (entriesCount == 0) {
-                return await interaction.reply({ content: `No entry found for this giveaway. No winner selected.` });
-            } else if (entriesCount < winners) {
-                winners = entries.slice;
-            }
-            
             const selectedWinners = randomizeWinners(entries, winners);
 
             const giveawayEmbed = new EmbedBuilder()
@@ -172,22 +164,17 @@ module.exports = {
                 )
                 .setColor("#FF0000")
                 .setImage(GIVEAWAY_IMAGES[Math.floor(Math.random() * 5)]);
-
             const giveawayButton = new ButtonBuilder()
                 .setCustomId("disabledGiveaway")
                 .setLabel(entriesCount.toString())
                 .setStyle(ButtonStyle.Secondary)
                 .setDisabled(true)
                 .setEmoji("👤");
-
             const row = new ActionRowBuilder().addComponents(giveawayButton);
-
             giveawayEmbed.setFooter({ text: `Message ID: ${giveaway.message_id}` });
-
             giveawayMessage.edit({ embeds: [giveawayEmbed], components: [row] });
 
             await giveawayData.update({ active: false, winners: winners }, { where: { message_id: messageId } });
-
             for (const entry of selectedWinners) {
                 await giveawayEntries.update({ won: true }, { where: { message_id: messageId, discord_id: entry.discord_id } });
             }
