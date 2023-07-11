@@ -164,6 +164,7 @@ client.on("interactionCreate", async (interaction) => {
 			});
 
 			const entries = await giveawayEntries.findAndCountAll({ where: { message_id: messageId } });
+			console.log(entries);
 
 			const giveawayButton = new ButtonBuilder()
 				.setCustomId("giveaway_" + messageId)
