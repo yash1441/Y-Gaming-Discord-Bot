@@ -153,7 +153,30 @@ module.exports = {
 
             const giveawayMessage = await interaction.guild.channels.cache.get(giveaway.channel_id).messages.fetch(giveaway.message_id);
             const winners = giveaway.winners;
-            const selectedWinners = randomizeWinners(entries, winners);
+            if (entriesCount == 0) {
+                const giveawayEmbed = new EmbedBuilder()
+                    .setTitle(prize)
+                    .setDescription(`The giveaway has ended!`)
+                    .addFields(
+                        { name: "Host", value: `<@${host}>`, inline: true },
+                        { name: "Winners", value: `-`, inline: true }
+                    )
+                    .setColor("#FF0000")
+                    .setImage(GIVEAWAY_IMAGES[Math.floor(Math.random() * 5)]);
+                const giveawayButton = new ButtonBuilder()
+                    .setCustomId("disabledGiveaway")
+                    .setLabel(entriesCount.toString())
+                    .setStyle(ButtonStyle.Secondary)
+                    .setDisabled(true)
+                    .setEmoji("👤");
+                const row = new ActionRowBuilder().addComponents(giveawayButton);
+                giveawayEmbed.setFooter({ text: `Message ID: ${giveaway.message_id}` });
+                giveawayMessage.edit({ embeds: [giveawayEmbed], components: [row] });
+                await giveawayData.update({ active: false, winners: 0 }, { where: { message_id: messageId } });
+                return await interaction.reply({ content: `No entry found for this giveaway. No winner was selected. Giveaway successfully ended.` });
+            }
+            const selectedWinners = randomizeWinners(entries, (entriesCount < winners) ? entriesCount : winners);
+            console.log(selectedWinners);
 
             const giveawayEmbed = new EmbedBuilder()
                 .setTitle(prize)
