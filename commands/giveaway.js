@@ -146,7 +146,7 @@ module.exports = {
             const messageId = interaction.options.getString("message-id");
 
             const giveaway = await giveawayData.findOne({ where: { message_id: messageId, active: false } });
-            const entries = await giveawayEntries.findAll({ where: { message_id: messageId } });
+            const entries = await giveawayEntries.findAll({ where: { message_id: messageId }, order: sequelize.random() });
             const entriesCount = entries.length;
 
             if (!giveaway) {
@@ -179,7 +179,7 @@ module.exports = {
                 await giveawayData.update({ active: false, winners: 0 }, { where: { message_id: messageId } });
                 return await interaction.editReply({ content: `No entry found for this giveaway. No winner was selected. Giveaway successfully ended.` });
             }
-            const selectedWinners = randomizeWinners(entries, (entriesCount < winners) ? entriesCount : winners);
+            const selectedWinners = entries.slice(0, ((entriesCount < winners) ? entriesCount : winners));
 
             const giveawayEmbed = new EmbedBuilder()
                 .setTitle(prize)
@@ -206,12 +206,12 @@ module.exports = {
             }
 
             await interaction.editReply({ content: `Giveaway successfully ended.` });
-        } else if (subCommand === "reroll") {
+        } else if (subCommand === "reroll") { 
             await interaction.reply({ content: "Rerolling the giveaway...", ephemeral: true });
 
             const messageId = interaction.options.getString("message-id");
 
-            const giveaway = await giveawayData.findOne({ where: { message_id: messageId, active: false } });
+            const giveaway = await giveawayData.findOne({ where: { message_id: messageId, active: false }, order: sequelize.random() });
             const entries = await giveawayEntries.findAll({ where: { message_id: messageId } });
             const entriesCount = entries.length;
             if (!giveaway) {
@@ -224,7 +224,7 @@ module.exports = {
             const host = giveaway.host;
             const giveawayMessage = await interaction.guild.channels.cache.get(giveaway.channel_id).messages.fetch(giveaway.message_id);
             const winners = giveaway.winners;
-            const selectedWinners = randomizeWinners(entries, (entriesCount < winners) ? entriesCount : winners);
+            const selectedWinners = entries.slice(0, ((entriesCount < winners) ? entriesCount : winners));
 
             const giveawayEmbed = new EmbedBuilder()
                 .setTitle(prize)
