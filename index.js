@@ -423,6 +423,5 @@ async function dbInit() {
 
 	sequelize.sync({ force }).then(async () => {
 		logger.info('Database synced.');
-		sequelize.close();
 	}).catch(logger.error);
 }
