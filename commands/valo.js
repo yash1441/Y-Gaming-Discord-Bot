@@ -1,7 +1,5 @@
 const { SlashCommandBuilder,
     EmbedBuilder,
-    ButtonBuilder,
-    ButtonStyle,
     ModalBuilder,
     TextInputBuilder,
     TextInputStyle,
