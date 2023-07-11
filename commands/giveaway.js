@@ -282,15 +282,14 @@ module.exports = {
         } else if (subCommand === "list") {
             await interaction.reply({ content: "Generating the list of giveaways..." });
 
-            const active = interaction.options.getBoolean("active");
-            console.log(active);
+            const active = interaction.options.getBoolean("active") ? interaction.options.getBoolean("active") : true;
 
             const embed = new EmbedBuilder()
                 .setTitle("Giveaway List")
                 .setImage("https://i.ibb.co/vxZD5R9/Giveaway-List.png")
                 .setColor("#0000FF");
 
-            const giveaways = await giveawayData.findAll({ where: { server_id: interaction.guild.id } });
+            const giveaways = await giveawayData.findAll({ where: { server_id: interaction.guild.id, active: active } });
 
             for (const giveaway of giveaways) {
                 await interaction.guild.members.fetch(giveaway.host).then(() => {
