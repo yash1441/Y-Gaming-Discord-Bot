@@ -152,7 +152,7 @@ client.on("interactionCreate", async (interaction) => {
 			const hasEntered = await giveawayEntries.findOne({ where: { discord_id: interaction.user.id, message_id: messageId } });
 
 			if (hasEntered) {
-				return await interaction.reply({ content: `You have already entered this giveaway.` });
+				return await interaction.reply({ content: `You have already entered this giveaway.`, ephemeral: true });
 			}
 
 			await giveawayEntries.create({
@@ -164,7 +164,6 @@ client.on("interactionCreate", async (interaction) => {
 			});
 
 			const entries = await giveawayEntries.findAndCountAll({ where: { message_id: messageId } });
-			console.log(entries);
 
 			const giveawayButton = new ButtonBuilder()
 				.setCustomId("giveaway_" + messageId)
@@ -174,7 +173,7 @@ client.on("interactionCreate", async (interaction) => {
 
 			const disableButton = new ButtonBuilder()
 				.setCustomId("disabledGiveaway")
-				.setLabel((entries).toString())
+				.setLabel((entries.count).toString())
 				.setStyle(ButtonStyle.Secondary)
 				.setDisabled(true)
 				.setEmoji("👤");
