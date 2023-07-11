@@ -282,10 +282,11 @@ module.exports = {
         } else if (subCommand === "list") {
             await interaction.reply({ content: "Generating the list of giveaways..." });
 
-            const active = interaction.options.getBoolean("active") ? interaction.options.getBoolean("active") : true;
+            const active = interaction.options.getBoolean("active") ? interaction.options.getBoolean("active") : false;
+            logger.debug(active);
 
             const embed = new EmbedBuilder()
-                .setTitle(active ? "Active" : "Inactive" + "Giveaway List")
+                .setTitle(((active) ? "Active" : "Inactive") + "Giveaway List")
                 .setImage("https://i.ibb.co/vxZD5R9/Giveaway-List.png")
                 .setColor("#0000FF");
 
