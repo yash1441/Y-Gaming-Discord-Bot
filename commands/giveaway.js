@@ -176,7 +176,7 @@ module.exports = {
                 return await interaction.reply({ content: `No entry found for this giveaway. No winner was selected. Giveaway successfully ended.` });
             }
             const selectedWinners = randomizeWinners(entries, (entriesCount < winners) ? entriesCount : winners);
-            console.log(selectedWinners);
+            console.log(selectedWinners[0].discord_id);
 
             const giveawayEmbed = new EmbedBuilder()
                 .setTitle(prize)
