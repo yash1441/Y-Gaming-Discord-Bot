@@ -102,14 +102,10 @@ module.exports = {
                 .setColor("#00FF00")
                 .setImage(GIVEAWAY_IMAGES[Math.floor(Math.random() * 5) + 5]);
 
-            let giveawayMessage;
-
-            await channel.send({ embeds: [giveawayEmbed] }).then((message) => {
-                giveawayMessage = message;
-            });
+            const giveawayMessage = await channel.send({ embeds: [giveawayEmbed] });
 
             await giveawayData.create({
-                message_id: giveawayMessageId,
+                message_id: giveawayMessage.id,
                 channel_id: interaction.channel.id,
                 server_id: interaction.guild.id,
                 host: interaction.user.id,
@@ -133,7 +129,7 @@ module.exports = {
 
             const row = new ActionRowBuilder().addComponents(giveawayButton, disableButton);
 
-            giveawayEmbed.setFooter({ text: `Message ID: ${giveawayMessageId}` });
+            giveawayEmbed.setFooter({ text: `Message ID: ${giveawayMessage.id}` });
 
             giveawayMessage.edit({ embeds: [giveawayEmbed], components: [row] });
 
@@ -172,7 +168,7 @@ module.exports = {
                 .setDescription(`The giveaway has ended!`)
                 .addFields(
                     { name: "Host", value: `<@${host}>`, inline: true },
-                    { name: "Winners", value: selectedWinners.map(id => `<@${id}>`).join(", "), inline: true }
+                    { name: "Winners", value: selectedWinners.map(discord_id => `<@${discord_id}>`).join(", "), inline: true }
                 )
                 .setColor("#FF0000")
                 .setImage(GIVEAWAY_IMAGES[Math.floor(Math.random() * 5)]);
@@ -193,7 +189,7 @@ module.exports = {
             await giveawayData.update({ active: false, winners: winners }, { where: { message_id: messageId } });
 
             for (const entry of selectedWinners) {
-                await giveawayEntries.update({ won: true }, { where: { message_id: messageId, id: entry.id } });
+                await giveawayEntries.update({ won: true }, { where: { message_id: messageId, discord_id: entry.discord_id } });
             }
 
             await interaction.editReply({ content: `Giveaway successfully ended.` });

@@ -148,7 +148,7 @@ client.on("interactionCreate", async (interaction) => {
 		if (interaction.customId.startsWith("giveaway_")) {
 			const messageId = interaction.customId.split("_")[1];
 
-			const hasEntered = await giveawayEntries.findOne({ where: { id: interaction.user.id, message_id: messageId } });
+			const hasEntered = await giveawayEntries.findOne({ where: { discord_id: interaction.user.id, message_id: messageId } });
 
 			if (hasEntered) {
 				return await interaction.reply({ content: `You have already entered this giveaway.` });
@@ -158,7 +158,7 @@ client.on("interactionCreate", async (interaction) => {
 				message_id: messageId,
 				channel_id: interaction.channel.id,
 				server_id: interaction.guild.id,
-				id: interaction.user.id,
+				discord_id: interaction.user.id,
 				entries: 1,
 			});
 
