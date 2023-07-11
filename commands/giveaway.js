@@ -150,9 +150,7 @@ module.exports = {
             const entriesCount = entries.length;
 
             if (!giveaway) {
-                return await interaction.editReply({ content: `Cannot find a giveaway with the Message ID: \`${messageId}\`` });
-            } else if (!giveaway.active) {
-                return await interaction.editReply({ content: `The giveaway hass already ended.` });
+                return await interaction.editReply({ content: `Cannot find an active giveaway with the Message ID: \`${messageId}\`` });
             }
 
             const prize = giveaway.prize;
@@ -217,9 +215,7 @@ module.exports = {
             const entries = await giveawayEntries.findAll({ where: { message_id: messageId } });
             const entriesCount = entries.length;
             if (!giveaway) {
-                return await interaction.editReply({ content: `Cannot find a giveaway with the Message ID: \`${messageId}\`` });
-            } else if (!giveaway.active) {
-                return await interaction.editReply({ content: `The giveaway hass already ended.` });
+                return await interaction.editReply({ content: `Cannot find an inactive giveaway with the Message ID: \`${messageId}\`` });
             } else if (entriesCount == 0) {
                 return await interaction.editReply({ content: `No entry found for this giveaway. Reroll failed.` });
             }
