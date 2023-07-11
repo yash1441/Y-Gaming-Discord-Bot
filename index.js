@@ -29,6 +29,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
 	dialect: 'mysql',
 	logging: false
 });
+const giveawayEntries = require("../Models/giveawayEntries")(sequelize, Sequelize.DataTypes);
 
 ////////////////////
 ///    DEFINE    ///
@@ -145,31 +146,33 @@ client.on("interactionCreate", async (interaction) => {
 		}
 	} else if (interaction.isButton()) {
 		if (interaction.customId.startsWith("giveaway_")) {
-			const giveawayId = interaction.customId.split("_")[1];
+			const messageId = interaction.customId.split("_")[1];
 
-			const success = await giveawayEntry(giveawayId, interaction.user.id);
+			const hasEntered = await giveawayEntries.findOne({ where: { id: interaction.user.id, message_id: messageId } });
 
-			if (success == -1) {
-				return await interaction.reply({ content: "You have already entered this giveaway!", ephemeral: true });
-			} else if (success == 0) {
-				return await interaction.reply({ content: "There was an error. Please try again later.", ephemeral: true });
-			} else if (success == -2) {
-				return await interaction.reply({ content: "This giveaway has ended.", ephemeral: true });
+			if (hasEntered) {
+				return await interaction.reply({ content: `You have already entered this giveaway.` });
 			}
 
-			let entries = 0;
+			await giveawayEntries.create({
+				message_id: messageId,
+				channel_id: interaction.channel.id,
+				server_id: interaction.guild.id,
+				id: interaction.user.id,
+				entries: 1,
+			});
 
-			interaction.message.components.find((row) => row.components.find((button) => entries = parseInt(button.label)));
+			const entries = await giveawayEntries.findAndCountAll({ where: { message_id: messageId } });
 
 			const giveawayButton = new ButtonBuilder()
-				.setCustomId("giveaway_" + giveawayId)
+				.setCustomId("giveaway_" + messageId)
 				.setLabel("Join")
 				.setStyle(ButtonStyle.Success)
 				.setEmoji("🎉");
 
 			const disableButton = new ButtonBuilder()
 				.setCustomId("disabledGiveaway")
-				.setLabel((entries + 1).toString())
+				.setLabel((entries).toString())
 				.setStyle(ButtonStyle.Secondary)
 				.setDisabled(true)
 				.setEmoji("👤");

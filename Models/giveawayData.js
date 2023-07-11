@@ -17,9 +17,18 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
         prize: DataTypes.STRING,
+        winners: {
+            type: DataTypes.INTEGER,
+            defaultValue: 1,
+            allowNull: false,
+        },
         ends_at: {
             type: DataTypes.INTEGER,
             defaultValue: 0,
+            allowNull: false,
+        },
+        active: {
+            type: DataTypes.BOOLEAN,
             allowNull: false,
         },
         role_whitelist: {

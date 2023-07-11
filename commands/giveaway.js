@@ -2,6 +2,15 @@ const { SlashCommandBuilder, ChannelType, EmbedBuilder, PermissionFlagsBits, Act
 const fs = require("fs");
 const logger = require("../Logger/logger.js");
 
+
+const Sequelize = require('sequelize');
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
+    host: process.env.DB_IP,
+    dialect: 'mysql',
+    logging: false
+});
+const giveawayData = require("../Models/giveawayData")(sequelize, Sequelize.DataTypes);
+const giveawayEntries = require("../Models/giveawayEntries")(sequelize, Sequelize.DataTypes);
 const GIVEAWAY_IMAGES = [
     "https://i.ibb.co/0FZMTLb/Giveaway-End1.png",
     "https://i.ibb.co/LpzrXQ4/Giveaway-End2.png",
@@ -13,7 +22,7 @@ const GIVEAWAY_IMAGES = [
     "https://i.ibb.co/xDkRZ0t/Giveaway-Start3.png",
     "https://i.ibb.co/gMWyV21/Giveaway-Start4.png",
     "https://i.ibb.co/Tc9kVQ5/Giveaway-Start5.png"
-]
+];
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -99,24 +108,18 @@ module.exports = {
                 giveawayMessage = message;
             });
 
-            const giveawayMessageId = giveawayMessage.id;
-            const giveawayData = {};
-            giveawayData[giveawayMessageId] = {
-                "serverId": interaction.guild.id,
-                "channelId": channel.id,
-                "messageId": giveawayMessageId,
-                "host": interaction.user.id,
-                "prize": prize,
-                "winners": winners,
-                "entries": [],
-                "ended": false,
-                "winner": []
-            };
-
-            storeGiveawayData(giveawayData);
+            await giveawayData.create({
+                message_id: giveawayMessageId,
+                channel_id: interaction.channel.id,
+                server_id: interaction.guild.id,
+                host: interaction.user.id,
+                prize: prize,
+                winners: winners,
+                active: true,
+            });
 
             const giveawayButton = new ButtonBuilder()
-                .setCustomId("giveaway_" + giveawayMessageId)
+                .setCustomId("giveaway_" + giveawayMessage.id)
                 .setLabel("Join")
                 .setStyle(ButtonStyle.Success)
                 .setEmoji("🎉");
@@ -140,69 +143,58 @@ module.exports = {
 
             const messageId = interaction.options.getString("message-id");
 
-            let giveawayData = {};
-            try {
-                giveawayData = JSON.parse(fs.readFileSync('./Data/giveaways.json', 'utf8'));
-            } catch (error) {
-                logger.error('Error reading giveawayData file:\n' + error);
+            const giveaway = await valoLogin.findOne({ where: { message_id: messageId } });
+            const entries = await valoLogin.findAll({ where: { message_id: messageId } });
+            const entriesCount = entries.length;
+            const prize = giveaway.prizes;
+            const host = giveaway.host;
+
+            if (!giveaway) {
+                return await interaction.reply({ content: `Cannot find a giveaway with the Message ID: \`${messageId}\`` });
+            } else if (!giveaway.active) {
+                return await interaction.reply({ content: `The giveaway hass already ended.` });
             }
 
-            const giveaway = giveawayData[messageId];
+            const giveawayMessage = await interaction.guild.channels.cache.get(giveaway.channel_id).messages.fetch(giveaway.message_id);
 
-            if (giveaway === undefined) {
-                return await interaction.editReply({ content: "Giveaway not found." });
-            } else if (giveaway["ended"] === true) {
-                return await interaction.editReply({ content: "Giveaway has already ended." });
+            const winners = giveaway.winners;
+
+            if (entriesCount == 0) {
+                return await interaction.reply({ content: `No entry found for this giveaway. No winner selected.` });
+            } else if (entriesCount < winners) {
+                winners = entries.slice;
             }
-
-            const giveawayMessage = await interaction.guild.channels.cache.get(giveaway["channelId"]).messages.fetch(giveaway["messageId"]);
-            const prize = giveawayData[messageId]["prize"];
-
-            giveawayData[messageId]["ended"] = true;
-
-            let winners = giveaway["winners"];
-            let entries = giveaway["entries"];
-
-            if (entries.length <= winners) {
-                winners = entries.length;
-                giveawayData[messageId]["winner"] = entries;
-            } else {
-                while (giveawayData[messageId]["winner"].length < winners) {
-                    let winnerIndex = [];
-                    let randomIndex = Math.floor(Math.random() * entries.length);
-
-                    while (winnerIndex.includes(randomIndex)) {
-                        randomIndex = Math.floor(Math.random() * entries.length);
-                    }
-                    winnerIndex.push(randomIndex);
-                    giveawayData[messageId]["winner"].push(entries[randomIndex]);
-                }
-            }
-
-            fs.writeFileSync("./Data/giveaways.json", JSON.stringify(giveawayData, null, 2), "utf8");
+            
+            const selectedWinners = randomizeWinners(entries, winners);
 
             const giveawayEmbed = new EmbedBuilder()
                 .setTitle(prize)
                 .setDescription(`The giveaway has ended!`)
                 .addFields(
-                    { name: "Host", value: `<@${giveaway["host"]}>`, inline: true },
-                    { name: "Winners", value: giveawayData[messageId]["winner"].map(id => `<@${id}>`).join(", "), inline: true }
+                    { name: "Host", value: `<@${host}>`, inline: true },
+                    { name: "Winners", value: selectedWinners.map(id => `<@${id}>`).join(", "), inline: true }
                 )
                 .setColor("#FF0000")
                 .setImage(GIVEAWAY_IMAGES[Math.floor(Math.random() * 5)]);
 
             const giveawayButton = new ButtonBuilder()
                 .setCustomId("disabledGiveaway")
-                .setLabel(giveaway["entries"].length.toString())
+                .setLabel(entriesCount.toString())
                 .setStyle(ButtonStyle.Secondary)
                 .setDisabled(true)
                 .setEmoji("👤");
 
             const row = new ActionRowBuilder().addComponents(giveawayButton);
 
-            giveawayEmbed.setFooter({ text: `Message ID: ${giveaway["messageId"]}` });
+            giveawayEmbed.setFooter({ text: `Message ID: ${giveaway.message_id}` });
 
             giveawayMessage.edit({ embeds: [giveawayEmbed], components: [row] });
+
+            await giveawayData.update({ active: false, winners: winners }, { where: { message_id: messageId } });
+
+            for (const entry of selectedWinners) {
+                await giveawayEntries.update({ won: true }, { where: { message_id: messageId, id: entry.id } });
+            }
 
             await interaction.editReply({ content: `Giveaway successfully ended.` });
         } else if (subCommand === "reroll") {
@@ -308,31 +300,11 @@ module.exports = {
     },
 };
 
-
-function getCurrentTime() {
-    return Math.floor(Date.now() / 1000)
-}
-
-function storeGiveawayData(giveawayData) {
-    // Load existing giveawayData objects from the JSON file
-    let existingData = {};
-    try {
-        const data = fs.readFileSync('./Data/giveaways.json', 'utf8');
-        existingData = JSON.parse(data);
-    } catch (error) {
-        logger.error('Error reading giveawayData file:\n' + error);
+function randomizeWinners(entries, winners) {
+    const shuffledEntries = [...entries];
+    for (let i = shuffledEntries.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffledEntries[i], shuffledEntries[j]] = [shuffledEntries[j], shuffledEntries[i]];
     }
-
-    // Merge the new giveawayData with the existing data
-    const updatedData = {
-        ...existingData,
-        ...giveawayData
-    };
-
-    // Write the updated data back to the JSON file
-    try {
-        fs.writeFileSync('./Data/giveaways.json', JSON.stringify(updatedData, null, 2));
-    } catch (error) {
-        logger.error('Error writing giveawayData file:\n' + error);
-    }
+    return shuffledEntries.slice(0, winners);
 }
