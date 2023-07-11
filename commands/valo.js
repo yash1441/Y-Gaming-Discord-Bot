@@ -736,18 +736,12 @@ module.exports = {
                 let password = submit.fields.getTextInputValue("password");
                 let id = interaction.user.id;
 
-                const credentials = await valoLogin.findOne({ where: { id: id } });
+                const [credentials, created] = await valoLogin.findOrCreate({ where: { id: id }, defaults: { id: id, username: username, password: password } });
 
-                if (credentials) {
+                if (!created) {
                     await valoLogin.update({ username: username, password: password }, { where: { id: id } });
                     return await submit.reply({ content: `Successfully updated your Valorant credentials.`, ephemeral: true })
                 }
-
-                await valoLogin.create({
-                    id: id,
-                    username: username,
-                    password: password,
-                });
                 return await submit.reply({ content: `Successfully stored your Valorant credentials.`, ephemeral: true })
             } else {
                 await interaction.reply({ content: "Request timed out. Please try again.", ephemeral: true });
