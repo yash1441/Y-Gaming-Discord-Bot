@@ -401,23 +401,6 @@ async function getValorantVersion(url) {
 	);
 }
 
-async function giveawayEntry(giveawayId, entryId) {
-	let success = 1;
-	const jsonFile = fs.readFileSync("./Data/giveaways.json", "utf8");
-	const giveaways = JSON.parse(jsonFile);
-	const giveaway = giveaways[giveawayId];
-
-	if (giveaway.entries.includes(entryId)) return -1;
-	if (giveaway.ended) return -2;
-	if (giveaway == undefined) return 0;
-
-	giveaway.entries.push(entryId);
-
-	fs.writeFileSync("./Data/giveaways.json", JSON.stringify(giveaways, null, 2), "utf8");
-
-	return success;
-}
-
 async function dbInit() {
 	const force = process.argv.includes('--force') || process.argv.includes('-f');
 
