@@ -81,6 +81,12 @@ module.exports = {
             subcommand
                 .setName("list")
                 .setDescription("List of ongoing giveaways.")
+                .addBooleanOption((option) =>
+                    option
+                        .setName("active")
+                        .setDescription("Whether to show active or inactive giveaways in the list.")
+                        .setRequired(false)
+                )
         ),
     async execute(interaction) {
         const subCommand = interaction.options.getSubcommand();
@@ -276,25 +282,20 @@ module.exports = {
         } else if (subCommand === "list") {
             await interaction.reply({ content: "Generating the list of giveaways..." });
 
+            const active = interaction.options.getBoolean("active");
+            console.log(active);
+
             const embed = new EmbedBuilder()
                 .setTitle("Giveaway List")
                 .setImage("https://i.ibb.co/vxZD5R9/Giveaway-List.png")
                 .setColor("#0000FF");
 
-            let giveawayData = {};
-            try {
-                giveawayData = JSON.parse(fs.readFileSync('./Data/giveaways.json', 'utf8'));
-            } catch (error) {
-                logger.error('Error reading giveawayData file:\n' + error);
-            }
-
-            const serverId = interaction.guild.id;
-            const giveaways = Object.values(giveawayData).filter(giveaway => giveaway.serverId === serverId && giveaway.ended === false);
+            const giveaways = await giveawayData.findAll({ where: { server_id: interaction.guild.id } });
 
             for (const giveaway of giveaways) {
-                await interaction.guild.members.fetch(giveaway.host).then((member) => {
-                    embed.addFields({ name: giveaway.prize, value: `- https://discord.com/channels/${giveaway.serverId}/${giveaway.channelId}/${giveaway.messageId}` });
-                })
+                await interaction.guild.members.fetch(giveaway.host).then(() => {
+                    embed.addFields({ name: giveaway.prize, value: `- https://discord.com/channels/${giveaway.server_id}/${giveaway.channel_id}/${giveaway.message_id}` });
+                });
             }
 
             if (giveaways.length === 0) {
