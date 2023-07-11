@@ -282,11 +282,11 @@ module.exports = {
         } else if (subCommand === "list") {
             await interaction.reply({ content: "Generating the list of giveaways..." });
 
-            const active = interaction.options.getBoolean("active") ? interaction.options.getBoolean("active") : false;
+            const active = (interaction.options.getBoolean("active") || interaction.options.getBoolean("active") == null)   ? true : false;
             logger.debug(active);
 
             const embed = new EmbedBuilder()
-                .setTitle(((active) ? "Active" : "Inactive") + "Giveaway List")
+                .setTitle(((active) ? "Active" : "Inactive") + " Giveaway List")
                 .setImage("https://i.ibb.co/vxZD5R9/Giveaway-List.png")
                 .setColor("#0000FF");
 
@@ -299,7 +299,7 @@ module.exports = {
             }
 
             if (giveaways.length === 0) {
-                embed.setDescription("There are no ongoing giveaways.");
+                embed.setDescription("There are no giveaways to display.");
             }
 
             await interaction.editReply({ content: "", embeds: [embed] });
