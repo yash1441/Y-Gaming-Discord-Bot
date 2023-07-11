@@ -106,7 +106,7 @@ module.exports = {
 
             await giveawayData.create({
                 message_id: giveawayMessage.id,
-                channel_id: interaction.channel.id,
+                channel_id: channel.id,
                 server_id: interaction.guild.id,
                 host: interaction.user.id,
                 prize: prize,
