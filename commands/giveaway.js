@@ -211,8 +211,8 @@ module.exports = {
 
             const messageId = interaction.options.getString("message-id");
 
-            const giveaway = await giveawayData.findOne({ where: { message_id: messageId, active: false }, order: sequelize.random() });
-            const entries = await giveawayEntries.findAll({ where: { message_id: messageId } });
+            const giveaway = await giveawayData.findOne({ where: { message_id: messageId, active: false } });
+            const entries = await giveawayEntries.findAll({ where: { message_id: messageId }, order: sequelize.random() });
             const entriesCount = entries.length;
             if (!giveaway) {
                 return await interaction.editReply({ content: `Cannot find an inactive giveaway with the Message ID: \`${messageId}\`` });
