@@ -142,7 +142,7 @@ module.exports = {
             const giveaway = await giveawayData.findOne({ where: { message_id: messageId } });
             const entries = await giveawayEntries.findAll({ where: { message_id: messageId } });
             const entriesCount = entries.length;
-            const prize = giveaway.prizes;
+            const prize = giveaway.prize;
             const host = giveaway.host;
 
             if (!giveaway) {
