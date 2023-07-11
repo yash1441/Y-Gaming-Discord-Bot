@@ -173,7 +173,7 @@ module.exports = {
                 giveawayEmbed.setFooter({ text: `Message ID: ${giveaway.message_id}` });
                 giveawayMessage.edit({ embeds: [giveawayEmbed], components: [row] });
                 await giveawayData.update({ active: false, winners: 0 }, { where: { message_id: messageId } });
-                return await interaction.reply({ content: `No entry found for this giveaway. No winner was selected. Giveaway successfully ended.` });
+                return await interaction.editReply({ content: `No entry found for this giveaway. No winner was selected. Giveaway successfully ended.` });
             }
             const selectedWinners = randomizeWinners(entries, (entriesCount < winners) ? entriesCount : winners);
             console.log(selectedWinners[0].discord_id);
