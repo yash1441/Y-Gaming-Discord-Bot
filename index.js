@@ -147,12 +147,12 @@ client.on("interactionCreate", async (interaction) => {
 		}
 	} else if (interaction.isButton()) {
 		if (interaction.customId.startsWith("giveaway_")) {
+			await interaction.deferReply({ ephemeral: true });
+
 			const messageId = interaction.customId.split("_")[1];
-
 			const hasEntered = await giveawayEntries.findOne({ where: { discord_id: interaction.user.id, message_id: messageId } });
-
 			if (hasEntered) {
-				return await interaction.reply({ content: `You have already entered this giveaway.`, ephemeral: true });
+				return await interaction.editReply({ content: `You have already entered this giveaway.`, ephemeral: true });
 			}
 
 			await giveawayEntries.create({
@@ -162,7 +162,6 @@ client.on("interactionCreate", async (interaction) => {
 				discord_id: interaction.user.id,
 				entries: 1,
 			});
-
 			const entries = await giveawayEntries.findAndCountAll({ where: { message_id: messageId } });
 
 			const giveawayButton = new ButtonBuilder()
@@ -170,22 +169,19 @@ client.on("interactionCreate", async (interaction) => {
 				.setLabel("Join")
 				.setStyle(ButtonStyle.Success)
 				.setEmoji("🎉");
-
 			const disableButton = new ButtonBuilder()
 				.setCustomId("disabledGiveaway")
 				.setLabel((entries.count).toString())
 				.setStyle(ButtonStyle.Secondary)
 				.setDisabled(true)
 				.setEmoji("👤");
-
 			const row = new ActionRowBuilder().addComponents(giveawayButton, disableButton);
+			interaction.message.edit({ components: [row] });
 
-			interaction.message.edit({ components: [row] })
-
-			await interaction.reply({
+			await interaction.editReply({
 				content: "You have successfully entered the giveaway!",
 				ephemeral: true,
-			})
+			});
 		}
 	}
 });
