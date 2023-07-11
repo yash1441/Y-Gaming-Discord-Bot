@@ -285,7 +285,7 @@ module.exports = {
             const active = interaction.options.getBoolean("active") ? interaction.options.getBoolean("active") : true;
 
             const embed = new EmbedBuilder()
-                .setTitle("Giveaway List")
+                .setTitle(active ? "Active" : "Inactive" + "Giveaway List")
                 .setImage("https://i.ibb.co/vxZD5R9/Giveaway-List.png")
                 .setColor("#0000FF");
 
