@@ -38,7 +38,7 @@ module.exports = {
             return await interaction.editReply({ content: "This is not a valid CS:GO status message." });
         }
 
-        await interaction.reply({ content: "Collecting player names and Steam IDs..." });
+        await interaction.editReply({ content: "Collecting player names and Steam IDs..." });
 
         const regex = /(\d+)\s+(\d+)\s+"([^"]+)"\s+([^\s]+)/g;
         let match;
@@ -54,7 +54,7 @@ module.exports = {
             .setColor("Random");
 
         for (const player of status) {
-            await interaction.reply({ content: `Getting rank for ${player.name}...` });
+            await interaction.editReply({ content: `Getting rank for ${player.name}...` });
             let sid = new SteamID(player.steamId);
             let url = "https://csgostats.gg/player/" + sid.getSteamID64();
 
