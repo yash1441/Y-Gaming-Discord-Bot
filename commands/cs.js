@@ -4,7 +4,16 @@ const SteamID = require("steamid");
 const cheerio = require("cheerio");
 const cloudscraper = require("cloudscraper");
 
+// const Sequelize = require('sequelize');
+// const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
+//     host: process.env.DB_IP,
+//     dialect: 'mysql',
+//     logging: false
+// });
+// const csgoRanks = require("../Models/csgoRanks")(sequelize, Sequelize.DataTypes);
+
 const RANK_NAMES = [
+    "Unranked",
     "Silver I",
     "Silver II",
     "Silver III",
@@ -58,15 +67,17 @@ module.exports = {
             let userStats = await getPlayerInfo(url);
 
             if (userStats === 0) {
+                embed.addFields({ name: "Best Rank", value: "Unranked", inline: false });
                 return await interaction.editReply({ content: `No matches have been added for \`${steamId}\`.` });
             } else if (userStats === -1) {
+                embed.addFields({ name: "Best Rank", value: "Error", inline: false });
                 return await interaction.editReply({ content: `An error occured while fetching data for \`${steamId}\`.` });
             }
 
             const embed = new EmbedBuilder()
                 .setTitle(`${userStats.name}'s CS:GO Rank`)
                 .setDescription(`## ` + RANK_NAMES[userStats.rank])
-                .setThumbnail(`https://static.csgostats.gg/images/ranks/${userStats.rank + 1}.png`)
+                .setThumbnail(`https://static.csgostats.gg/images/ranks/${userStats.rank}.png`)
                 .addFields(
                     { name: "Best Rank", value: RANK_NAMES[userStats.bestRank], inline: false }
                 )
@@ -97,6 +108,7 @@ async function getPlayerInfo(url) {
         playerData.rank = getRank(0, rankImages);
         playerData.bestRank = getRank(1, rankImages);
 
+        if (playerData.rank == null) playerData.rank = 0;
         if (playerData.bestRank == null) playerData.bestRank = playerData.rank;
 
         playerData.name = playerName;
@@ -111,7 +123,7 @@ function getRank(index, rankImages) {
     }
 
     const imageSrc = rankImages.eq(index).attr('src');
-    const rankIndex = parseInt(imageSrc.split('/ranks/')[1].split('.png')[0]) - 1;
+    const rankIndex = parseInt(imageSrc.split('/ranks/')[1].split('.png')[0]);
 
     return rankIndex;
 };
