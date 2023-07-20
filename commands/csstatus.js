@@ -4,7 +4,16 @@ const SteamID = require("steamid");
 const cheerio = require("cheerio");
 const cloudscraper = require("cloudscraper");
 
+const Sequelize = require('sequelize');
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
+    host: process.env.DB_IP,
+    dialect: 'mysql',
+    logging: false
+});
+const csgoRanks = require("../Models/csgoRanks")(sequelize, Sequelize.DataTypes);
+
 const RANK_NAMES = [
+    "Unranked",
     "Silver I",
     "Silver II",
     "Silver III",
@@ -56,17 +65,15 @@ module.exports = {
         for (const player of status) {
             await interaction.editReply({ content: `Getting rank for ${player.name}...` });
             let sid = new SteamID(player.steamId);
-            let url = "https://csgostats.gg/player/" + sid.getSteamID64();
 
-            let userStats = await getPlayerRank(url);
+            let userStats = await getPlayerRank(sid.getSteamID64());
 
             if (userStats === 0) {
                 embed.addFields({ name: player.name, value: "Unranked", inline: true });
             } else if (userStats === -1) {
                 embed.addFields({ name: player.name, value: "Error", inline: true });
             } else {
-                if (RANK_NAMES[userStats.rank] == undefined) embed.addFields({ name: player.name, value: "Unranked", inline: true });
-                else embed.addFields({ name: player.name, value: RANK_NAMES[userStats.rank], inline: true });
+                embed.addFields({ name: player.name, value: RANK_NAMES[userStats.rank], inline: true });
             }
         }
 
@@ -74,7 +81,8 @@ module.exports = {
 	},
 };
 
-async function getPlayerRank(url) {
+async function getPlayerRank(steamId) {
+    const url = "https://csgostats.gg/player/" + steamId;
     const html = await cloudscraper.get(url);
 
     if (html.includes("No matches have been added for this player")) {
@@ -92,6 +100,16 @@ async function getPlayerRank(url) {
         playerData.rank = getRank(0, rankImages);
         playerData.bestRank = getRank(1, rankImages);
 
+        if (playerData.rank == null) playerData.rank = 0;
+        if (playerData.bestRank == null) playerData.bestRank = playerData.rank;
+
+        const [userRanks, created] = await csgoRanks.findOrCreate({ where: { steam_id: steamId }, defaults: { steam_id: steamId, current_rank: playerData.rank, best_rank: playerData.bestRank } });
+        if (!created) {
+            if (userRanks.current_rank != 0 && playerData.rank == 0) playerData.rank = userRanks.current_rank;
+            if (userRanks.best_rank != 0 && playerData.bestRank == 0) playerData.bestRank = userRanks.best_rank;
+            await csgoRanks.update({ current_rank: playerData.rank, best_rank: playerData.bestRank }, { where: { steam_id: steamId } });
+        }
+
         return playerData;
     } else return -1;
 }
@@ -102,7 +120,7 @@ function getRank(index, rankImages) {
     }
 
     const imageSrc = rankImages.eq(index).attr('src');
-    const rankIndex = parseInt(imageSrc.split('/ranks/')[1].split('.png')[0]) - 1;
+    const rankIndex = parseInt(imageSrc.split('/ranks/')[1].split('.png')[0]);
 
     return rankIndex;
 };
