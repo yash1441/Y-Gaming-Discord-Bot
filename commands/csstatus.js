@@ -58,6 +58,9 @@ module.exports = {
             status.push({ name, steamId });
         }
 
+        const link = await getMultiLink(status);
+        logger.debug(link);
+
         const embed = new EmbedBuilder()
             .setTitle("CS:GO Status Ranks")
             .setColor("Random");
@@ -80,6 +83,16 @@ module.exports = {
         await interaction.editReply({ content: "", embeds: [embed] });
 	},
 };
+
+async function getMultiLink(status) {
+    let url = "https://csgostats.gg/player/multi?";
+
+    for (const [index, player] of status) {
+        url += `data[${index}][0]=${player.name}&data[${index}][1]=${player.player.steamId}&`;
+    }
+
+    return url;
+}
 
 async function getPlayerRank(steamId) {
     const url = "https://csgostats.gg/player/" + steamId;
