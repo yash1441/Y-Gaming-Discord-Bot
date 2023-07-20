@@ -60,6 +60,8 @@ module.exports = {
 
         const multiPlayerInfo = getMultiPlayerInfo(status);
 
+        logger.debug(JSON.stringify(multiPlayerInfo));
+        
         const embed = new EmbedBuilder()
             .setTitle("CS:GO Status Ranks")
             .setColor("Random");
@@ -88,6 +90,8 @@ async function getMultiPlayerInfo(status) {
     const url = await getMultiLink(status);
     const html = await cloudscraper.get(url);
 
+    logger.debug(url);
+
     if (html.includes("No matches have been added for this player")) {
         return 0;
     }
@@ -107,6 +111,8 @@ async function getMultiPlayerInfo(status) {
         if (!rankData[index]) rankData[index] = 0;
         player.rank = parseInt(rankData[index]);
     }
+
+    logger.debug(JSON.stringify(players));
 
     return players;
 }
