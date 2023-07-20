@@ -67,7 +67,7 @@ module.exports = {
         for (const player of multiPlayerInfo) {
             logger.debug(JSON.stringify(player));
             await interaction.editReply({ content: `Getting rank for ${player.name}...` });
-            embed.addFields({ name: player.name, value: RANK_NAMES[multiPlayerInfo.rank], inline: true });
+            embed.addFields({ name: player.name, value: RANK_NAMES[player.rank], inline: true });
         }
 
         await interaction.editReply({ content: "", embeds: [embed] });
