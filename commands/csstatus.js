@@ -90,7 +90,7 @@ async function getMultiLink(status) {
         url += `data[${index}][0]=${player.name}&data[${index}][1]=${player.steamId}&`;
     }
 
-    return url;
+    return encodeURI(url);
 }
 
 async function getMultiPlayerInfo(status) {
