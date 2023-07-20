@@ -31,7 +31,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
 });
 const giveawayEntries = require("./Models/giveawayEntries")(sequelize, Sequelize.DataTypes);
 const giveawayData = require("./Models/giveawayData")(sequelize, Sequelize.DataTypes);
-const csgoRanks = require("../Models/csgoRanks")(sequelize, Sequelize.DataTypes);
+const csgoRanks = require("./Models/csgoRanks")(sequelize, Sequelize.DataTypes);
 
 ////////////////////
 ///    DEFINE    ///
