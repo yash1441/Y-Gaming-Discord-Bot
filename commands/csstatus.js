@@ -64,7 +64,7 @@ module.exports = {
             .setTitle("CS:GO Status Ranks")
             .setColor("Random");
 
-        for (const player of multiPlayerInfo) {
+        for (const player of multiPlayerInfo.entries()) {
             await interaction.editReply({ content: `Getting rank for ${player.name}...` });
             embed.addFields({ name: player.name, value: RANK_NAMES[multiPlayerInfo.rank], inline: true });
         }
