@@ -86,7 +86,8 @@ async function getMultiLink(status) {
     let url = "https://csgostats.gg/player/multi?";
 
     for (const [index, player] of status.entries()) {
-        url += `data[${index}][0]=${encodeURI(player.name)}&data[${index}][1]=${player.steamId}&`;
+        let playerName = encodeURI(player.name.replace('#', '%23'));
+        url += `data[${index}][0]=${playerName}&data[${index}][1]=${player.steamId}&`;
     }
 
     return url;
