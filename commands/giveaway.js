@@ -145,7 +145,7 @@ module.exports = {
 
             const messageId = interaction.options.getString("message-id");
 
-            const giveaway = await giveawayData.findOne({ where: { message_id: messageId, active: false } });
+            const giveaway = await giveawayData.findOne({ where: { message_id: messageId, active: true } });
             const entries = await giveawayEntries.findAll({ where: { message_id: messageId }, order: sequelize.random() });
             const entriesCount = entries.length;
 
@@ -257,7 +257,6 @@ module.exports = {
             await interaction.reply({ content: "Generating the list of giveaways..." });
 
             const active = (interaction.options.getBoolean("active") || interaction.options.getBoolean("active") == null) ? true : false;
-            logger.debug(active);
 
             const embed = new EmbedBuilder()
                 .setTitle(((active) ? "Active" : "Inactive") + " Giveaway List")
