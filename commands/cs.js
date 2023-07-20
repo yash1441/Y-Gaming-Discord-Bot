@@ -4,13 +4,13 @@ const SteamID = require("steamid");
 const cheerio = require("cheerio");
 const cloudscraper = require("cloudscraper");
 
-// const Sequelize = require('sequelize');
-// const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
-//     host: process.env.DB_IP,
-//     dialect: 'mysql',
-//     logging: false
-// });
-// const csgoRanks = require("../Models/csgoRanks")(sequelize, Sequelize.DataTypes);
+const Sequelize = require('sequelize');
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
+    host: process.env.DB_IP,
+    dialect: 'mysql',
+    logging: false
+});
+const csgoRanks = require("../Models/csgoRanks")(sequelize, Sequelize.DataTypes);
 
 const RANK_NAMES = [
     "Unranked",
@@ -62,9 +62,8 @@ module.exports = {
             }
 
             let sid = new SteamID(steamId);
-            let url = "https://csgostats.gg/player/" + sid.getSteamID64();
 
-            let userStats = await getPlayerInfo(url);
+            let userStats = await getPlayerInfo(sid.getSteamID64());
 
             if (userStats === 0) {
                 return await interaction.editReply({ content: `No matches have been added for \`${steamId}\`.` });
@@ -86,7 +85,8 @@ module.exports = {
 	},
 };
 
-async function getPlayerInfo(url) {
+async function getPlayerInfo(steamId) {
+    const url = "https://csgostats.gg/player/" + steamId;
     const html = await cloudscraper.get(url);
 
     if (html.includes("No matches have been added for this player")) {
@@ -108,6 +108,13 @@ async function getPlayerInfo(url) {
 
         if (playerData.rank == null) playerData.rank = 0;
         if (playerData.bestRank == null) playerData.bestRank = playerData.rank;
+
+        const [userRanks, created] = await csgoRanks.findOrCreate({ where: { steam_id: steamId }, defaults: { steam_id: steamId, current_rank: playerData.rank, best_rank: playerData.bestRank } });
+        if (!created) {
+            if (userRanks.current_rank != 0 && playerData.rank == 0) playerData.rank = userRanks.current_rank;
+            if (userRanks.best_rank != 0 && playerData.bestRank == 0) playerData.bestRank = userRanks.best_rank;
+            await csgoRanks.update({ current_rank: playerData.rank, best_rank: playerData.bestRank }, { where: { steam_id: steamId } });
+        }
 
         playerData.name = playerName;
 
