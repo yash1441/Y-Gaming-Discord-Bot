@@ -11,6 +11,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
 });
 const giveawayData = require("../Models/giveawayData")(sequelize, Sequelize.DataTypes);
 const giveawayEntries = require("../Models/giveawayEntries")(sequelize, Sequelize.DataTypes);
+
 const GIVEAWAY_IMAGES = [
     "https://i.ibb.co/0FZMTLb/Giveaway-End1.png",
     "https://i.ibb.co/LpzrXQ4/Giveaway-End2.png",
@@ -279,12 +280,3 @@ module.exports = {
         }
     },
 };
-
-function randomizeWinners(entries, winners) {
-    const shuffledEntries = [...entries];
-    for (let i = shuffledEntries.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffledEntries[i], shuffledEntries[j]] = [shuffledEntries[j], shuffledEntries[i]];
-    }
-    return shuffledEntries.slice(0, winners);
-}
