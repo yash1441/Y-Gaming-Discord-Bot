@@ -72,8 +72,6 @@ module.exports = {
                 return await interaction.editReply({ content: `An error occured while fetching data for \`${steamId}\`.` });
             }
 
-            logger.debug("userStats.rank: " + userStats.rank);
-
             const embed = new EmbedBuilder()
                 .setTitle(`${userStats.name}'s CS:GO Rank`)
                 .setDescription(`## ` + RANK_NAMES[userStats.rank])
@@ -124,8 +122,6 @@ function getRank(index, rankImages) {
 
     const imageSrc = rankImages.eq(index).attr('src');
     const rankIndex = parseInt(imageSrc.split('/ranks/')[1].split('.png')[0]);
-
-    logger.debug("rankIndex: " + rankIndex);
 
     return rankIndex;
 };
