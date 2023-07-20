@@ -59,18 +59,26 @@ module.exports = {
         }
 
         const multiPlayerInfo = await getMultiPlayerInfo(status);
-        
+
         const embed = new EmbedBuilder()
             .setTitle("CS:GO Status Ranks")
             .setColor("Random");
 
         for (const player of multiPlayerInfo) {
-            logger.debug(JSON.stringify(player));
             await interaction.editReply({ content: `Getting rank for ${player.name}...` });
             embed.addFields({ name: player.name, value: RANK_NAMES[player.rank], inline: true });
         }
 
         await interaction.editReply({ content: "", embeds: [embed] });
+
+        for (const player of multiPlayerInfo) {
+            const [dbRank, created] = await csgoRanks.findOrCreate({ where: { steam_id: player.steamId }, defaults: { steam_id: player.steamId, current_rank: player.rank } });
+            if (!created) {
+                if (dbRank.current_rank != 0 && player.rank == 0) player.rank = dbRank.current_rank;
+                await csgoRanks.update({ current_rank: player.rank }, { where: { steam_id: player.steamId } });
+            }
+
+        }
     },
 };
 
