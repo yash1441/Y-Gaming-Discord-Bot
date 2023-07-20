@@ -67,12 +67,12 @@ module.exports = {
             let userStats = await getPlayerInfo(url);
 
             if (userStats === 0) {
-                embed.addFields({ name: "Best Rank", value: "Unranked", inline: false });
                 return await interaction.editReply({ content: `No matches have been added for \`${steamId}\`.` });
             } else if (userStats === -1) {
-                embed.addFields({ name: "Best Rank", value: "Error", inline: false });
                 return await interaction.editReply({ content: `An error occured while fetching data for \`${steamId}\`.` });
             }
+
+            logger.debug("userStats.rank: " + userStats.rank);
 
             const embed = new EmbedBuilder()
                 .setTitle(`${userStats.name}'s CS:GO Rank`)
@@ -124,6 +124,8 @@ function getRank(index, rankImages) {
 
     const imageSrc = rankImages.eq(index).attr('src');
     const rankIndex = parseInt(imageSrc.split('/ranks/')[1].split('.png')[0]);
+
+    logger.debug("rankIndex: " + rankIndex);
 
     return rankIndex;
 };
