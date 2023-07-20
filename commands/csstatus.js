@@ -87,8 +87,8 @@ module.exports = {
 async function getMultiLink(status) {
     let url = "https://csgostats.gg/player/multi?";
 
-    for (const [index, player] of status) {
-        url += `data[${index}][0]=${player.name}&data[${index}][1]=${player.player.steamId}&`;
+    for (const [index, {name, steamId}] of status) {
+        url += `data[${index}][0]=${name}&data[${index}][1]=${steamId}&`;
     }
 
     return url;
