@@ -110,7 +110,7 @@ async function getMultiPlayerInfo(status) {
     const rankRow = table.find('tr[data-type-row="rank"]');
 
     // Extract the data from the "rank" row
-    const rankData = rankRow.find('td').map((index, element) => $(element).text()).get();
+    const rankData = rankRow.find('td img').map((index, element) => $(element).attr('data-rank-value')).get();
 
     console.log(rankData);
 
