@@ -106,11 +106,13 @@ module.exports = {
             await interaction.reply({ content: "Checking if it is a valid crosshair code..." });
 
             const shareCode = interaction.options.getString("crosshair-code");
-
-            const crosshairConfig = decodeCrosshairShareCode(shareCode);
-            const crosshairConVars = crosshairToConVars(crosshairConfig);
-
-            await interaction.editReply({ content: `\`\`\`js\n${crosshairConVars}\n\`\`\`` });
+            try {
+                const crosshairConfig = decodeCrosshairShareCode(shareCode)
+                const crosshairConVars = crosshairToConVars(crosshairConfig);
+                await interaction.editReply({ content: `\`\`\`js\n${crosshairConVars}\n\`\`\`` });
+            } catch {
+                await interaction.editReply({ content: `Invalid crosshair code.` });
+            }
         }
     },
 };
