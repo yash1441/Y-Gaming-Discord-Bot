@@ -397,11 +397,44 @@ async function createImage(c) {
             img.bitmap.data[idx + 2] = 0;
             img.bitmap.data[idx + 3] = 255;
         });
-        // ...
-        // (repeat the above for other outlines and dots)
-        // ...
+        // Top Outline (if not T-style)
+        if (!c.is_t_style) {
+            img.scan(g.topOutline(THICKNESS, SIZE, GAP)[0], g.topOutline(THICKNESS, SIZE, GAP)[1], g.topOutline(THICKNESS, SIZE, GAP)[2], g.topOutline(THICKNESS, SIZE, GAP)[3], (x, y, idx) => {
+                img.bitmap.data[idx + 0] = 0;
+                img.bitmap.data[idx + 1] = 0;
+                img.bitmap.data[idx + 2] = 0;
+                img.bitmap.data[idx + 3] = 255;
+            });
+        }
+
+        // Right Outline
+        img.scan(g.rightOutline(THICKNESS, SIZE, GAP)[0], g.rightOutline(THICKNESS, SIZE, GAP)[1], g.rightOutline(THICKNESS, SIZE, GAP)[2], g.rightOutline(THICKNESS, SIZE, GAP)[3], (x, y, idx) => {
+            img.bitmap.data[idx + 0] = 0;
+            img.bitmap.data[idx + 1] = 0;
+            img.bitmap.data[idx + 2] = 0;
+            img.bitmap.data[idx + 3] = 255;
+        });
+
+        // Bottom Outline
+        img.scan(g.bottomOutline(THICKNESS, SIZE, GAP)[0], g.bottomOutline(THICKNESS, SIZE, GAP)[1], g.bottomOutline(THICKNESS, SIZE, GAP)[2], g.bottomOutline(THICKNESS, SIZE, GAP)[3], (x, y, idx) => {
+            img.bitmap.data[idx + 0] = 0;
+            img.bitmap.data[idx + 1] = 0;
+            img.bitmap.data[idx + 2] = 0;
+            img.bitmap.data[idx + 3] = 255;
+        });
+
+        // Dot Outline (if center dot is present)
+        if (c.has_center_dot) {
+            img.scan(g.dotOutline(THICKNESS)[0], g.dotOutline(THICKNESS)[1], g.dotOutline(THICKNESS)[2], g.dotOutline(THICKNESS)[3], (x, y, idx) => {
+                img.bitmap.data[idx + 0] = 0;
+                img.bitmap.data[idx + 1] = 0;
+                img.bitmap.data[idx + 2] = 0;
+                img.bitmap.data[idx + 3] = 255;
+            });
+        }
     }
 
+    // Left
     img.scan(g.left(THICKNESS, SIZE, GAP)[0], g.left(THICKNESS, SIZE, GAP)[1], g.left(THICKNESS, SIZE, GAP)[2], g.left(THICKNESS, SIZE, GAP)[3], (x, y, idx) => {
         img.bitmap.data[idx + 0] = c.red;
         img.bitmap.data[idx + 1] = c.green;
@@ -409,9 +442,31 @@ async function createImage(c) {
         img.bitmap.data[idx + 3] = c.alpha;
     });
 
-    // ...
-    // (repeat the above for other parts of the crosshair)
-    // ...
+    // Top (if not T-style)
+    if (!c.is_t_style) {
+        img.scan(g.top(THICKNESS, SIZE, GAP)[0], g.top(THICKNESS, SIZE, GAP)[1], g.top(THICKNESS, SIZE, GAP)[2], g.top(THICKNESS, SIZE, GAP)[3], (x, y, idx) => {
+            img.bitmap.data[idx + 0] = c.red;
+            img.bitmap.data[idx + 1] = c.green;
+            img.bitmap.data[idx + 2] = c.blue;
+            img.bitmap.data[idx + 3] = c.alpha;
+        });
+    }
+
+    // Right
+    img.scan(g.right(THICKNESS, SIZE, GAP)[0], g.right(THICKNESS, SIZE, GAP)[1], g.right(THICKNESS, SIZE, GAP)[2], g.right(THICKNESS, SIZE, GAP)[3], (x, y, idx) => {
+        img.bitmap.data[idx + 0] = c.red;
+        img.bitmap.data[idx + 1] = c.green;
+        img.bitmap.data[idx + 2] = c.blue;
+        img.bitmap.data[idx + 3] = c.alpha;
+    });
+
+    // Bottom
+    img.scan(g.bottom(THICKNESS, SIZE, GAP)[0], g.bottom(THICKNESS, SIZE, GAP)[1], g.bottom(THICKNESS, SIZE, GAP)[2], g.bottom(THICKNESS, SIZE, GAP)[3], (x, y, idx) => {
+        img.bitmap.data[idx + 0] = c.red;
+        img.bitmap.data[idx + 1] = c.green;
+        img.bitmap.data[idx + 2] = c.blue;
+        img.bitmap.data[idx + 3] = c.alpha;
+    });
 
     await img.writeAsync('crosshair.png');
     return img;
