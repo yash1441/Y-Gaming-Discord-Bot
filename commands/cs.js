@@ -3,7 +3,7 @@ const logger = require("../Logger/logger.js");
 const SteamID = require("steamid");
 const cheerio = require("cheerio");
 const cloudscraper = require("cloudscraper");
-const { decodeCrosshairShareCode, Crosshair } = require("csgo-sharecode");
+const { decodeCrosshairShareCode, crosshairToConVars } = require("csgo-sharecode");
 
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
@@ -36,37 +36,37 @@ const RANK_NAMES = [
 ];
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName("cs")
-		.setDescription("Commands related to Counter-Strike.")
-		.addSubcommand((subcommand) =>
-			subcommand
-				.setName("rank")
-				.setDescription("Get the rank of a player.")
+    data: new SlashCommandBuilder()
+        .setName("cs")
+        .setDescription("Commands related to Counter-Strike.")
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName("rank")
+                .setDescription("Get the rank of a player.")
                 .addStringOption((option) =>
                     option
                         .setName("steam-id")
                         .setDescription("Enter the Steam ID of the player. Example: STEAM_1:1:123456789")
                         .setRequired(true)
-                    )
-		)
+                )
+        )
         .addSubcommand((subcommand) =>
-			subcommand
-				.setName("crosshair")
-				.setDescription("Get the crosshair settings.")
+            subcommand
+                .setName("crosshair")
+                .setDescription("Get the crosshair settings.")
                 .addStringOption((option) =>
                     option
                         .setName("crosshair-code")
                         .setDescription("Enter the crosshair code.")
                         .setRequired(true)
-                    )
-		),
-	async execute(interaction) {
-		const subCommand = interaction.options.getSubcommand();
+                )
+        ),
+    async execute(interaction) {
+        const subCommand = interaction.options.getSubcommand();
 
         if (subCommand === "rank") {
             await interaction.reply({ content: "Checking if it is a valid Steam ID..." });
-            
+
             const steamId = interaction.options.getString("steam-id");
 
             if (!steamId.startsWith("STEAM_")) {
@@ -95,13 +95,15 @@ module.exports = {
             await interaction.editReply({ content: "", embeds: [embed] });
         } else if (subCommand === "crosshair") {
             await interaction.reply({ content: "Checking if it is a valid crosshair code..." });
-            
+
             const shareCode = interaction.options.getString("crosshair-code");
 
-            const crosshair = decodeCrosshairShareCode(shareCode);
-            console.log(crosshair);
+            const crosshairConfig = decodeCrosshairShareCode(shareCode);
+            const crosshairConVars = crosshairToConVars(crosshairConfig);
+
+            await interaction.editReply({ content: `\`\`\`\n${crosshairConVars}\n\`\`\`` });
         }
-	},
+    },
 };
 
 async function getPlayerInfo(steamId) {
@@ -117,7 +119,7 @@ async function getPlayerInfo(steamId) {
     const rankContainer = $('.player-ranks');
     const playerContainer = $('.player-ident-outer');
     const playerName = playerContainer.find('#player-name').text().trim();
-    
+
     if (rankContainer.length > 0) {
         const rankImages = rankContainer.find('img[src]');
         const playerData = {};
@@ -143,7 +145,7 @@ async function getPlayerInfo(steamId) {
 
 function getRank(index, rankImages) {
     if (index >= rankImages.length) {
-      return null;
+        return null;
     }
 
     const imageSrc = rankImages.eq(index).attr('src');
