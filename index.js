@@ -7,6 +7,7 @@ const {
 	ButtonBuilder,
 	ButtonStyle,
 	ActionRowBuilder,
+	ChannelType,
 	ModalBuilder,
 	TextInputBuilder,
 	TextInputStyle,
@@ -43,6 +44,7 @@ const client = new Client({
 		GatewayIntentBits.GuildMessages,
 		GatewayIntentBits.GuildMessageReactions,
 		GatewayIntentBits.GuildVoiceStates,
+		GatewayIntentBits.DirectMessages,
 		GatewayIntentBits.MessageContent,
 	],
 	partials: ["MESSAGE", "CHANNEL", "REACTION"],
@@ -194,6 +196,16 @@ client.on("messageCreate", async (message) => {
 	const msg = message.content;
 
 	if (!msg.includes("STEAM_")) return;
+
+	await message.channel.sendTyping();
+
+	try {
+		const embed = await CSGO.getStatusEmbed(message);
+		message.channel.send({ embeds: [embed] });
+	} catch {
+		message.channel.stopTyping();
+		logger.error('Could not fetch or send rank status embed.');
+	}
 
 	try {
 		const embed = await CSGO.getStatusEmbed(message);
