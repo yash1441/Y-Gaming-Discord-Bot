@@ -196,6 +196,8 @@ client.on("messageCreate", async (message) => {
 	if (!msg.includes("STEAM_")) return;
 
 	const embed = CSGO.getStatusEmbed(message);
+
+	console.log(embed);
 	message.channel.send({ embeds: [embed] });
 });
 

@@ -83,8 +83,6 @@ async function getStatusEmbed(message) {
         embed.addFields({ name: player.name, value: RANK_NAMES[player.rank], inline: false });
     }
 
-    console.log(embed);
-
     for (const player of multiPlayerInfo) {
         const [dbRank, created] = await csgoRanks.findOrCreate({ where: { steam_id: player.steamId }, defaults: { steam_id: player.steamId, current_rank: player.rank } });
         if (!created) {
