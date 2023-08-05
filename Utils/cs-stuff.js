@@ -58,11 +58,8 @@ async function getStatusEmbed(message) {
         .setColor("Random");
 
     for (const player of multiPlayerInfo) {
-        await interaction.editReply({ content: `Getting rank for ${player.name}...` });
         embed.addFields({ name: player.name, value: RANK_NAMES[player.rank], inline: false });
     }
-
-    await interaction.editReply({ content: "", embeds: [embed] });
 
     for (const player of multiPlayerInfo) {
         const [dbRank, created] = await csgoRanks.findOrCreate({ where: { steam_id: player.steamId }, defaults: { steam_id: player.steamId, current_rank: player.rank } });
