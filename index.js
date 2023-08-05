@@ -201,9 +201,8 @@ client.on("messageCreate", async (message) => {
 
 	try {
 		const embed = await CSGO.getStatusEmbed(message);
-		if (!embed.description) {
+		if (!embed.fields[0]) {
 			logger.error('Could not fetch rank status embed.');
-			console.log(embed);
 			return;
 		}
 		message.channel.send({ embeds: [embed] });
