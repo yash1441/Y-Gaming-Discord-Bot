@@ -41,8 +41,6 @@ async function getMultiLink(status) {
         url += `data[${index}][0]=${playerName}&data[${index}][1]=${player.steamId}&`;
     }
 
-    console.log(url);
-
     return url;
 }
 
@@ -61,8 +59,6 @@ async function getMultiPlayerInfo(status) {
         if (!rankData[index]) rankData[index] = 0;
         player.rank = parseInt(rankData[index]);
     }
-
-    console.log(players);
 
     return players;
 }
@@ -86,6 +82,8 @@ async function getStatusEmbed(message) {
     for (const player of multiPlayerInfo) {
         embed.addFields({ name: player.name, value: RANK_NAMES[player.rank], inline: false });
     }
+
+    console.log(embed);
 
     for (const player of multiPlayerInfo) {
         const [dbRank, created] = await csgoRanks.findOrCreate({ where: { steam_id: player.steamId }, defaults: { steam_id: player.steamId, current_rank: player.rank } });
