@@ -195,9 +195,12 @@ client.on("messageCreate", async (message) => {
 
 	if (!msg.includes("STEAM_")) return;
 
-	const embed = await CSGO.getStatusEmbed(message);
-
-	message.channel.send({ embeds: [embed] });
+	try {
+		const embed = await CSGO.getStatusEmbed(message);
+		message.channel.send({ embeds: [embed] });
+	} catch {
+		logger.error('Could not fetch or send rank status embed.');
+	}
 });
 
 client.login(process.env.DISCORD_TOKEN);
