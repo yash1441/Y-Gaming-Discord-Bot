@@ -199,7 +199,7 @@ client.on("messageCreate", async (message) => {
 
 	logger.debug('Check passed');
 
-	const embed = CSGO.getStatusEmbed(msg);
+	const embed = CSGO.getStatusEmbed(message);
 	message.channel.send({ embeds: [embed] });
 });
 
