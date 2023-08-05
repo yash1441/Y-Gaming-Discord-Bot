@@ -11,7 +11,6 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
 });
 const csgoRanks = require("../Models/csgoRanks")(sequelize, Sequelize.DataTypes);
 
-
 const RANK_NAMES = [
     "Unranked",
     "Silver I",
@@ -42,6 +41,8 @@ async function getMultiLink(status) {
         url += `data[${index}][0]=${playerName}&data[${index}][1]=${player.steamId}&`;
     }
 
+    console.log(url);
+
     return url;
 }
 
@@ -60,6 +61,8 @@ async function getMultiPlayerInfo(status) {
         if (!rankData[index]) rankData[index] = 0;
         player.rank = parseInt(rankData[index]);
     }
+
+    console.log(players);
 
     return players;
 }

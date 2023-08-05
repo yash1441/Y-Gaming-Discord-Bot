@@ -191,13 +191,9 @@ client.on("interactionCreate", async (interaction) => {
 client.on("messageCreate", async (message) => {
 	if (message.author.bot) return;
 
-	logger.debug('Works');
-
 	const msg = message.content;
 
 	if (!msg.includes("STEAM_")) return;
-
-	logger.debug('Check passed');
 
 	const embed = CSGO.getStatusEmbed(message);
 	message.channel.send({ embeds: [embed] });
