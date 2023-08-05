@@ -18,7 +18,7 @@ require("dotenv").config();
 const logger = require("./Logger/logger.js");
 const Valorant = require("@liamcottle/valorant.js");
 const axios = require("axios").default;
-
+const CSGO = require('./Utils/cs-stuff.js');
 
 ////////////////////
 ///   DATABASE   ///
@@ -185,6 +185,17 @@ client.on("interactionCreate", async (interaction) => {
 			});
 		}
 	}
+});
+
+client.on("messageCreate", async (message) => {
+	if (message.author.bot) return;
+
+	const msg = message.content;
+
+	if (!msg.includes("STEAM_")) return;
+
+	const embed = CSGO.getStatusEmbed(msg);
+	message.channel.send({ embeds: [embed] });
 });
 
 client.login(process.env.DISCORD_TOKEN);
