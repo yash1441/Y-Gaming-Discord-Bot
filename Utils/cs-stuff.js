@@ -140,7 +140,7 @@ async function getStatusEmbed(message) {
     let namesArray = [], ranksArray = [];
 
     for (const player of multiPlayerInfo) {
-        namesArray.push(bold(escapeMarkdown(player.name)) + '(' + player.steamId + ')');
+        namesArray.push(bold(escapeMarkdown(player.name)) + ' (' + player.steamId + ')');
         ranksArray.push(ranks[player.rank].emoji);
     }
 
