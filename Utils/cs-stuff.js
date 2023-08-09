@@ -145,8 +145,8 @@ async function getStatusEmbed(message) {
     }
 
     embed.addFields(
-        { name: 'Player', value: namesArray.join('\n'), inline: false },
-        { name: 'Rank', value: ranksArray.join('\n'), inline: false },
+        { name: 'Player', value: namesArray.join('\n'), inline: true },
+        { name: 'Rank', value: ranksArray.join('\n'), inline: true },
     );
 
     for (const player of multiPlayerInfo) {
