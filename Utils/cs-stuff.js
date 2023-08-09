@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require("discord.js");
+const { EmbedBuilder, bold } = require("discord.js");
 const logger = require("../Logger/logger.js");
 const cheerio = require("cheerio");
 const cloudscraper = require("cloudscraper");
@@ -140,7 +140,7 @@ async function getStatusEmbed(message) {
     let namesArray = [], ranksArray = [];
 
     for (const player of multiPlayerInfo) {
-        namesArray.push(player.name);
+        namesArray.push(bold(player.name) + '(' + player.steamId + ')');
         ranksArray.push(ranks[player.rank].emoji);
     }
 
