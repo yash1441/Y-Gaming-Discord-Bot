@@ -15,8 +15,6 @@ module.exports = {
             return await interaction.editReply({ content: "This is not a valid CS:GO status message." });
         }
 
-        await message.channel.sendTyping();
-
         try {
             const embed = await CSGO.getStatusEmbed(message);
             if (!embed.data.fields[0]) {
