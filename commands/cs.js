@@ -1,48 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const SteamID = require("steamid");
-const cheerio = require("cheerio");
-const cloudscraper = require("cloudscraper");
 const { decodeCrosshairShareCode, crosshairToConVars } = require("csgo-sharecode");
-const fs = require('fs');
-const Jimp = require('jimp');
+const CSGO = require('../Utils/cs-stuff.js');
 const logger = require("../Logger/logger.js");
-
-// Database //
-
-const Sequelize = require('sequelize');
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
-    host: process.env.DB_IP,
-    dialect: 'mysql',
-    logging: false
-});
-const csgoRanks = require("../Models/csgoRanks")(sequelize, Sequelize.DataTypes);
-
-// CS:GO Ranks //
-
-const RANK_NAMES = [
-    "Unranked",
-    "Silver I",
-    "Silver II",
-    "Silver III",
-    "Silver IV",
-    "Silver Elite",
-    "Silver Elite Master",
-    "Gold Nova I",
-    "Gold Nova II",
-    "Gold Nova III",
-    "Gold Nova Master",
-    "Master Guardian I",
-    "Master Guardian II",
-    "Master Guardian Elite",
-    "Distinguished Master Guardian",
-    "Legendary Eagle",
-    "Legendary Eagle Master",
-    "Supreme Master First Class",
-    "The Global Elite",
-];
-
-// CS:GO Crosshair //
-
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -75,32 +34,15 @@ module.exports = {
 
         if (subCommand === "rank") {
             await interaction.reply({ content: "Checking if it is a valid Steam ID..." });
-
             const steamId = interaction.options.getString("steam-id");
-
             if (!steamId.startsWith("STEAM_")) {
                 return await interaction.editReply({ content: `\`${steamId}\` is an invalid Steam ID.` });
             }
 
-            let sid = new SteamID(steamId);
+            const embed = await CSGO.getPlayerEmbed(steamId);
 
-            let userStats = await getPlayerInfo(sid.getSteamID64());
-
-            if (userStats === 0) {
-                return await interaction.editReply({ content: `No matches have been added for \`${steamId}\`.` });
-            } else if (userStats === -1) {
-                return await interaction.editReply({ content: `An error occured while fetching data for \`${steamId}\`.` });
-            }
-
-            const embed = new EmbedBuilder()
-                .setTitle(`${userStats.name}'s CS:GO Rank`)
-                .setDescription(`## ` + RANK_NAMES[userStats.rank])
-                .setThumbnail(`https://static.csgostats.gg/images/ranks/${userStats.rank}.png`)
-                .addFields(
-                    { name: "Best Rank", value: RANK_NAMES[userStats.bestRank], inline: false }
-                )
-                .setColor("Random");
-
+            if (embed == 0) return await interaction.editReply({ content: `No matches have been added for \`${steamId}\`.` });
+            if (embed == -1) return await interaction.editReply({ content: `An error occured while fetching data for \`${steamId}\`.` });
             await interaction.editReply({ content: "", embeds: [embed] });
         } else if (subCommand === "crosshair") {
             await interaction.reply({ content: "Checking if it is a valid crosshair code..." });
