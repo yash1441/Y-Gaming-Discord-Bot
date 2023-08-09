@@ -11,27 +11,85 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
 });
 const csgoRanks = require("../Models/csgoRanks")(sequelize, Sequelize.DataTypes);
 
-const RANK_NAMES = [
-    "Unranked",
-    "Silver I",
-    "Silver II",
-    "Silver III",
-    "Silver IV",
-    "Silver Elite",
-    "Silver Elite Master",
-    "Gold Nova I",
-    "Gold Nova II",
-    "Gold Nova III",
-    "Gold Nova Master",
-    "Master Guardian I",
-    "Master Guardian II",
-    "Master Guardian Elite",
-    "Distinguished Master Guardian",
-    "Legendary Eagle",
-    "Legendary Eagle Master",
-    "Supreme Master First Class",
-    "The Global Elite",
-];
+const ranks = [
+    {
+        name: "Unranked",
+        emoji: "<:unranked:>"
+    },
+    {
+        name: "Silver I",
+        emoji: "<:s1:>"
+    },
+    {
+        name: "Silver II",
+        emoji: "<:s2:>"
+    },
+    {
+        name: "Silver III",
+        emoji: "<:s3:>"
+    },
+    {
+        name: "Silver IV",
+        emoji: "<:s4:>"
+    },
+    {
+        name: "Silver Elite",
+        emoji: "<:se:>"
+    },
+    {
+        name: "Silver Elite Master",
+        emoji: "<:sem:>"
+    },
+    {
+        name: "Gold Nova I",
+        emoji: "<:gn1:>"
+    },
+    {
+        name: "Gold Nova II",
+        emoji: "<:gn2:>"
+    },
+    {
+        name: "Gold Nova III",
+        emoji: "<:gn3:>"
+    },
+    {
+        name: "Gold Nova Master",
+        emoji: "<:gnm:>"
+    },
+    {
+        name: "Master Guardian I",
+        emoji: "<:mg1:>"
+    },
+    {
+        name: "Master Guardian II",
+        emoji: "<:mg2:>"
+    },
+    {
+        name: "Master Guardian Elite",
+        emoji: "<:mge:>"
+    },
+    {
+        name: "Distinguished Master Guardian",
+        emoji: "<:dmg:>"
+    },
+    {
+        name: "Legendary Eagle",
+        emoji: "<:le:>"
+    },
+    {
+        name: "Legendary Eagle Master",
+        emoji: "<:lem:>"
+    },
+    {
+        name: "Supreme Master First Class",
+        emoji: "<:smfc:>"
+    },
+    {
+        name: "The Global Elite",
+        emoji: "<:ge:>"
+    },
+
+]
 
 async function getMultiLink(status) {
     let url = "https://csgostats.gg/player/multi?";
@@ -80,7 +138,7 @@ async function getStatusEmbed(message) {
         .setColor("Random");
 
     for (const player of multiPlayerInfo) {
-        embed.addFields({ name: player.name, value: RANK_NAMES[player.rank], inline: false });
+        embed.addFields({ name: player.name, value: ranks[player.rank].name, inline: false });
     }
 
     for (const player of multiPlayerInfo) {
