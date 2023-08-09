@@ -14,79 +14,79 @@ const csgoRanks = require("../Models/csgoRanks")(sequelize, Sequelize.DataTypes)
 const ranks = [
     {
         name: "Unranked",
-        emoji: "<:unranked:>"
+        emoji: "<:unranked:1138816376497246219>"
     },
     {
         name: "Silver I",
-        emoji: "<:s1:>"
+        emoji: "<:s1:1138816485586899014>"
     },
     {
         name: "Silver II",
-        emoji: "<:s2:>"
+        emoji: "<:s2:1138816575579889816>"
     },
     {
         name: "Silver III",
-        emoji: "<:s3:>"
+        emoji: "<:s3:1138816605720158218>"
     },
     {
         name: "Silver IV",
-        emoji: "<:s4:>"
+        emoji: "<:s4:1138816638045667378>"
     },
     {
         name: "Silver Elite",
-        emoji: "<:se:>"
+        emoji: "<:se:1138816693230108792>"
     },
     {
         name: "Silver Elite Master",
-        emoji: "<:sem:>"
+        emoji: "<:sem:1138816721948528683>"
     },
     {
         name: "Gold Nova I",
-        emoji: "<:gn1:>"
+        emoji: "<:gn1:1138816766689161338>"
     },
     {
         name: "Gold Nova II",
-        emoji: "<:gn2:>"
+        emoji: "<:gn2:1138816791762698393>"
     },
     {
         name: "Gold Nova III",
-        emoji: "<:gn3:>"
+        emoji: "<:gn3:1138816817289244753>"
     },
     {
         name: "Gold Nova Master",
-        emoji: "<:gnm:>"
+        emoji: "<:gnm:1138816869726433390>"
     },
     {
         name: "Master Guardian I",
-        emoji: "<:mg1:>"
+        emoji: "<:mg1:1138816904761442306>"
     },
     {
         name: "Master Guardian II",
-        emoji: "<:mg2:>"
+        emoji: "<:mg2:1138816950689091614>"
     },
     {
         name: "Master Guardian Elite",
-        emoji: "<:mge:>"
+        emoji: "<:mge:1138816976228200478>"
     },
     {
         name: "Distinguished Master Guardian",
-        emoji: "<:dmg:>"
+        emoji: "<:dmg:1138817027629400196>"
     },
     {
         name: "Legendary Eagle",
-        emoji: "<:le:>"
+        emoji: "<:le:1138817060735033374>"
     },
     {
         name: "Legendary Eagle Master",
-        emoji: "<:lem:>"
+        emoji: "<:lem:1138817083216506882>"
     },
     {
         name: "Supreme Master First Class",
-        emoji: "<:smfc:>"
+        emoji: "<:smfc:1138817119182663770>"
     },
     {
         name: "The Global Elite",
-        emoji: "<:ge:>"
+        emoji: "<:ge:1138817149570404442>"
     },
 
 ]
@@ -137,9 +137,19 @@ async function getStatusEmbed(message) {
         .setTitle("CS:GO Status Ranks")
         .setColor("Random");
 
+    let namesArray = [], ranksArray = [];
+
     for (const player of multiPlayerInfo) {
-        embed.addFields({ name: player.name, value: ranks[player.rank].name, inline: false });
+        namesArray.push(player.name);
+        ranksArray.push(ranks[player.rank].emoji);
     }
+
+    embed.addFields(
+        { name: 'Player', value: namesArray.join('\n'), inline: false },
+        { name: 'Rank', value: ranksArray.join('\n'), inline: false },
+    );
+
+    embed.addFields({ name: player.name, value: ranks[player.rank].name, inline: false });
 
     for (const player of multiPlayerInfo) {
         const [dbRank, created] = await csgoRanks.findOrCreate({ where: { steam_id: player.steamId }, defaults: { steam_id: player.steamId, current_rank: player.rank } });
