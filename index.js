@@ -206,8 +206,9 @@ client.on("messageCreate", async (message) => {
 			return;
 		}
 		message.channel.send({ embeds: [embed] });
-	} catch {
+	} catch(error) {
 		logger.error('Could not send rank status embed.');
+		console.log(error);
 	}
 });
 
