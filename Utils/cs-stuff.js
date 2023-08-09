@@ -137,15 +137,17 @@ async function getStatusEmbed(message) {
         .setTitle("CS:GO Status Ranks")
         .setColor("Random");
 
-    let namesArray = [], ranksArray = [];
+    let namesArray = [], ranksArray = [], steamIdArray = [];
 
     for (const player of multiPlayerInfo) {
-        namesArray.push(bold(escapeMarkdown(player.name)) + ' (' + player.steamId + ')');
+        namesArray.push(bold(escapeMarkdown(player.name)));
+        steamIdArray.push(player.steamId);
         ranksArray.push(ranks[player.rank].emoji);
     }
 
     embed.addFields(
         { name: 'Player', value: namesArray.join('\n'), inline: true },
+        { name: 'Steam ID', value: steamIdArray.join('\n'), inline: true },
         { name: 'Rank', value: ranksArray.join('\n'), inline: true },
     );
 
