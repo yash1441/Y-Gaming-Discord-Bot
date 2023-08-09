@@ -102,7 +102,7 @@ async function getPlayerEmbed(steamId) {
     if (userStats == -1) return -1;
 
     const embed = new EmbedBuilder()
-        .setTitle(`${userStats.name}'s CS:GO Rank`)
+        .setTitle(`${escapeMarkdown(userStats.name)}'s CS:GO Rank`)
         .setDescription(`## ` + ranks[userStats.rank].name)
         .setThumbnail(`https://static.csgostats.gg/images/ranks/${userStats.rank}.png`)
         .addFields(
