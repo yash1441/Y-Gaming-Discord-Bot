@@ -140,7 +140,7 @@ async function getStatusEmbed(message) {
     let namesArray = [], ranksArray = [];
 
     for (const player of multiPlayerInfo) {
-        namesArray.push(bold(player.name) + '(' + player.steamId + ')');
+        namesArray.push(bold(escapeMarkdown(player.name)) + '(' + player.steamId + ')');
         ranksArray.push(ranks[player.rank].emoji);
     }
 
@@ -159,5 +159,11 @@ async function getStatusEmbed(message) {
 
     return embed;
 }
+
+function escapeMarkdown(text) {
+    var unescaped = text.replace(/\\(\*|_|`|~|\\)/g, '$1'); // unescape any "backslashed" character
+    var escaped = unescaped.replace(/(\*|_|`|~|\\)/g, '\\$1'); // escape *, _, `, ~, \
+    return escaped;
+  }
 
 module.exports = { getStatusEmbed };
