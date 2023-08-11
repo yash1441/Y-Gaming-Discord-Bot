@@ -45,8 +45,14 @@ module.exports = {
         const focusedValue = interaction.options.getFocused();
         const choices = await CSGO.getSkinNamesList();
 		const filtered = choices.filter(choice => choice.startsWith(focusedValue));
+        let options;
+        if (filtered.length > 25) {
+            options = filtered.slice(0, 25);
+        } else {
+            options = filtered;
+        }
 		await interaction.respond(
-			filtered.map(choice => ({ name: choice, value: choice })),
+			options.map(choice => ({ name: choice, value: choice })),
 		);
     },
     async execute(interaction) {
