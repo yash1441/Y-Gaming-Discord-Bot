@@ -300,6 +300,8 @@ async function getSkinData(skin) {
         error: "Unable to find " + skin + " in the BUFF database."
     }
 
+    console.log(skinData);
+
     return skinData;
 }
 
