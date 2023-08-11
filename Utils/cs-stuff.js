@@ -244,9 +244,9 @@ async function getCSData() {
 		const jsonData = response.data;
         const formattedData = [];
 
-        for (const skinId in jsonData) {
-            const skinName = skinId.name;
-            formattedData.push(skinName);
+        for (const item in jsonData) {
+            const itemName = item.name;
+            if (itemName) formattedData.push(itemName);
         }
 
         console.log(formattedData);
