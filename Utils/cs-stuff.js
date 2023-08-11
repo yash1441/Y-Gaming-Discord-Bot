@@ -253,7 +253,7 @@ async function getCSSkins() {
         }
 
         const itemsString = JSON.stringify(itemsData, null, 2);
-        fs.writeFileSync(path.join(__dirname, './Data/cs-items.json'), itemsString);
+        fs.writeFileSync(path.join(__dirname, '../Data/cs-items.json'), itemsString);
         logger.info('CSGO: Loaded ' + itemsArray.length + ' items.');
         return itemsArray;
 	});
