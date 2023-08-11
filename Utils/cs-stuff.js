@@ -289,7 +289,7 @@ async function getSkinWearsList(itemName) {
     return wearsArray;
 }
 
-async function getSkinData(skin) {
+async function getSkinData(skin, log) {
     const url = "https://buff-price.czernouskovi.eu/item?name=" + encodeURI(skin);
     let skinData = {};
     await axios.get(url).then((response) => {
@@ -299,6 +299,7 @@ async function getSkinData(skin) {
         skinData = { error: "Unable to find " + skin + " in the BUFF database." }
     });
 
+    if (log) console.log(skinData);
     return skinData;
 }
 

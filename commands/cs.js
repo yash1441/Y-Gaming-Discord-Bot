@@ -134,7 +134,7 @@ module.exports = {
             if (skin.includes('Knife')) {
                 skin = '★ ' + skin;
             }
-            const skinData = await CSGO.getSkinData(skin);
+            const skinData = await CSGO.getSkinData(skin, true);
 
             if (!skinData || skinData.error) return await interaction.editReply({ content: skinData.error });
 
