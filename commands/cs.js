@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, bold, italic, hyperlink } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, bold, italic, hyperlink } = require("discord.js");
 const { decodeCrosshairShareCode, crosshairToConVars } = require("csgo-sharecode");
 const CSGO = require('../Utils/cs-stuff.js');
 const logger = require("../Logger/logger.js");
@@ -140,17 +140,31 @@ module.exports = {
 
             const embed = new EmbedBuilder()
                 .setTitle(skinData.name)
+                .setDescription(italic('1CN¥ = ₹11.5'))
                 .addFields(
-                    { name: 'Buff Price (BUY)', value: (parseInt(skinData.buyPrice) * 11.5).toString(), inline: true },
-                    { name: '\u200B', value: hyperlink(bold('SCREENSHOT'), skinData.inspectUrl) + '\n' + hyperlink(bold('STEAM'), skinData.steamUrl), inline: true},
-                    { name: 'Buff Price (SELL)', value: (parseInt(skinData.sellPrice) * 11.5).toString(), inline: false},
-                    { name: 'Steam Price', value: (parseInt(skinData.steamPrice) * 11.5).toString(), inline: false},
+                    { name: 'Buff Price (BUY)', value: '₹' + (parseInt(skinData.buyPrice) * 11.5).toString(), inline: true },
+                    { name: 'Buff Price (SELL)', value: '₹' + (parseInt(skinData.sellPrice) * 11.5).toString(), inline: true },
+                    { name: 'Steam Price', value: '₹' + (parseInt(skinData.steamPrice) * 11.5).toString(), inline: false },
                 )
                 .setThumbnail(skinData.image)
                 .setFooter({ text: 'Item ID: ' + skinData.itemId.toString() })
                 .setColor('#FFFFFF');
 
-            await interaction.editReply({ content: '', embeds: [embed] });
+            const button1 = new ButtonBuilder()
+                .setLabel('Screenshot')
+                .setURL(skinData.inspectUrl)
+                .setEmoji({ animated: false, name: 'buff', id: '1139648328024477697' })
+                .setStyle(ButtonStyle.Link);
+
+            const button2 = new ButtonBuilder()
+                .setLabel('Steam Market')
+                .setURL(skinData.steamUrl)
+                .setEmoji({ animated: true, name: 'steam', id: '1139647383085514883' })
+                .setStyle(ButtonStyle.Link);
+
+            const row = new ActionRowBuilder().addComponents(button1, button2);
+
+            await interaction.editReply({ content: '', embeds: [embed], components: [row] });
         }
     },
 };
