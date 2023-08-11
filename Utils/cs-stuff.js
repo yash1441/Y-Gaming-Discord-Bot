@@ -275,7 +275,7 @@ async function getSkinNamesList() {
 async function getSkinWearsList(itemName) {
     const jsonData = fs.readFileSync(path.join(__dirname, '../Data/cs-items.json'), 'utf8');
     const itemsData = JSON.parse(jsonData);
-    const wearsArray = [];
+    let wearsArray = [];
 
     for (const itemId in itemsData) {
         const item = itemsData[itemId];
