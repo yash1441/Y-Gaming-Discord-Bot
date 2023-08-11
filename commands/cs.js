@@ -45,9 +45,10 @@ module.exports = {
         ),
     async autocomplete(interaction) {
         const focusedValue = interaction.options.getFocused();
+        const words = focusedValue.toLowerCase().split(" ");
         await fetchChoices();
 		const filtered = choices.filter(choice => {
-            const words = focusedValue.toLowerCase().split(" ");
+            const choiceLower = choice.toLowerCase();
             return words.every(word => choiceLower.includes(word)) || words.some(word => choiceLower.includes(word));
         });
         let options;
