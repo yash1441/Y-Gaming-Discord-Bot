@@ -295,12 +295,11 @@ async function getSkinData(skin) {
     await axios.get(url).then((response) => {
         skinData = response.data;
     }).catch((error) => {
-        console.log(error);
+        console.log('ERROR\n' + error);
     });
 
-    if (!skinData) skinData = {
-        error: "Unable to find " + skin + " in the BUFF database."
-    }
+    if (!skinData) skinData = { error: "Unable to find " + skin + " in the BUFF database." }
+    else if (response.code.startsWith('ERR')) skinData = { error: "ERROR: Unable to find " + skin + " in the BUFF database." };
 
     console.log(skinData);
 
