@@ -241,22 +241,36 @@ function escapeMarkdown(text) {
     return escaped;
 }
 
-async function getCSSkins() {
-    await axios.get('https://bymykel.github.io/CSGO-API/api/en/all.json').then((response) => {
-		const itemsData = response.data;
-        const itemsArray = [];
+async function getSkinNamesList() {
+    const jsonData = fs.readFileSync('../Data/cs-items.json', 'utf8');
+    const itemsData = JSON.parse(jsonData);
+    const itemsArray = [];
 
-        for (const itemId in itemsData) {
-            const item = itemsData[itemId];
-            const itemName = item.name;
-            if (itemName) itemsArray.push(itemName);
-        }
+    for (const itemId in itemsData) {
+        const item = itemsData[itemId];
+        const itemName = item.name;
+        if (itemName) itemsArray.push(itemName);
+    }
 
-        const itemsString = JSON.stringify(itemsData, null, 2);
-        fs.writeFileSync(path.join(__dirname, '../Data/cs-items.json'), itemsString);
-        logger.info('CSGO: Loaded ' + itemsArray.length + ' items.');
-        return itemsArray;
-	});
+    logger.info('CSGO: Loaded ' + itemsArray.length + ' items.');
+    return itemsArray;
+
+    // const data = JSON.parse(jsonData);
+    // await axios.get('https://bymykel.github.io/CSGO-API/api/en/all.json').then((response) => {
+    //     const itemsData = response.data;
+    //     const itemsArray = [];
+
+    //     for (const itemId in itemsData) {
+    //         const item = itemsData[itemId];
+    //         const itemName = item.name;
+    //         if (itemName) itemsArray.push(itemName);
+    //     }
+
+    //     const itemsString = JSON.stringify(itemsData, null, 2);
+    //     fs.writeFileSync(path.join(__dirname, '../Data/cs-items.json'), itemsString);
+    //     logger.info('CSGO: Loaded ' + itemsArray.length + ' items.');
+    //     return itemsArray;
+    // });
 }
 
-module.exports = { getStatusEmbed, getPlayerEmbed, getCSSkins };
+module.exports = { getStatusEmbed, getPlayerEmbed, getSkinNamesList };
