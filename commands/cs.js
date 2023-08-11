@@ -3,6 +3,8 @@ const { decodeCrosshairShareCode, crosshairToConVars } = require("csgo-sharecode
 const CSGO = require('../Utils/cs-stuff.js');
 const logger = require("../Logger/logger.js");
 
+let choices = null;
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("cs")
@@ -43,7 +45,7 @@ module.exports = {
         ),
     async autocomplete(interaction) {
         const focusedValue = interaction.options.getFocused();
-        const choices = await CSGO.getSkinNamesList();
+        await fetchChoices();
 		const filtered = choices.filter(choice => choice.includes(focusedValue));
         let options;
         if (filtered.length > 25) {
@@ -88,3 +90,9 @@ module.exports = {
         }
     },
 };
+
+async function fetchChoices() {
+    if (choices === null) {
+        choices = await CSGO.getSkinNamesList();
+    }
+}
