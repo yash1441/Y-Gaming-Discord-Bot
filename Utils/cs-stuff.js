@@ -244,9 +244,9 @@ async function getCSData() {
 		const jsonData = response.data;
         const formattedData = [];
 
-        for (const item in jsonData) {
+        for (const itemId in jsonData) {
+            const item = jsonData[itemId];
             const itemName = item.name;
-            console.log(item);
             if (itemName) formattedData.push(itemName);
         }
 
