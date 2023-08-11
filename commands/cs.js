@@ -127,8 +127,10 @@ module.exports = {
         } else if (subCommand === "item") {
             await interaction.deferReply({ ephemeral: true });
             const itemName = interaction.options.getString("item-name");
-            if (!choices.includes(itemName)) return await interaction.editReply({ content: 'Invalid item! Please try again.' });
-            await interaction.editReply({ content: itemName });
+            const itemWear = interaction.options.getString("item-wear");
+            if (!choices.includes(itemName) && !wears.includes(itemWear)) return await interaction.editReply({ content: 'Invalid item! Please try again.' });
+            const skin = (wears.includes('NA')) ? itemName : itemName + ' (' + itemWear + ')';
+            await interaction.editReply({ content: skin });
         }
     },
 };
