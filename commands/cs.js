@@ -157,7 +157,10 @@ module.exports = {
 
             if (skinData.inspectUrl) {
                 button1.setURL(skinData.inspectUrl);
-            } else button1.setDisabled(true);
+            } else{
+                button1.setURL('https://y-gaming.in');
+                button1.setDisabled(true);
+            }
 
             const button2 = new ButtonBuilder()
                 .setLabel('Steam Market')
@@ -166,7 +169,10 @@ module.exports = {
 
             if (skinData.steamUrl) {
                 button2.setURL(skinData.steamUrl);
-            } else button2.setDisabled(true);
+            } else{
+                button2.setURL('https://y-gaming.in');
+                button2.setDisabled(true);
+            }
 
             const row = new ActionRowBuilder().addComponents(button1, button2);
 
