@@ -241,7 +241,15 @@ function escapeMarkdown(text) {
 
 async function getCSData() {
     await axios.get('https://bymykel.github.io/CSGO-API/api/en/all.json').then((response) => {
-		console.log(response.data);
+		const jsonData = response.data;
+        const formattedData = [];
+
+        for (const skinId in jsonData) {
+            const skinName = skinId.name;
+            formattedData.push(skinName);
+        }
+
+        console.log(formattedData);
 	});
 }
 
