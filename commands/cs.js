@@ -152,15 +152,21 @@ module.exports = {
 
             const button1 = new ButtonBuilder()
                 .setLabel('Screenshot')
-                .setURL(skinData.inspectUrl)
                 .setEmoji({ animated: false, name: 'buff', id: '1139648328024477697' })
                 .setStyle(ButtonStyle.Link);
 
+            if (skinData.inspectUrl) {
+                button1.setURL(skinData.inspectUrl);
+            } else button1.setDisabled(true);
+
             const button2 = new ButtonBuilder()
                 .setLabel('Steam Market')
-                .setURL(skinData.steamUrl)
                 .setEmoji({ animated: true, name: 'steam', id: '1139647383085514883' })
                 .setStyle(ButtonStyle.Link);
+
+            if (skinData.steamUrl) {
+                button2.setURL(skinData.steamUrl);
+            } else button2.setDisabled(true);
 
             const row = new ActionRowBuilder().addComponents(button1, button2);
 
