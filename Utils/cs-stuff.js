@@ -293,6 +293,7 @@ async function getSkinData(skin) {
     const url = "https://buff-price.czernouskovi.eu/item?name=" + skin;
     let skinData = {};
     await axios.get(url).then((response) => {
+        console.log({ url, response });
         skinData = JSON.parse(response.data);;
     });
 
