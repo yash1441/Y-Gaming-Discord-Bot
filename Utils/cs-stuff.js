@@ -275,12 +275,12 @@ async function getSkinNamesList() {
 async function getSkinWearsList(itemName) {
     const jsonData = fs.readFileSync(path.join(__dirname, '../Data/cs-items.json'), 'utf8');
     const itemsData = JSON.parse(jsonData);
-    let wearsArray = [];
+    const wearsArray = [];
 
     for (const itemId in itemsData) {
         const item = itemsData[itemId];
         if (item.name == itemName && item.wears) {
-            wearsArray = item.wears
+            item.wears.forEach(wear => wearsArray.push(wear));
         } else continue;
     }
 

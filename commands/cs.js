@@ -74,7 +74,7 @@ module.exports = {
             }
             await interaction.respond(
                 options.map(choice => ({ name: choice, value: choice })),
-            );
+            ).then(() => { wears = null });
         } else if (focusedOption.name === 'item-wear') {
             const itemName = interaction.options.getString("item-name");
             if (!itemName || !choices.includes(itemName)) {
