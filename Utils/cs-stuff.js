@@ -296,7 +296,7 @@ async function getSkinData(skin) {
         skinData = response.data;
     });
 
-    if (!skinData) skinData = {
+    if (!skinData || skinData.includes('Server Error')) skinData = {
         error: "Unable to find " + skin + " in the BUFF database."
     }
 
