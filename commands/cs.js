@@ -140,7 +140,6 @@ module.exports = {
 
             const embed = new EmbedBuilder()
                 .setTitle(skinData.name)
-                .setDescription()
                 .addFields(
                     { name: 'Buff Price (BUY)', value: (parseInt(skinData.buyPrice) * 11.5).toString(), inline: true },
                     { name: 'Buff Price (SELL)', value: (parseInt(skinData.sellPrice) * 11.5).toString(), inline: true},
