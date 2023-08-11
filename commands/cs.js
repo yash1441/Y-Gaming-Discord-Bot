@@ -85,8 +85,8 @@ module.exports = {
             }
         } else if (subCommand === "item") {
             await interaction.deferReply({ ephemeral: true });
-
-            await interaction.editReply({ content: 'Done' });
+            const itemName = interaction.options.getString("item-name");
+            await interaction.editReply({ content: itemName });
         }
     },
 };
