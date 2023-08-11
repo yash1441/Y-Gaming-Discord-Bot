@@ -289,4 +289,14 @@ async function getSkinWearsList(itemName) {
     return wearsArray;
 }
 
+async function getSkinData(skin) {
+    const url = "https://buff-price.czernouskovi.eu/item?name=" + skin;
+    let skinData = {};
+    await axios.get(url).then((response) => {
+        skinData = JSON.parse(response.data);;
+    });
+
+    return skinData;
+}
+
 module.exports = { getStatusEmbed, getPlayerEmbed, getSkinNamesList, getSkinWearsList };

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, codeBlock  } = require("discord.js");
 const { decodeCrosshairShareCode, crosshairToConVars } = require("csgo-sharecode");
 const CSGO = require('../Utils/cs-stuff.js');
 const logger = require("../Logger/logger.js");
@@ -130,7 +130,10 @@ module.exports = {
             const itemWear = interaction.options.getString("item-wear");
             if (!choices.includes(itemName) && !wears.includes(itemWear)) return await interaction.editReply({ content: 'Invalid item! Please try again.' });
             const skin = (wears.includes('NA')) ? itemName : itemName + ' (' + itemWear + ')';
-            await interaction.editReply({ content: skin });
+            const skinData = await CSGO.getSkinData(skin);
+
+            if (!skinData) return await interaction.editReply({ content: 'Item data not found!Please try again.' });
+            await interaction.editReply({ content: codeBlock('json', skinData) });
         }
     },
 };
