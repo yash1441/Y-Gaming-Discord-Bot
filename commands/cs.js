@@ -139,7 +139,6 @@ async function fetchChoices(check, skinName) {
     if (check == 'names' && choices === null) {
         choices = await CSGO.getSkinNamesList();
     } else if (check == 'wears' && (wears === null || wears.includes('NA'))) {
-        logger.debug('Wear Option Check');
         wears = await CSGO.getSkinWearsList(skinName);
     }
 }
