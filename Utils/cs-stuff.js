@@ -299,4 +299,4 @@ async function getSkinData(skin) {
     return skinData;
 }
 
-module.exports = { getStatusEmbed, getPlayerEmbed, getSkinNamesList, getSkinWearsList };
+module.exports = { getStatusEmbed, getPlayerEmbed, getSkinNamesList, getSkinWearsList, getSkinData };
