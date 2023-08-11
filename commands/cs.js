@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, codeBlock } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, bold, hyperlink, hideLinkEmbed } = require("discord.js");
 const { decodeCrosshairShareCode, crosshairToConVars } = require("csgo-sharecode");
 const CSGO = require('../Utils/cs-stuff.js');
 const logger = require("../Logger/logger.js");
@@ -137,7 +137,19 @@ module.exports = {
             const skinData = await CSGO.getSkinData(skin);
 
             if (!skinData) return await interaction.editReply({ content: 'Item data not found!Please try again.' });
-            await interaction.editReply({ content: codeBlock('json', JSON.stringify(skinData)) });
+
+            const embed = new EmbedBuilder()
+                .setTitle(skinData.name)
+                .setDescription(skinData.itemId)
+                .addFields(
+                    { name: 'Buff Price (BUY)', value: (parseInt(skinData.buyPrice) * 11.5).toString(), inline: true },
+                    { name: 'Buff Price (SELL)', value: (parseInt(skinData.sellPrice) * 11.5).toString(), inline: true},
+                    { name: 'Steam Price', value: (parseInt(skinData.steamPrice) * 11.5).toString(), inline: true},
+                    { name: 'Links', value: hideLinkEmbed(hyperlink(bold('INSPECT'), skinData.inspectUrl)) + '\n' + hideLinkEmbed(hyperlink(bold('STEAM'), skinData.steamUrl)), inline: false},
+                )
+                .setThumbnail(skinData.image);
+
+            await interaction.editReply({ content: '', embeds: [embed] });
         }
     },
 };
