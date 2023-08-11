@@ -4,6 +4,7 @@ const cheerio = require("cheerio");
 const cloudscraper = require("cloudscraper");
 const axios = require("axios").default;
 const fs = require("fs");
+const path = require("path");
 const logger = require("../Logger/logger.js");
 
 const Sequelize = require('sequelize');
