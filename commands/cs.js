@@ -51,6 +51,12 @@ module.exports = {
             const choiceLower = choice.toLowerCase();
             return words.every(word => choiceLower.includes(word)) || words.some(word => choiceLower.includes(word));
         });
+        filtered.sort((a, b) => {
+            const aScore = words.reduce((score, word) => score + (a.toLowerCase().includes(word) ? 1 : 0), 0);
+            const bScore = words.reduce((score, word) => score + (b.toLowerCase().includes(word) ? 1 : 0), 0);
+            return bScore - aScore;
+        });
+        
         let options;
         if (filtered.length > 25) {
             options = filtered.slice(0, 25);
