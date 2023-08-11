@@ -48,7 +48,7 @@ module.exports = {
         await fetchChoices();
 		const filtered = choices.filter(choice => {
             const words = focusedValue.toLowerCase().split(" ");
-            return words.some(word => choice.toLowerCase().includes(word));
+            return words.every(word => choiceLower.includes(word)) || words.some(word => choiceLower.includes(word));
         });
         let options;
         if (filtered.length > 25) {
