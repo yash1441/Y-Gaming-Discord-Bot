@@ -242,7 +242,7 @@ function escapeMarkdown(text) {
 }
 
 async function getSkinNamesList() {
-    const jsonData = fs.readFileSync('../Data/cs-items.json', 'utf8');
+    const jsonData = fs.readFileSync(path.join(__dirname, '../Data/cs-items.json'), 'utf8');
     const itemsData = JSON.parse(jsonData);
     const itemsArray = [];
 
