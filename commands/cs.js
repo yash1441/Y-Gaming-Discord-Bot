@@ -133,7 +133,7 @@ module.exports = {
             const skinData = await CSGO.getSkinData(skin);
 
             if (!skinData) return await interaction.editReply({ content: 'Item data not found!Please try again.' });
-            await interaction.editReply({ content: codeBlock('json', skinData) });
+            await interaction.editReply({ content: codeBlock('json', JSON.stringify(skinData)) });
         }
     },
 };
