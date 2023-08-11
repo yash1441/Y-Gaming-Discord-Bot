@@ -3,6 +3,7 @@ const SteamID = require("steamid");
 const cheerio = require("cheerio");
 const cloudscraper = require("cloudscraper");
 const axios = require("axios").default;
+const fs = require("fs");
 const logger = require("../Logger/logger.js");
 
 const Sequelize = require('sequelize');
@@ -239,19 +240,22 @@ function escapeMarkdown(text) {
     return escaped;
 }
 
-async function getCSData() {
+async function getCSSkins() {
     await axios.get('https://bymykel.github.io/CSGO-API/api/en/all.json').then((response) => {
-		const jsonData = response.data;
-        const formattedData = [];
+		const itemsData = response.data;
+        const itemsArray = [];
 
-        for (const itemId in jsonData) {
-            const item = jsonData[itemId];
+        for (const itemId in itemsData) {
+            const item = itemsData[itemId];
             const itemName = item.name;
-            if (itemName) formattedData.push(itemName);
+            if (itemName) itemsArray.push(itemName);
         }
 
-        console.log(formattedData);
+        const itemsString = JSON.stringify(itemsData, null, 2);
+        fs.writeFileSync(path.join(__dirname, './Data/cs-items.json'), itemsString);
+        logger.info('CSGO: Loaded ' + itemsArray.length + ' items.');
+        return itemsArray;
 	});
 }
 
-module.exports = { getStatusEmbed, getPlayerEmbed, getCSData };
+module.exports = { getStatusEmbed, getPlayerEmbed, getCSSkins };

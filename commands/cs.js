@@ -38,6 +38,7 @@ module.exports = {
                         .setName("item-name")
                         .setDescription("Enter the item name.")
                         .setRequired(true)
+                        //.setAutocomplete(true)
                 )
         ),
     async execute(interaction) {
@@ -68,7 +69,7 @@ module.exports = {
             }
         } else if (subCommand === "item") {
             await interaction.deferReply({ ephemeral: true });
-            await CSGO.getCSData();
+            await CSGO.getCSSkins();
             await interaction.editReply({ content: 'Done' });
         }
     },
