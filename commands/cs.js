@@ -46,7 +46,7 @@ module.exports = {
     async autocomplete(interaction) {
         const focusedValue = interaction.options.getFocused();
         await fetchChoices();
-		const filtered = choices.filter(choice => choice.includes(focusedValue));
+		const filtered = choices.filter(choice => choice.toLowerCase().includes(focusedValue.toLowerCase()));
         let options;
         if (filtered.length > 25) {
             options = filtered.slice(0, 25);
