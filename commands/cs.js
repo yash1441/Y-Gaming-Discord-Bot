@@ -144,7 +144,7 @@ module.exports = {
                     { name: 'Buff Price (BUY)', value: (parseInt(skinData.buyPrice) * 11.5).toString(), inline: true },
                     { name: 'Buff Price (SELL)', value: (parseInt(skinData.sellPrice) * 11.5).toString(), inline: true},
                     { name: 'Steam Price', value: (parseInt(skinData.steamPrice) * 11.5).toString(), inline: true},
-                    { name: '\u200B', value: hyperlink(bold('INSPECT'), skinData.inspectUrl) + '\n' + hyperlink(bold('STEAM'), skinData.steamUrl), inline: false},
+                    { name: '\u200B', value: hyperlink(bold('SCREENSHOT'), skinData.inspectUrl) + '\n' + hyperlink(bold('STEAM'), skinData.steamUrl), inline: false},
                 )
                 .setThumbnail(skinData.image)
                 .setFooter({ text: 'Item ID: ' + skinData.itemId.toString() })
