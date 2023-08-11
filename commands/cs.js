@@ -142,10 +142,9 @@ module.exports = {
                 .setTitle(skinData.name)
                 .addFields(
                     { name: 'Buff Price (BUY)', value: (parseInt(skinData.buyPrice) * 11.5).toString(), inline: true },
-                    { name: 'Buff Price (SELL)', value: (parseInt(skinData.sellPrice) * 11.5).toString(), inline: true},
-                    { name: '\u200B', value: '\u200B', inline: true },
-                    { name: 'Steam Price', value: (parseInt(skinData.steamPrice) * 11.5).toString(), inline: true},
                     { name: '\u200B', value: hyperlink(bold('SCREENSHOT'), skinData.inspectUrl) + '\n' + hyperlink(bold('STEAM'), skinData.steamUrl), inline: true},
+                    { name: 'Buff Price (SELL)', value: (parseInt(skinData.sellPrice) * 11.5).toString(), inline: false},
+                    { name: 'Steam Price', value: (parseInt(skinData.steamPrice) * 11.5).toString(), inline: false},
                 )
                 .setThumbnail(skinData.image)
                 .setFooter({ text: 'Item ID: ' + skinData.itemId.toString() })
