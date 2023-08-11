@@ -136,7 +136,7 @@ module.exports = {
             }
             const skinData = await CSGO.getSkinData(skin);
 
-            if (!skinData) return await interaction.editReply({ content: 'Item data not found! Please try again.' });
+            if (!skinData || skinData.error) return await interaction.editReply({ content: 'Item data not found! Please try again.' });
 
             const embed = new EmbedBuilder()
                 .setTitle(skinData.name)
