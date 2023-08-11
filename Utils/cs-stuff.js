@@ -2,6 +2,7 @@ const { EmbedBuilder, bold } = require("discord.js");
 const SteamID = require("steamid");
 const cheerio = require("cheerio");
 const cloudscraper = require("cloudscraper");
+const axios = require("axios").default;
 const logger = require("../Logger/logger.js");
 
 const Sequelize = require('sequelize');
@@ -238,4 +239,10 @@ function escapeMarkdown(text) {
     return escaped;
 }
 
-module.exports = { getStatusEmbed, getPlayerEmbed };
+async function getCSData() {
+    await axios.get('https://bymykel.github.io/CSGO-API/api/en/all.json').then((response) => {
+		console.log(response.data);
+	});
+}
+
+module.exports = { getStatusEmbed, getPlayerEmbed, getCSData };

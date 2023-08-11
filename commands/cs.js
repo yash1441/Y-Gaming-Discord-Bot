@@ -28,6 +28,17 @@ module.exports = {
                         .setDescription("Enter the crosshair code.")
                         .setRequired(true)
                 )
+        )
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName("item")
+                .setDescription("Show information about an in-game item.")
+                .addStringOption((option) =>
+                    option
+                        .setName("item-name")
+                        .setDescription("Enter the item name.")
+                        .setRequired(true)
+                )
         ),
     async execute(interaction) {
         const subCommand = interaction.options.getSubcommand();
@@ -55,6 +66,10 @@ module.exports = {
             } catch {
                 await interaction.editReply({ content: `Invalid crosshair code.` });
             }
+        } else if (subCommand === "item") {
+            await interaction.deferReply({ ephemeral: true });
+            await CSGO.getCSData();
+            await interaction.editReply({ content: 'Done' });
         }
     },
 };
