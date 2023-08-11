@@ -272,4 +272,21 @@ async function getSkinNamesList() {
     // });
 }
 
-module.exports = { getStatusEmbed, getPlayerEmbed, getSkinNamesList };
+async function getSkinWearsList(itemName) {
+    const jsonData = fs.readFileSync(path.join(__dirname, '../Data/cs-items.json'), 'utf8');
+    const itemsData = JSON.parse(jsonData);
+    const wearsArray = [];
+
+    for (const itemId in itemsData) {
+        const item = itemsData[itemId];
+        if (item.name == itemName && item.wears) {
+            wearsArray = item.wears
+        } else continue;
+    }
+
+    if (wearsArray.length < 1) wearsArray.push('NA');
+
+    return wearsArray;
+}
+
+module.exports = { getStatusEmbed, getPlayerEmbed, getSkinNamesList, getSkinWearsList };

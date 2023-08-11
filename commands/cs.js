@@ -3,7 +3,7 @@ const { decodeCrosshairShareCode, crosshairToConVars } = require("csgo-sharecode
 const CSGO = require('../Utils/cs-stuff.js');
 const logger = require("../Logger/logger.js");
 
-let choices = null;
+let choices = null, wears = null;
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -42,30 +42,61 @@ module.exports = {
                         .setRequired(true)
                         .setAutocomplete(true)
                 )
+                .addStringOption((option) =>
+                    option
+                        .setName("item-wear")
+                        .setDescription("Enter the item wear.")
+                        .setRequired(true)
+                        .setAutocomplete(true)
+                )
         ),
     async autocomplete(interaction) {
+        const focusedOption = interaction.options.getFocused(true);
         const focusedValue = interaction.options.getFocused();
         const words = focusedValue.toLowerCase().split(" ");
-        await fetchChoices();
-		const filtered = choices.filter(choice => {
-            const choiceLower = choice.toLowerCase();
-            return words.every(word => choiceLower.includes(word)) || words.some(word => choiceLower.includes(word));
-        });
-        filtered.sort((a, b) => {
-            const aScore = words.reduce((score, word) => score + (a.toLowerCase().includes(word) ? 1 : 0), 0);
-            const bScore = words.reduce((score, word) => score + (b.toLowerCase().includes(word) ? 1 : 0), 0);
-            return bScore - aScore;
-        });
+        if (focusedOption.name === 'item-name') {
+            await fetchChoices('names', false);
+            const filtered = choices.filter(choice => {
+                const choiceLower = choice.toLowerCase();
+                return words.every(word => choiceLower.includes(word)) || words.some(word => choiceLower.includes(word));
+            });
+            filtered.sort((a, b) => {
+                const aScore = words.reduce((score, word) => score + (a.toLowerCase().includes(word) ? 1 : 0), 0);
+                const bScore = words.reduce((score, word) => score + (b.toLowerCase().includes(word) ? 1 : 0), 0);
+                return bScore - aScore;
+            });
 
-        let options;
-        if (filtered.length > 25) {
-            options = filtered.slice(0, 25);
-        } else {
-            options = filtered;
+            let options;
+            if (filtered.length > 25) {
+                options = filtered.slice(0, 25);
+            } else {
+                options = filtered;
+            }
+            await interaction.respond(
+                options.map(choice => ({ name: choice, value: choice })),
+            );
+        } else if (focusedOption.name === 'item-wear') {
+            const itemName = interaction.options.getString("item-name");
+            if (!itemName || !choices.includes(itemName)) {
+                wears = ['NA'];
+            } else {
+                await fetchChoices('wears', itemName);
+                const filtered = wears.filter(wears => {
+                    const wearsLower = wears.toLowerCase();
+                    return words.every(word => wearsLower.includes(word)) || words.some(word => wearsLower.includes(word));
+                });
+
+                filtered.sort((a, b) => {
+                    const aScore = words.reduce((score, word) => score + (a.toLowerCase().includes(word) ? 1 : 0), 0);
+                    const bScore = words.reduce((score, word) => score + (b.toLowerCase().includes(word) ? 1 : 0), 0);
+                    return bScore - aScore;
+                });
+
+                await interaction.respond(
+                    filtered.map(wear => ({ name: wear, value: wear })),
+                );
+            }
         }
-		await interaction.respond(
-			options.map(choice => ({ name: choice, value: choice })),
-		);
     },
     async execute(interaction) {
         const subCommand = interaction.options.getSubcommand();
@@ -102,8 +133,10 @@ module.exports = {
     },
 };
 
-async function fetchChoices() {
-    if (choices === null) {
+async function fetchChoices(check, skinName) {
+    if (check == 'names' && choices === null) {
         choices = await CSGO.getSkinNamesList();
+    } else if (check == 'wears' && (wears === null || wears.includes('NA'))) {
+        wears = await CSGO.getSkinWearsList(skinName);
     }
 }
