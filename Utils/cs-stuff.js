@@ -294,6 +294,8 @@ async function getSkinData(skin) {
     let skinData = {};
     await axios.get(url).then((response) => {
         skinData = response.data;
+    }).catch((error) => {
+        console.log(error);
     });
 
     if (!skinData) skinData = {
