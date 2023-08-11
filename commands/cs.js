@@ -44,7 +44,7 @@ module.exports = {
     async autocomplete(interaction) {
         const focusedValue = interaction.options.getFocused();
         const choices = await CSGO.getSkinNamesList();
-		const filtered = choices.filter(choice => choice.startsWith(focusedValue));
+		const filtered = choices.filter(choice => choice.includes(focusedValue));
         let options;
         if (filtered.length > 25) {
             options = filtered.slice(0, 25);
@@ -83,7 +83,7 @@ module.exports = {
             }
         } else if (subCommand === "item") {
             await interaction.deferReply({ ephemeral: true });
-            await CSGO.getCSSkins();
+
             await interaction.editReply({ content: 'Done' });
         }
     },
