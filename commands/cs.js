@@ -38,9 +38,17 @@ module.exports = {
                         .setName("item-name")
                         .setDescription("Enter the item name.")
                         .setRequired(true)
-                        //.setAutocomplete(true)
+                        .setAutocomplete(true)
                 )
         ),
+    async autocomplete(interaction) {
+        const focusedValue = interaction.options.getFocused();
+        const choices = await CSGO.getSkinNamesList();
+		const filtered = choices.filter(choice => choice.startsWith(focusedValue));
+		await interaction.respond(
+			filtered.map(choice => ({ name: choice, value: choice })),
+		);
+    },
     async execute(interaction) {
         const subCommand = interaction.options.getSubcommand();
 
