@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, bold, hyperlink } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, bold, italic, hyperlink } = require("discord.js");
 const { decodeCrosshairShareCode, crosshairToConVars } = require("csgo-sharecode");
 const CSGO = require('../Utils/cs-stuff.js');
 const logger = require("../Logger/logger.js");
@@ -140,7 +140,7 @@ module.exports = {
 
             const embed = new EmbedBuilder()
                 .setTitle(skinData.name)
-                .setDescription(skinData.itemId.toString())
+                .setDescription(italic('Item ID: ' + skinData.itemId.toString()))
                 .addFields(
                     { name: 'Buff Price (BUY)', value: (parseInt(skinData.buyPrice) * 11.5).toString(), inline: true },
                     { name: 'Buff Price (SELL)', value: (parseInt(skinData.sellPrice) * 11.5).toString(), inline: true},
