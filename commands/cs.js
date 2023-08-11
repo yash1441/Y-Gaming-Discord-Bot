@@ -56,7 +56,7 @@ module.exports = {
             const bScore = words.reduce((score, word) => score + (b.toLowerCase().includes(word) ? 1 : 0), 0);
             return bScore - aScore;
         });
-        
+
         let options;
         if (filtered.length > 25) {
             options = filtered.slice(0, 25);
@@ -96,6 +96,7 @@ module.exports = {
         } else if (subCommand === "item") {
             await interaction.deferReply({ ephemeral: true });
             const itemName = interaction.options.getString("item-name");
+            if (!choices.includes(itemName)) return await interaction.editReply({ content: 'Invalid item! Please try again.' });
             await interaction.editReply({ content: itemName });
         }
     },
