@@ -252,7 +252,6 @@ async function getSkinNamesList() {
         if (itemName) itemsArray.push(itemName);
     }
 
-    logger.info('CSGO: Loaded ' + itemsArray.length + ' items.');
     return itemsArray;
 
     // const data = JSON.parse(jsonData);
