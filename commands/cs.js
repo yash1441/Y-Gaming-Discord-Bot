@@ -125,7 +125,7 @@ module.exports = {
                 await interaction.editReply({ content: `Invalid crosshair code.` });
             }
         } else if (subCommand === "item") {
-            await interaction.deferReply({ ephemeral: true });
+            await interaction.deferReply({ ephemeral: false });
             const itemName = interaction.options.getString("item-name");
             const itemWear = interaction.options.getString("item-wear");
             if (!choices.includes(itemName) && !wears.includes(itemWear)) return await interaction.editReply({ content: 'Invalid item! Please try again.' });
@@ -136,18 +136,20 @@ module.exports = {
             }
             const skinData = await CSGO.getSkinData(skin);
 
-            if (!skinData) return await interaction.editReply({ content: 'Item data not found!Please try again.' });
+            if (!skinData) return await interaction.editReply({ content: 'Item data not found! Please try again.' });
 
             const embed = new EmbedBuilder()
                 .setTitle(skinData.name)
-                .setDescription(italic('Item ID: ' + skinData.itemId.toString()))
+                .setDescription()
                 .addFields(
                     { name: 'Buff Price (BUY)', value: (parseInt(skinData.buyPrice) * 11.5).toString(), inline: true },
                     { name: 'Buff Price (SELL)', value: (parseInt(skinData.sellPrice) * 11.5).toString(), inline: true},
                     { name: 'Steam Price', value: (parseInt(skinData.steamPrice) * 11.5).toString(), inline: true},
-                    { name: 'Links', value: hyperlink(bold('INSPECT'), skinData.inspectUrl) + '\n' + hyperlink(bold('STEAM'), skinData.steamUrl), inline: false},
+                    { name: '\u200B', value: hyperlink(bold('INSPECT'), skinData.inspectUrl) + '\n' + hyperlink(bold('STEAM'), skinData.steamUrl), inline: false},
                 )
-                .setThumbnail(skinData.image);
+                .setThumbnail(skinData.image)
+                .setFooter({ text: 'Item ID: ' + skinData.itemId.toString() })
+                .setColor('#FFFFFF');
 
             await interaction.editReply({ content: '', embeds: [embed] });
         }
