@@ -49,6 +49,12 @@ module.exports = {
                         .setRequired(true)
                         .setAutocomplete(true)
                 )
+                .addBooleanOption((option) =>
+                    option
+                        .setName("stattrak")
+                        .setDescription("Whether the item is StatTrak™.")
+                        .setRequired(false)
+                )
         ),
     async autocomplete(interaction) {
         const focusedOption = interaction.options.getFocused(true);
@@ -128,9 +134,14 @@ module.exports = {
             await interaction.deferReply({ ephemeral: false });
             const itemName = interaction.options.getString("item-name");
             const itemWear = interaction.options.getString("item-wear");
+            const statTrak = interaction.options.getBoolean("stattrak") ?? false;
+
             if (!choices.includes(itemName) && !wears.includes(itemWear)) return await interaction.editReply({ content: 'Invalid item! Please try again.' });
             let skin = (wears.includes('NA')) ? itemName : itemName + ' (' + itemWear + ')';
 
+            if (statTrak) {
+                skin = 'StatTrak™ ' + skin;
+            }
             if (skin.includes('Knife')) {
                 skin = '★ ' + skin;
             }
