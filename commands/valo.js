@@ -727,7 +727,8 @@ module.exports = {
                     filter: (i) => i.user.id === interaction.user.id,
                 })
                 .catch((error) => {
-                    console.log({ error });
+                    logger.error('Valo Login Modal Error');
+                    console.error(error);
                     return null;
                 });
 
