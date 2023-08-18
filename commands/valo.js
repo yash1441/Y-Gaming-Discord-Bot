@@ -727,7 +727,7 @@ module.exports = {
                     filter: (i) => i.user.id === interaction.user.id,
                 })
                 .catch((error) => {
-                    logger.error(error);
+                    console.error(error);
                     return null;
                 });
 
