@@ -744,7 +744,7 @@ module.exports = {
                 }
                 return await submit.reply({ content: `Successfully stored your Valorant credentials.`, ephemeral: true })
             } else {
-                await interaction.reply({ content: "Request timed out. Please try again.", ephemeral: true });
+                await interaction.followUp({ content: "Request timed out. Please try again.", ephemeral: true });
             }
         }
     },
