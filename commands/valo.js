@@ -482,7 +482,7 @@ module.exports = {
             await interaction.deferReply();
             const userCreds = await valoLogin.findOne({ where: { id: interaction.user.id } });
             if (!userCreds) {
-                return await interaction.editReply({ content: `Please use the </valo login:1127207637738606603> command first then try again.`})
+                return await interaction.editReply({ content: `Please use the </valo login:1127207637738606603> command first then try again.` })
             }
 
             const rawNightMarket = await getNightMarket(userCreds.username, userCreds.password);
@@ -634,7 +634,7 @@ module.exports = {
 
             const userCreds = await valoLogin.findOne({ where: { id: interaction.user.id } });
             if (!userCreds) {
-                return await interaction.editReply({ content: `Please use the </valo login:1127207637738606603> command first then try again.`})
+                return await interaction.editReply({ content: `Please use the </valo login:1127207637738606603> command first then try again.` })
             }
 
             let store;
@@ -727,7 +727,7 @@ module.exports = {
                     filter: (i) => i.user.id === interaction.user.id,
                 })
                 .catch((error) => {
-                    console.error(error);
+                    console.log({ error });
                     return null;
                 });
 
@@ -1079,13 +1079,13 @@ async function getStore(username, password) {
 }
 
 async function getValorantVersion() {
-	await axios.get("https://valorant-api.com/v1/version").then((response) => {
-		valorantAPI.user_agent =
-			"RiotClient/" +
-			response.data.data.riotClientBuild +
-			" rso-auth (Windows;10;;Professional, x64)";
-		valorantAPI.client_version = response.data.data.riotClientVersion;
-	});
+    await axios.get("https://valorant-api.com/v1/version").then((response) => {
+        valorantAPI.user_agent =
+            "RiotClient/" +
+            response.data.data.riotClientBuild +
+            " rso-auth (Windows;10;;Professional, x64)";
+        valorantAPI.client_version = response.data.data.riotClientVersion;
+    });
 }
 
 async function fetchNightmarketSkins(rawNightMarket) {
