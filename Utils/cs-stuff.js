@@ -149,8 +149,6 @@ async function getPlayerEmbeds(steamId) {
     if (userStats == 0) return 0;
     if (userStats == -1) return -1;
 
-    console.log(ratings[getRatingIndex(userStats.bestRating)]);
-
     const csgoembed = new EmbedBuilder()
         .setTitle(`${escapeMarkdown(userStats.name)}'s CS:GO Rank`)
         .setDescription(`## ` + ranks[userStats.rank].name)
@@ -165,7 +163,7 @@ async function getPlayerEmbeds(steamId) {
         .setDescription(`## ` + userStats.rating.toString())
         .setThumbnail(userStats.ratingImage)
         .addFields(
-            { name: "Best Rating", value: userStats.bestRating.toString() + " " + ratings[getRatingIndex(userStats.bestRating)], inline: false }
+            { name: "Best Rating", value: userStats.bestRating.toString() + " " + ratings[getRatingIndex(userStats.bestRating)].emoji, inline: false }
         )
         .setColor("#de9b35");
 
