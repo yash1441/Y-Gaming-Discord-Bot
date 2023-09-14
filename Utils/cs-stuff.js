@@ -128,14 +128,25 @@ async function getPlayerInfo(steamId) {
 
     const rankContainer = $('.csgo-rank');
     const playerName = $('#player-name').text().trim();
+    const csgoCurrentRankImage = $('#csgo-rank .rank img').attr('src');
+    const csgoCurrentRank = getPlayerRankIndex(csgoCurrentRankImage);
+    const csgoBestRankImage = $('#csgo-rank .best img').attr('src');
+    const csgoBestRank = getPlayerRankIndex(csgoBestRankImage);
+    const cs2CurrentRank = $('#cs2-rank .rank .cs2rating span').text();
+    const cs2CurrentRankImage = $('#cs2-rank .rank .cs2rating').css('background-image');
+    const cs2BestRank = $('#cs2-rank .best .cs2rating span').text();
+    const cs2BestRankImage = $('#cs2-rank .best .cs2rating').css('background-image');
+
+    console.log({ rankContainer, playerName, csgoCurrentRankImage, csgoCurrentRank, csgoBestRankImage, csgoBestRank, cs2CurrentRank, cs2CurrentRankImage, cs2BestRank, cs2BestRankImage });
+    
 
     if (rankContainer.length > 0) {
         const rankImages = rankContainer.find('img[src]');
         console.log({ rankImages });
         const playerData = {};
 
-        playerData.rank = getPlayerRank(0, rankImages);
-        playerData.bestRank = getPlayerRank(1, rankImages);
+        playerData.rank = getPlayerRankIndex(0, rankImages);
+        playerData.bestRank = getPlayerRankIndex(1, rankImages);
 
         if (playerData.rank == null) playerData.rank = 0;
         if (playerData.bestRank == null) playerData.bestRank = playerData.rank;
@@ -153,14 +164,8 @@ async function getPlayerInfo(steamId) {
     } else return -1;
 }
 
-function getPlayerRank(index, rankImages) {
-    if (index >= rankImages.length) {
-        return null;
-    }
-
-    const imageSrc = rankImages.eq(index).attr('src');
-    const rankIndex = parseInt(imageSrc.split('/ranks/')[1].split('.png')[0]);
-
+function getPlayerRankIndex(rankImage) {
+    const rankIndex = parseInt(rankImage.split('/ranks/')[1].split('.png')[0]);
     return rankIndex;
 }
 
