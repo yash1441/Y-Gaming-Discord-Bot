@@ -108,7 +108,7 @@ module.exports = {
         const subCommand = interaction.options.getSubcommand();
 
         if (subCommand === "rank") {
-            await interaction.reply({ content: "Checking if it is a valid Steam ID..." });
+            await interaction.deferReply();
             const steamId = interaction.options.getString("steam-id");
             if (!steamId.startsWith("STEAM_")) {
                 return await interaction.editReply({ content: `\`${steamId}\` is an invalid Steam ID.` });
