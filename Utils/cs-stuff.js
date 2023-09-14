@@ -149,6 +149,9 @@ async function getPlayerEmbeds(steamId) {
     if (userStats == 0) return 0;
     if (userStats == -1) return -1;
 
+    console.log(userStats.bestRating);
+    console.log(getRatingIndex(userStats.bestRating));
+
     const csgoembed = new EmbedBuilder()
         .setTitle(`${escapeMarkdown(userStats.name)}'s CS:GO Rank`)
         .setDescription(`## ` + ranks[userStats.rank].name)
