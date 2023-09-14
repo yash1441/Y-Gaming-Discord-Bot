@@ -136,7 +136,7 @@ async function getPlayerInfo(steamId) {
     const cs2BestRank = $('#cs2-rank .best .cs2rating span').text().trim();
     const cs2BestRankImage = $('#cs2-rank .best .cs2rating').css('background-image').replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');;
 
-    console.log({ rankContainer, playerName, csgoCurrentRankImage, csgoCurrentRank, csgoBestRankImage, csgoBestRank, cs2CurrentRank, cs2CurrentRankImage, cs2BestRank, cs2BestRankImage });
+    console.log({ playerName, csgoCurrentRankImage, csgoCurrentRank, csgoBestRankImage, csgoBestRank, cs2CurrentRank, cs2CurrentRankImage, cs2BestRank, cs2BestRankImage });
     
 
     if (rankContainer.length > 0) {
