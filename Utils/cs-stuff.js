@@ -128,15 +128,16 @@ async function getPlayerInfo(steamId) {
 
     const playerName = $('#player-name').text().trim();
     const csgoCurrentRankImage = $('#csgo-rank .rank img').attr('src');
-    const csgoCurrentRank = csgoCurrentRankImage.split('/ranks/')[1].split('.png')[0];
+    console.log(csgoCurrentRankImage);
+    const csgoCurrentRank = parseInt(csgoCurrentRankImage.split('/ranks/')[1].split('.png')[0]);
     const csgoBestRankImage = $('#csgo-rank .best img').attr('src');
-    const csgoBestRank = csgoBestRankImage.split('/ranks/')[1].split('.png')[0];
+    const csgoBestRank = parseInt(csgoBestRankImage.split('/ranks/')[1].split('.png')[0]);
     const cs2CurrentRank = $('#cs2-rank .rank .cs2rating span').text().trim().replace(',', '');
     const cs2CurrentRankImage = $('#cs2-rank .rank .cs2rating').css('background-image').replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');;
     const cs2BestRank = $('#cs2-rank .best .cs2rating span').text().trim().replace(',', '');
     const cs2BestRankImage = $('#cs2-rank .best .cs2rating').css('background-image').replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');;
     
-    console.log(parseInt(cs2BestRank));
+    
 
     // if (rankContainer.length > 0) {
     //     const rankImages = rankContainer.find('img[src]');
