@@ -129,10 +129,9 @@ async function getPlayerInfo(steamId) {
     const rankContainer = $('.csgo-rank');
     const playerName = $('#player-name').text().trim();
 
-    console.log({rankContainer, playerName});
-
     if (rankContainer.length > 0) {
         const rankImages = rankContainer.find('img[src]');
+        console.log({ rankImages });
         const playerData = {};
 
         playerData.rank = getPlayerRank(0, rankImages);
