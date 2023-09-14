@@ -114,11 +114,11 @@ module.exports = {
                 return await interaction.editReply({ content: `\`${steamId}\` is an invalid Steam ID.` });
             }
 
-            const embed = await CSGO.getPlayerEmbed(steamId);
+            const embeds = await CSGO.getPlayerEmbeds(steamId);
 
-            if (embed == 0) return await interaction.editReply({ content: `No matches have been added for \`${steamId}\`.` });
-            if (embed == -1) return await interaction.editReply({ content: `An error occured while fetching data for \`${steamId}\`.` });
-            await interaction.editReply({ content: "", embeds: [embed] });
+            if (embeds == 0) return await interaction.editReply({ content: `No matches have been added for \`${steamId}\`.` });
+            if (embeds == -1) return await interaction.editReply({ content: `An error occured while fetching data for \`${steamId}\`.` });
+            await interaction.editReply({ content: "", embeds: embeds });
         } else if (subCommand === "crosshair") {
             await interaction.reply({ content: "Checking if it is a valid crosshair code..." });
 
