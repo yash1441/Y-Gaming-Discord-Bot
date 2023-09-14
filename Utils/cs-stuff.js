@@ -129,7 +129,7 @@ const ratings = [
     },
 ];
 
-async function getRatingIndex(rating) {
+function getRatingIndex(rating) {
     if (rating == 0) return 0;
     if (rating < 5000) return 1;
     if (rating < 10000) return 2;
