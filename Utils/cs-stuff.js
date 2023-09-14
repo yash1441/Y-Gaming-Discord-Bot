@@ -99,7 +99,7 @@ async function getPlayerEmbed(steamId) {
     const sid = new SteamID(steamId);
     const steamId64 = sid.getSteamID64()
 
-    let userStats = await getPlayerInfo(steamId64);
+    let userStats = await getPlayerInfo(steamId64, steamId);
 
     if (userStats == 0) return 0;
     if (userStats == -1) return -1;
@@ -116,8 +116,8 @@ async function getPlayerEmbed(steamId) {
     return embed;
 }
 
-async function getPlayerInfo(steamId) {
-    const url = "https://csgostats.gg/player/" + steamId;
+async function getPlayerInfo(steamId64, steamId) {
+    const url = "https://csgostats.gg/player/" + steamId64;
     const html = await cloudscraper.get(url);
 
     if (html.includes("No matches have been added for this player")) {
@@ -127,39 +127,50 @@ async function getPlayerInfo(steamId) {
     const $ = cheerio.load(html);
 
     const playerName = $('#player-name').text().trim();
+
     const csgoCurrentRankImage = $('#csgo-rank .rank img').attr('src');
-    const csgoCurrentRank = parseInt(csgoCurrentRankImage.split('/ranks/')[1].split('.png')[0]);
+    let csgoCurrentRank = 0;
+    if (csgoCurrentRankImage) csgoCurrentRank = parseInt(csgoCurrentRankImage.split('/ranks/')[1].split('.png')[0]);
+
     const csgoBestRankImage = $('#csgo-rank .best img').attr('src');
-    const csgoBestRank = parseInt(csgoBestRankImage.split('/ranks/')[1].split('.png')[0]);
-    const cs2CurrentRank = $('#cs2-rank .rank .cs2rating span').text().trim().replace(',', '');
-    const cs2CurrentRankImage = $('#cs2-rank .rank .cs2rating').css('background-image').replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');;
-    const cs2BestRank = $('#cs2-rank .best .cs2rating span').text().trim().replace(',', '');
-    const cs2BestRankImage = $('#cs2-rank .best .cs2rating').css('background-image').replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');;
-    
-    console.log(parseInt(cs2BestRank));
+    let csgoBestRank = 0;
+    if (csgoBestRankImage) csgoBestRank = parseInt(csgoBestRankImage.split('/ranks/')[1].split('.png')[0]);
 
-    // if (rankContainer.length > 0) {
-    //     const rankImages = rankContainer.find('img[src]');
-    //     console.log({ rankImages });
-    //     const playerData = {};
+    let cs2CurrentRating = $('#cs2-rank .rank .cs2rating span').text().trim();
+    if (!cs2CurrentRating) cs2CurrentRating = 0;
+    else cs2CurrentRating = parseInt(cs2CurrentRating.replace(',', ''));
 
-    //     playerData.rank = getPlayerRankIndex(0, rankImages);
-    //     playerData.bestRank = getPlayerRankIndex(1, rankImages);
+    let cs2CurrentRatingImage = $('#cs2-rank .rank .cs2rating').css('background-image');
+    if (!cs2CurrentRatingImage) cs2CurrentRatingImage = "https://static.csgostats.gg/images/ranks/0.png";
+    else cs2CurrentRatingImage = cs2CurrentRatingImage.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
 
-    //     if (playerData.rank == null) playerData.rank = 0;
-    //     if (playerData.bestRank == null) playerData.bestRank = playerData.rank;
+    let cs2BestRating = $('#cs2-rank .best .cs2rating span').text().trim();
+    if (!cs2BestRating) cs2BestRating = 0;
+    else cs2BestRating = parseInt(cs2BestRating.replace(',', ''));
 
-    //     const [userRanks, created] = await csgoRanks.findOrCreate({ where: { steam_id: steamId }, defaults: { steam_id: steamId, current_rank: playerData.rank, best_rank: playerData.bestRank } });
-    //     if (!created) {
-    //         if (userRanks.current_rank != 0 && playerData.rank == 0) playerData.rank = userRanks.current_rank;
-    //         if (userRanks.best_rank != 0 && playerData.bestRank == 0) playerData.bestRank = userRanks.best_rank;
-    //         await csgoRanks.update({ current_rank: playerData.rank, best_rank: playerData.bestRank }, { where: { steam_id: steamId } });
-    //     }
+    let cs2BestRatingImage = $('#cs2-rank .best .cs2rating').css('background-image');
+    if (!cs2BestRatingImage) cs2BestRatingImage = "https://static.csgostats.gg/images/ranks/0.png";
+    else cs2BestRatingImage = cs2BestRatingImage.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
 
-    //     playerData.name = playerName;
+    const playerData = {
+        name: playerName,
+        rank: csgoCurrentRank,
+        bestRank: csgoBestRank,
+        rating: cs2CurrentRating,
+        bestRating: cs2BestRating,
+    }
 
-    //     return playerData;
-    // } else return -1;
+    const [userRanks, created] = await csgoRanks.findOrCreate({ where: { steam_id: steamId }, defaults: { steam_id: steamId, current_rank: playerData.rank, best_rank: playerData.bestRank, current_rating: playerData.rating, best_rating: playerData.bestRating } });
+
+    if (!created) {
+        if (userRanks.current_rank != 0 && playerData.rank == 0) playerData.rank = userRanks.current_rank;
+        if (userRanks.best_rank != 0 && playerData.bestRank == 0) playerData.bestRank = userRanks.best_rank;
+        if (userRanks.current_rating != 0 && playerData.rating == 0) playerData.rating = userRanks.current_rating;
+        if (userRanks.best_rating != 0 && playerData.bestRating == 0) playerData.bestRating = userRanks.best_rating;
+        await csgoRanks.update({ current_rank: playerData.rank, best_rank: playerData.bestRank, current_rating: playerData.rating, best_rating: playerData.bestRating }, { where: { steam_id: steamId } });
+    }
+
+    return playerData;
 }
 
 async function getMultiLink(status) {
