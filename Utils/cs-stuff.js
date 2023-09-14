@@ -126,16 +126,15 @@ async function getPlayerInfo(steamId) {
 
     const $ = cheerio.load(html);
 
-    const rankContainer = $('.csgo-rank');
     const playerName = $('#player-name').text().trim();
     const csgoCurrentRankImage = $('#csgo-rank .rank img').attr('src');
     const csgoCurrentRank = getPlayerRankIndex(csgoCurrentRankImage);
     const csgoBestRankImage = $('#csgo-rank .best img').attr('src');
     const csgoBestRank = getPlayerRankIndex(csgoBestRankImage);
-    const cs2CurrentRank = $('#cs2-rank .rank .cs2rating span').text();
-    const cs2CurrentRankImage = $('#cs2-rank .rank .cs2rating').css('background-image');
-    const cs2BestRank = $('#cs2-rank .best .cs2rating span').text();
-    const cs2BestRankImage = $('#cs2-rank .best .cs2rating').css('background-image');
+    const cs2CurrentRank = $('#cs2-rank .rank .cs2rating span').text().trim();
+    const cs2CurrentRankImage = $('#cs2-rank .rank .cs2rating').css('background-image').replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');;
+    const cs2BestRank = $('#cs2-rank .best .cs2rating span').text().trim();
+    const cs2BestRankImage = $('#cs2-rank .best .cs2rating').css('background-image').replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');;
 
     console.log({ rankContainer, playerName, csgoCurrentRankImage, csgoCurrentRank, csgoBestRankImage, csgoBestRank, cs2CurrentRank, cs2CurrentRankImage, cs2BestRank, cs2BestRankImage });
     
