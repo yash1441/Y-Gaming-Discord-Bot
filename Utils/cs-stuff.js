@@ -96,6 +96,10 @@ const ranks = [
 
 const ratings = [
     {
+        name: "Unrated",
+        emoji: "<:unranked:1138816376497246219>"
+    },
+    {
         name: "Common",
         emoji: "<:common:1151898756405534740>"
     },
@@ -126,13 +130,14 @@ const ratings = [
 ];
 
 async function getRatingIndex(rating) {
-    if (rating < 5000) return 0;
-    if (rating < 10000) return 1;
-    if (rating < 15000) return 2;
-    if (rating < 20000) return 3;
-    if (rating < 25000) return 4;
-    if (rating < 30000) return 5;
-    if (rating >= 30000) return 6;
+    if (rating == 0) return 0;
+    if (rating < 5000) return 1;
+    if (rating < 10000) return 2;
+    if (rating < 15000) return 3;
+    if (rating < 20000) return 4;
+    if (rating < 25000) return 5;
+    if (rating < 30000) return 6;
+    if (rating >= 30000) return 7;
 }
 
 async function getPlayerEmbeds(steamId) {
@@ -158,7 +163,7 @@ async function getPlayerEmbeds(steamId) {
         .setDescription(`## ` + userStats.rating.toString())
         .setThumbnail(userStats.ratingImage)
         .addFields(
-            { name: "Best Rating", value: userStats.bestRating.toString() + " " + ratings[getRatingIndex(userStats.bestRating)].name, inline: false }
+            { name: "Best Rating", value: userStats.bestRating.toString() + " " + ratings[getRatingIndex(userStats.bestRating)], inline: false }
         )
         .setColor("#de9b35");
 
