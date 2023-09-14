@@ -92,8 +92,48 @@ const ranks = [
         name: "The Global Elite",
         emoji: "<:ge:1138817149570404442>"
     },
+];
 
-]
+const ratings = [
+    {
+        name: "Common",
+        emoji: "<:common:1151898756405534740>"
+    },
+    {
+        name: "Uncommon",
+        emoji: "<:uncommon:1151898774910795866>"
+    },
+    {
+        name: "Rare",
+        emoji: "<:rare:1151898770435493908>"
+    },
+    {
+        name: "Mythical",
+        emoji: "<:mythical:1151898765943382107>"
+    },
+    {
+        name: "Legendary",
+        emoji: "<:legendary:1151898761149292625>"
+    },
+    {
+        name: "Ancient",
+        emoji: "<:ancient:1151898753062666260>"
+    },
+    {
+        name: "Unusual",
+        emoji: "<:unusual:1151898783760789534>"
+    },
+];
+
+async function getRatingIndex(rating) {
+    if (rating < 5000) return 0;
+    if (rating < 10000) return 1;
+    if (rating < 15000) return 2;
+    if (rating < 20000) return 3;
+    if (rating < 25000) return 4;
+    if (rating < 30000) return 5;
+    if (rating >= 30000) return 6;
+}
 
 async function getPlayerEmbeds(steamId) {
     const sid = new SteamID(steamId);
@@ -118,7 +158,7 @@ async function getPlayerEmbeds(steamId) {
         .setDescription(`## ` + userStats.rating.toString())
         .setThumbnail(userStats.ratingImage)
         .addFields(
-            { name: "Best Rating", value: userStats.bestRating.toString(), inline: false }
+            { name: "Best Rating", value: userStats.bestRating.toString() + " " + ratings[getRatingIndex(userStats.bestRating)].name, inline: false }
         )
         .setColor("#de9b35");
 
