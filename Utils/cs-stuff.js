@@ -127,8 +127,9 @@ async function getPlayerInfo(steamId) {
     const $ = cheerio.load(html);
 
     const rankContainer = $('.csgo-rank');
-    const playerContainer = $('.player-data');
-    const playerName = playerContainer.find('#player-name').text().trim();
+    const playerName = $('#player-name').text().trim();
+
+    console.log({rankContainer, playerName});
 
     if (rankContainer.length > 0) {
         const rankImages = rankContainer.find('img[src]');
