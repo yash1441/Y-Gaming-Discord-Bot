@@ -163,7 +163,7 @@ async function getPlayerEmbeds(steamId) {
         .setDescription(`## ` + userStats.rating.toString())
         .setThumbnail(userStats.ratingImage)
         .addFields(
-            { name: "Best Rating", value: userStats.bestRating.toString() + " " + ratings[getRatingIndex(userStats.bestRating)].emoji, inline: false }
+            { name: "Best Rating", value: ratings[getRatingIndex(userStats.bestRating)].emoji + " " + userStats.bestRating.toString(), inline: false }
         )
         .setColor("#de9b35");
 
