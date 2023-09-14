@@ -115,10 +115,10 @@ async function getPlayerEmbeds(steamId) {
 
     const cs2embed = new EmbedBuilder()
         .setTitle(`${escapeMarkdown(userStats.name)}'s CS2 Rating`)
-        .setDescription(`## ` + userStats.rating)
+        .setDescription(`## ` + userStats.rating.toString())
         .setThumbnail(userStats.ratingImage)
         .addFields(
-            { name: "Best Rating", value: userStats.bestRating, inline: false }
+            { name: "Best Rating", value: userStats.bestRating.toString(), inline: false }
         )
         .setColor("#de9b35");
 
