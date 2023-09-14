@@ -139,28 +139,28 @@ async function getPlayerInfo(steamId) {
     console.log({ playerName, csgoCurrentRankImage, csgoCurrentRank, csgoBestRankImage, csgoBestRank, cs2CurrentRank, cs2CurrentRankImage, cs2BestRank, cs2BestRankImage });
     
 
-    if (rankContainer.length > 0) {
-        const rankImages = rankContainer.find('img[src]');
-        console.log({ rankImages });
-        const playerData = {};
+    // if (rankContainer.length > 0) {
+    //     const rankImages = rankContainer.find('img[src]');
+    //     console.log({ rankImages });
+    //     const playerData = {};
 
-        playerData.rank = getPlayerRankIndex(0, rankImages);
-        playerData.bestRank = getPlayerRankIndex(1, rankImages);
+    //     playerData.rank = getPlayerRankIndex(0, rankImages);
+    //     playerData.bestRank = getPlayerRankIndex(1, rankImages);
 
-        if (playerData.rank == null) playerData.rank = 0;
-        if (playerData.bestRank == null) playerData.bestRank = playerData.rank;
+    //     if (playerData.rank == null) playerData.rank = 0;
+    //     if (playerData.bestRank == null) playerData.bestRank = playerData.rank;
 
-        const [userRanks, created] = await csgoRanks.findOrCreate({ where: { steam_id: steamId }, defaults: { steam_id: steamId, current_rank: playerData.rank, best_rank: playerData.bestRank } });
-        if (!created) {
-            if (userRanks.current_rank != 0 && playerData.rank == 0) playerData.rank = userRanks.current_rank;
-            if (userRanks.best_rank != 0 && playerData.bestRank == 0) playerData.bestRank = userRanks.best_rank;
-            await csgoRanks.update({ current_rank: playerData.rank, best_rank: playerData.bestRank }, { where: { steam_id: steamId } });
-        }
+    //     const [userRanks, created] = await csgoRanks.findOrCreate({ where: { steam_id: steamId }, defaults: { steam_id: steamId, current_rank: playerData.rank, best_rank: playerData.bestRank } });
+    //     if (!created) {
+    //         if (userRanks.current_rank != 0 && playerData.rank == 0) playerData.rank = userRanks.current_rank;
+    //         if (userRanks.best_rank != 0 && playerData.bestRank == 0) playerData.bestRank = userRanks.best_rank;
+    //         await csgoRanks.update({ current_rank: playerData.rank, best_rank: playerData.bestRank }, { where: { steam_id: steamId } });
+    //     }
 
-        playerData.name = playerName;
+    //     playerData.name = playerName;
 
-        return playerData;
-    } else return -1;
+    //     return playerData;
+    // } else return -1;
 }
 
 function getPlayerRankIndex(rankImage) {
