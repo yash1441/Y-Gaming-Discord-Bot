@@ -113,6 +113,8 @@ async function getPlayerEmbeds(steamId) {
         )
         .setColor("#5d79ae");
 
+    console.log(userStats.rankImage);
+
     const cs2embed = new EmbedBuilder()
         .setTitle(`${escapeMarkdown(userStats.name)}'s CS2 Rating`)
         .setDescription(`## ` + userStats.rating.toString())
