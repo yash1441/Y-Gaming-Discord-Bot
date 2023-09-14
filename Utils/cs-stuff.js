@@ -95,7 +95,7 @@ const ranks = [
 
 ]
 
-async function getPlayerEmbed(steamId) {
+async function getPlayerEmbeds(steamId) {
     const sid = new SteamID(steamId);
     const steamId64 = sid.getSteamID64()
 
@@ -104,16 +104,25 @@ async function getPlayerEmbed(steamId) {
     if (userStats == 0) return 0;
     if (userStats == -1) return -1;
 
-    const embed = new EmbedBuilder()
+    const csgoembed = new EmbedBuilder()
         .setTitle(`${escapeMarkdown(userStats.name)}'s CS:GO Rank`)
         .setDescription(`## ` + ranks[userStats.rank].name)
-        .setThumbnail(`https://static.csgostats.gg/images/ranks/${userStats.rank}.png`)
+        .setThumbnail(userStats.rankImage)
         .addFields(
             { name: "Best Rank", value: ranks[userStats.bestRank].emoji + " " + ranks[userStats.bestRank].name, inline: false }
         )
-        .setColor("Random");
+        .setColor("#5d79ae");
 
-    return embed;
+    const cs2embed = new EmbedBuilder()
+        .setTitle(`${escapeMarkdown(userStats.name)}'s CS2 Rating`)
+        .setDescription(`## ` + userStats.rating)
+        .setThumbnail(userStats.ratingImage)
+        .addFields(
+            { name: "Best Rating", value: userStats.bestRating, inline: false }
+        )
+        .setColor("#de9b35");
+
+    return [csgoembed, cs2embed];
 }
 
 async function getPlayerInfo(steamId64, steamId) {
@@ -155,9 +164,13 @@ async function getPlayerInfo(steamId64, steamId) {
     const playerData = {
         name: playerName,
         rank: csgoCurrentRank,
+        rankImage: csgoCurrentRankImage,
         bestRank: csgoBestRank,
+        bestRankImage: csgoBestRankImage,
         rating: cs2CurrentRating,
+        ratingImage: cs2CurrentRatingImage,
         bestRating: cs2BestRating,
+        bestRatingImage: cs2BestRatingImage,
     }
 
     const [userRanks, created] = await csgoRanks.findOrCreate({ where: { steam_id: steamId }, defaults: { steam_id: steamId, current_rank: playerData.rank, best_rank: playerData.bestRank, current_rating: playerData.rating, best_rating: playerData.bestRating } });
@@ -312,4 +325,4 @@ async function getSkinData(skin, log) {
     return skinData;
 }
 
-module.exports = { getStatusEmbed, getPlayerEmbed, getSkinNamesList, getSkinWearsList, getSkinData };
+module.exports = { getStatusEmbed, getPlayerEmbeds, getSkinNamesList, getSkinWearsList, getSkinData };
