@@ -228,10 +228,14 @@ async function getPlayerInfo(steamId64, steamId) {
     let cs2Wins = $('#cs2-rank .wins').text().trim();
     if (!cs2Wins) cs2Wins = '0';
 
-    let csgoLastPlayed = $('#csgo-rank .icon').text().trim();
+    let csgoLastPlayed = $('#csgo-rank .icon').contents().filter(function () {
+        return this.nodeType === 3;
+    }).text().trim();
     if (!csgoLastPlayed) csgoLastPlayed = 'Unknown';
 
-    let cs2LastPlayed = $('#cs2-rank .icon').text().trim();
+    let cs2LastPlayed = $('#cs2-rank .icon').contents().filter(function () {
+        return this.nodeType === 3;
+    }).text().trim();
     if (!cs2LastPlayed) cs2LastPlayed = 'Unknown';
 
     const playerData = {
