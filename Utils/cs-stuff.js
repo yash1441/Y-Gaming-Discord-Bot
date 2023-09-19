@@ -225,6 +225,11 @@ async function getPlayerInfo(steamId64, steamId) {
         if (userRanks.best_rank != 0 && playerData.bestRank == 0) playerData.bestRank = userRanks.best_rank;
         if (userRanks.current_rating != 0 && playerData.rating == 0) playerData.rating = userRanks.current_rating;
         if (userRanks.best_rating != 0 && playerData.bestRating == 0) playerData.bestRating = userRanks.best_rating;
+
+        if (playerData.bestRating < playerData.rating) {
+            playerData.bestRating = playerData.rating;
+            playerData.bestRatingImage = playerData.ratingImage;
+        }
         await csgoRanks.update({ current_rank: playerData.rank, best_rank: playerData.bestRank, current_rating: playerData.rating, best_rating: playerData.bestRating }, { where: { steam_id: steamId } });
     }
 
