@@ -161,7 +161,12 @@ async function getPlayerEmbeds(steamId) {
             { name: "Best Rank", value: ranks[userStats.bestRank].emoji + " " + ranks[userStats.bestRank].name, inline: true },
             { name: "Wins", value: userStats.csgoWins, inline: true },
         )
-        .setColor("#5d79ae");
+        .setColor("#5d79ae")
+        .setFooter({
+			text: userStats.csgoLastPlayed,
+			iconURL:
+				"https://static.csgostats.gg/images/logo-csgo.png",
+		});
 
     const cs2embed = new EmbedBuilder()
         .setTitle(`${escapeMarkdown(userStats.name)}'s CS2 Rating`)
@@ -171,7 +176,12 @@ async function getPlayerEmbeds(steamId) {
             { name: "Best Rating", value: ratings[getRatingIndex(userStats.bestRating)].emoji + " " + userStats.bestRating.toString(), inline: true },
             { name: "Wins", value: userStats.cs2Wins, inline: true },
         )
-        .setColor("#de9b35");
+        .setColor("#de9b35")
+        .setFooter({
+			text: userStats.cs2LastPlayed,
+			iconURL:
+				"https://static.csgostats.gg/images/logo-cs2.png",
+		});
 
     return [csgoembed, cs2embed];
 }
@@ -218,6 +228,12 @@ async function getPlayerInfo(steamId64, steamId) {
     let cs2Wins = $('#cs2-rank .wins').text().trim();
     if (!cs2Wins) cs2Wins = '0';
 
+    let csgoLastPlayed = $('#csgo-rank .icon').text().trim();
+    if (!csgoLastPlayed) csgoLastPlayed = 'Unknown';
+
+    let cs2LastPlayed = $('#cs2-rank .icon').text().trim();
+    if (!cs2LastPlayed) cs2LastPlayed = 'Unknown';
+
     const playerData = {
         name: playerName,
         rank: csgoCurrentRank,
@@ -230,6 +246,8 @@ async function getPlayerInfo(steamId64, steamId) {
         bestRatingImage: cs2BestRatingImage,
         csgoWins: csgoWins,
         cs2Wins: cs2Wins,
+        csgoLastPlayed: csgoLastPlayed,
+        cs2LastPlayed: cs2LastPlayed,
     }
 
     const [userRanks, created] = await csgoRanks.findOrCreate({ where: { steam_id: steamId }, defaults: { steam_id: steamId, current_rank: playerData.rank, best_rank: playerData.bestRank, current_rating: playerData.rating, best_rating: playerData.bestRating } });
