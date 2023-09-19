@@ -180,7 +180,7 @@ async function getPlayerInfo(steamId64, steamId) {
         return 0;
     }
 
-    await delay(5000);
+    await delay(500);
 
     const $ = cheerio.load(html);
 
