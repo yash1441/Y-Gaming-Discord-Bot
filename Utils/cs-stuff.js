@@ -218,6 +218,8 @@ async function getPlayerInfo(steamId64, steamId) {
         bestRatingImage: cs2BestRatingImage,
     }
 
+    console.log({ playerData });
+
     const [userRanks, created] = await csgoRanks.findOrCreate({ where: { steam_id: steamId }, defaults: { steam_id: steamId, current_rank: playerData.rank, best_rank: playerData.bestRank, current_rating: playerData.rating, best_rating: playerData.bestRating } });
 
     if (!created) {
@@ -230,6 +232,9 @@ async function getPlayerInfo(steamId64, steamId) {
             playerData.bestRating = playerData.rating;
             playerData.bestRatingImage = playerData.ratingImage;
         }
+
+        console.log({ playerData });
+        
         await csgoRanks.update({ current_rank: playerData.rank, best_rank: playerData.bestRank, current_rating: playerData.rating, best_rating: playerData.bestRating }, { where: { steam_id: steamId } });
     }
 
