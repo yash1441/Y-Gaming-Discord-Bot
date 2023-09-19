@@ -154,7 +154,7 @@ async function getPlayerEmbeds(steamId) {
     }
 
     const csgoembed = new EmbedBuilder()
-        .setTitle(`${escapeMarkdown(userStats.name)}'s CS:GO Rank`)
+        .setTitle(`${escapeMarkdown(userStats.name)}`)
         .setDescription(`## ` + ranks[userStats.rank].name)
         .setThumbnail(userStats.rankImage)
         .addFields(
@@ -169,7 +169,7 @@ async function getPlayerEmbeds(steamId) {
 		});
 
     const cs2embed = new EmbedBuilder()
-        .setTitle(`${escapeMarkdown(userStats.name)}'s CS2 Rating`)
+        .setTitle(`${escapeMarkdown(userStats.name)}`)
         .setDescription(`## ` + userStats.rating.toString())
         .setThumbnail(userStats.ratingImage)
         .addFields(
