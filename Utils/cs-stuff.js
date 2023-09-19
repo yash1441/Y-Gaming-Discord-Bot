@@ -163,7 +163,7 @@ async function getPlayerEmbeds(steamId) {
         )
         .setColor("#5d79ae")
         .setFooter({
-			text: userStats.csgoLastPlayed,
+			text: "Last Played " + userStats.csgoLastPlayed,
 			iconURL:
 				"https://static.csgostats.gg/images/logo-csgo.png",
 		});
@@ -178,7 +178,7 @@ async function getPlayerEmbeds(steamId) {
         )
         .setColor("#de9b35")
         .setFooter({
-			text: userStats.cs2LastPlayed,
+			text: "Last Played " + userStats.cs2LastPlayed,
 			iconURL:
 				"https://static.csgostats.gg/images/logo-cs2.png",
 		});
