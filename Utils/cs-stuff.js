@@ -183,6 +183,7 @@ async function getPlayerInfo(steamId64, steamId) {
     const playerName = $('#player-name').text().trim();
 
     const csgoCurrentRankImage = $('#csgo-rank .rank img').attr('src');
+    console.log(csgoCurrentRankImage);
     let csgoCurrentRank = 0;
     if (csgoCurrentRankImage) csgoCurrentRank = parseInt(csgoCurrentRankImage.split('/ranks/')[1].split('.png')[0]);
 
