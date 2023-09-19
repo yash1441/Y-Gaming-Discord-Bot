@@ -183,7 +183,6 @@ async function getPlayerInfo(steamId64, steamId) {
     const playerName = $('#player-name').text().trim();
 
     const csgoCurrentRankImage = $('#csgo-rank .rank img').attr('src');
-    console.log(csgoCurrentRankImage);
     let csgoCurrentRank = 0;
     if (csgoCurrentRankImage) csgoCurrentRank = parseInt(csgoCurrentRankImage.split('/ranks/')[1].split('.png')[0]);
 
@@ -219,8 +218,6 @@ async function getPlayerInfo(steamId64, steamId) {
         bestRatingImage: cs2BestRatingImage,
     }
 
-    console.log({ playerData });
-
     const [userRanks, created] = await csgoRanks.findOrCreate({ where: { steam_id: steamId }, defaults: { steam_id: steamId, current_rank: playerData.rank, best_rank: playerData.bestRank, current_rating: playerData.rating, best_rating: playerData.bestRating } });
 
     if (!created) {
@@ -229,12 +226,15 @@ async function getPlayerInfo(steamId64, steamId) {
         if (userRanks.current_rating != 0 && playerData.rating == 0) playerData.rating = userRanks.current_rating;
         if (userRanks.best_rating != 0 && playerData.bestRating == 0) playerData.bestRating = userRanks.best_rating;
 
+        if (playerData.bestRank < playerData.rank) {
+            playerData.bestRank = playerData.rank;
+            playerData.bestRankImage = playerData.rankImage;
+        }
+
         if (playerData.bestRating < playerData.rating) {
             playerData.bestRating = playerData.rating;
             playerData.bestRatingImage = playerData.ratingImage;
         }
-
-        console.log({ playerData });
         
         await csgoRanks.update({ current_rank: playerData.rank, best_rank: playerData.bestRank, current_rating: playerData.rating, best_rating: playerData.bestRating }, { where: { steam_id: steamId } });
     }
