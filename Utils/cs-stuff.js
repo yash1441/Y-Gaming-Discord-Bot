@@ -223,10 +223,10 @@ async function getPlayerInfo(steamId64, steamId) {
     else cs2BestRatingImage = cs2BestRatingImage.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
 
     let csgoWins = $('#csgo-rank .wins').text().trim();
-    if (!csgoWins) csgoWins = '0';
+    if (!csgoWins) csgoWins = 'NA';
 
     let cs2Wins = $('#cs2-rank .wins').text().trim();
-    if (!cs2Wins) cs2Wins = '0';
+    if (!cs2Wins) cs2Wins = 'NA';
 
     let csgoLastPlayed = $('#csgo-rank .icon').contents().filter(function () {
         return this.nodeType === 3;
