@@ -129,6 +129,8 @@ const ratings = [
     },
 ];
 
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 function getRatingIndex(rating) {
     if (rating == 0) return 0;
     if (rating < 5000) return 1;
@@ -177,6 +179,8 @@ async function getPlayerInfo(steamId64, steamId) {
     if (html.includes("No matches have been added for this player")) {
         return 0;
     }
+
+    await delay(5000);
 
     const $ = cheerio.load(html);
 
