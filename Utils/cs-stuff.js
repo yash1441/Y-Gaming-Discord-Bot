@@ -129,8 +129,6 @@ const ratings = [
     },
 ];
 
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
 function getRatingIndex(rating) {
     if (rating == 0) return 0;
     if (rating < 5000) return 1;
@@ -150,6 +148,10 @@ async function getPlayerEmbeds(steamId) {
 
     if (userStats == 0) return 0;
     if (userStats == -1) return -1;
+
+    if (!userStats.rankImage) {
+        userStats.rankImage = "https://static.csgostats.gg/images/ranks/" + userStats.rank.toString() + ".png"
+    }
 
     const csgoembed = new EmbedBuilder()
         .setTitle(`${escapeMarkdown(userStats.name)}'s CS:GO Rank`)
@@ -179,8 +181,6 @@ async function getPlayerInfo(steamId64, steamId) {
     if (html.includes("No matches have been added for this player")) {
         return 0;
     }
-
-    await delay(500);
 
     const $ = cheerio.load(html);
 
