@@ -150,7 +150,7 @@ async function getPlayerEmbeds(steamId) {
     if (userStats == -1) return -1;
 
     if (!userStats.rankImage) {
-        userStats.rankImage = "https://static.csgostats.gg/images/ranks/" + userStats.rank.toString() + ".png"
+        userStats.rankImage = "https://static.csstats.gg/images/ranks/" + userStats.rank.toString() + ".png"
     }
 
     const csgoembed = new EmbedBuilder()
@@ -165,7 +165,7 @@ async function getPlayerEmbeds(steamId) {
         .setFooter({
 			text: "Last Played " + userStats.csgoLastPlayed,
 			iconURL:
-				"https://static.csgostats.gg/images/logo-csgo.png",
+				"https://static.csstats.gg/images/logo-csgo.png",
 		});
 
     const cs2embed = new EmbedBuilder()
@@ -180,14 +180,14 @@ async function getPlayerEmbeds(steamId) {
         .setFooter({
 			text: "Last Played " + userStats.cs2LastPlayed,
 			iconURL:
-				"https://static.csgostats.gg/images/logo-cs2.png",
+				"https://static.csstats.gg/images/logo-cs2.png",
 		});
 
     return [csgoembed, cs2embed];
 }
 
 async function getPlayerInfo(steamId64, steamId) {
-    const url = "https://csgostats.gg/player/" + steamId64;
+    const url = "https://csstats.gg/player/" + steamId64;
     const html = await cloudscraper.get(url);
 
     if (html.includes("No matches have been added for this player")) {
@@ -211,7 +211,7 @@ async function getPlayerInfo(steamId64, steamId) {
     else cs2CurrentRating = parseInt(cs2CurrentRating.replace(',', ''));
 
     let cs2CurrentRatingImage = $('#cs2-rank .rank .cs2rating').css('background-image');
-    if (!cs2CurrentRatingImage) cs2CurrentRatingImage = "https://static.csgostats.gg/images/ranks/0.png";
+    if (!cs2CurrentRatingImage) cs2CurrentRatingImage = "https://static.csstats.gg/images/ranks/0.png";
     else cs2CurrentRatingImage = cs2CurrentRatingImage.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
 
     let cs2BestRating = $('#cs2-rank .best .cs2rating span').text().trim();
@@ -219,7 +219,7 @@ async function getPlayerInfo(steamId64, steamId) {
     else cs2BestRating = parseInt(cs2BestRating.replace(',', ''));
 
     let cs2BestRatingImage = $('#cs2-rank .best .cs2rating').css('background-image');
-    if (!cs2BestRatingImage) cs2BestRatingImage = "https://static.csgostats.gg/images/ranks/0.png";
+    if (!cs2BestRatingImage) cs2BestRatingImage = "https://static.csstats.gg/images/ranks/0.png";
     else cs2BestRatingImage = cs2BestRatingImage.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
 
     let csgoWins = $('#csgo-rank .wins').text().trim();
@@ -279,7 +279,7 @@ async function getPlayerInfo(steamId64, steamId) {
 }
 
 async function getMultiLink(status) {
-    let url = "https://csgostats.gg/player/multi?";
+    let url = "https://csstats.gg/player/multi?";
 
     for (const [index, player] of status.entries()) {
         let playerName = encodeURI(player.name.replace('#', '%23'));
