@@ -208,7 +208,7 @@ async function getPlayerInfo(steamId64, steamId) {
 
     let cs2CurrentRating = $('#cs2-rank .rank .cs2rating span').text().trim();
     if (!cs2CurrentRating) cs2CurrentRating = 0;
-    else cs2CurrentRating = parseInt(cs2CurrentRating.replace(',', '')).replace('-', 0);
+    else cs2CurrentRating = parseInt(cs2CurrentRating.replace(',', '').replace('-', 0));
 
     let cs2CurrentRatingImage = $('#cs2-rank .rank .cs2rating').css('background-image');
     if (!cs2CurrentRatingImage) cs2CurrentRatingImage = "https://static.csstats.gg/images/ranks/0.png";
@@ -216,7 +216,7 @@ async function getPlayerInfo(steamId64, steamId) {
 
     let cs2BestRating = $('#cs2-rank .best .cs2rating span').text().trim();
     if (!cs2BestRating) cs2BestRating = 0;
-    else cs2BestRating = parseInt(cs2BestRating.replace(',', '')).replace('-', 0);
+    else cs2BestRating = parseInt(cs2BestRating.replace(',', '').replace('-', 0));
 
     let cs2BestRatingImage = $('#cs2-rank .best .cs2rating').css('background-image');
     if (!cs2BestRatingImage) cs2BestRatingImage = "https://static.csstats.gg/images/ranks/0.png";
