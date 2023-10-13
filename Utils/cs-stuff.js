@@ -1,7 +1,11 @@
 const { EmbedBuilder, bold } = require("discord.js");
 const SteamID = require("steamid");
 const cheerio = require("cheerio");
-const cloudscraper = require("cloudscraper");
+const cloudscraper = require("cloudscraper").defaults({
+    agentOptions: {
+        ciphers: 'ECDHE-ECDSA-AES128-GCM-SHA256'
+    }
+});
 const axios = require("axios").default;
 const fs = require("fs");
 const path = require("path");
