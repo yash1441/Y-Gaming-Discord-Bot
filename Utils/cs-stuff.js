@@ -190,6 +190,8 @@ async function getPlayerInfo(steamId64, steamId) {
     const url = "https://csstats.gg/player/" + steamId64;
     const html = await cloudscraper.get(url);
 
+    console.log({ url });
+
     if (html.includes("No matches have been added for this player")) {
         return 0;
     }
