@@ -163,10 +163,10 @@ async function getPlayerEmbeds(steamId) {
         )
         .setColor("#5d79ae")
         .setFooter({
-			text: "Last Played " + userStats.csgoLastPlayed,
-			iconURL:
-				"https://static.csstats.gg/images/logo-csgo.png",
-		});
+            text: "Last Played " + userStats.csgoLastPlayed,
+            iconURL:
+                "https://static.csstats.gg/images/logo-csgo.png",
+        });
 
     const cs2embed = new EmbedBuilder()
         .setTitle(`${escapeMarkdown(userStats.name)}`)
@@ -178,10 +178,10 @@ async function getPlayerEmbeds(steamId) {
         )
         .setColor("#de9b35")
         .setFooter({
-			text: "Last Played " + userStats.cs2LastPlayed,
-			iconURL:
-				"https://static.csstats.gg/images/logo-cs2.png",
-		});
+            text: "Last Played " + userStats.cs2LastPlayed,
+            iconURL:
+                "https://static.csstats.gg/images/logo-cs2.png",
+        });
 
     return [csgoembed, cs2embed];
 }
@@ -253,6 +253,8 @@ async function getPlayerInfo(steamId64, steamId) {
         csgoLastPlayed: csgoLastPlayed,
         cs2LastPlayed: cs2LastPlayed,
     }
+
+    console.log({ playerData });
 
     const [userRanks, created] = await csgoRanks.findOrCreate({ where: { steam_id: steamId }, defaults: { steam_id: steamId, current_rank: playerData.rank, best_rank: playerData.bestRank, current_rating: playerData.rating, best_rating: playerData.bestRating } });
 
