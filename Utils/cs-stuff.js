@@ -3,7 +3,7 @@ const SteamID = require("steamid");
 const cheerio = require("cheerio");
 const cloudscraper = require("cloudscraper").defaults({
     agentOptions: {
-        ciphers: 'ECDHE-ECDSA-CHACHA20-POLY1305'
+        ciphers: ["ECDHE-ECDSA-AES128-GCM-SHA256", "ECDHE-ECDSA-CHACHA20-POLY1305", "ECDHE-RSA-AES128-GCM-SHA256", "ECDHE-RSA-CHACHA20-POLY1305", "ECDHE-ECDSA-AES256-GCM-SHA384", "ECDHE-RSA-AES256-GCM-SHA384"]
     }
 });
 const axios = require("axios").default;
