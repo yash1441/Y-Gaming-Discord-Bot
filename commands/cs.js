@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, bold, italic, hyperlink } = require("discord.js");
-const { decodeCrosshairShareCode, crosshairToConVars } = require("csgo-sharecode");
+//const { decodeCrosshairShareCode, crosshairToConVars } = require("csgo-sharecode");
 const CSGO = require('../Utils/cs-stuff.js');
 const logger = require("../Logger/logger.js");
 
@@ -20,7 +20,7 @@ module.exports = {
                         .setRequired(true)
                 )
         )
-        .addSubcommand((subcommand) =>
+        /*.addSubcommand((subcommand) =>
             subcommand
                 .setName("crosshair")
                 .setDescription("Get the crosshair settings.")
@@ -30,7 +30,7 @@ module.exports = {
                         .setDescription("Enter the crosshair code.")
                         .setRequired(true)
                 )
-        )
+        )*/
         .addSubcommand((subcommand) =>
             subcommand
                 .setName("item")
@@ -119,7 +119,7 @@ module.exports = {
             if (embeds == 0) return await interaction.editReply({ content: `No matches have been added for \`${steamId}\`.` });
             if (embeds == -1) return await interaction.editReply({ content: `An error occured while fetching data for \`${steamId}\`.` });
             await interaction.editReply({ content: "", embeds: embeds });
-        } else if (subCommand === "crosshair") {
+        } /*else if (subCommand === "crosshair") {
             await interaction.reply({ content: "Checking if it is a valid crosshair code..." });
 
             const shareCode = interaction.options.getString("crosshair-code");
@@ -130,7 +130,7 @@ module.exports = {
             } catch {
                 await interaction.editReply({ content: `Invalid crosshair code.` });
             }
-        } else if (subCommand === "item") {
+        }*/ else if (subCommand === "item") {
             await interaction.deferReply({ ephemeral: false });
             const itemName = interaction.options.getString("item-name");
             const itemWear = interaction.options.getString("item-wear");
