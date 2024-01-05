@@ -59,8 +59,7 @@ module.exports = {
 			let newEmbed = new EmbedBuilder()
 				.setTitle(submit.fields.getTextInputValue("title"))
 				.setDescription(
-					submit.fields.getTextInputValue("description") +
-						"\n<:xplaygg:930809190841217074>"
+					submit.fields.getTextInputValue("description")
 				)
 				.setColor(embed.color);
 
