@@ -6,12 +6,14 @@ const {
 	ActionRowBuilder,
 	TextInputBuilder,
 	TextInputStyle,
+	PermissionFlagsBits
 } = require("discord.js");
 
 module.exports = {
 	data: new ContextMenuCommandBuilder()
 		.setName("Edit Embed")
-		.setType(ApplicationCommandType.Message),
+		.setType(ApplicationCommandType.Message)
+		.setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
 
 	async execute(interaction) {
 		const message = interaction.targetMessage;
