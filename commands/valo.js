@@ -615,7 +615,7 @@ module.exports = {
                 .setRank(leaderboard)
                 .setOverlay('#23272A')
                 .setStatus('none')
-                .setStyle({opacity: 0.5})
+                .setStyles({ statistics: { rank: { text: { className: "test", style: { color: 'blue' } } } } })
                 .setTextStyles({ xp: "RR:" })
                 .setGraphemeProvider(BuiltInGraphemeProvider.FluentEmojiFlat);
 
@@ -623,16 +623,11 @@ module.exports = {
                 card.setBackground(playerCardWide);
             }
 
-            console.log(card.style);
             console.log(card.options);
 
             const image = await card.build({
                 format: "png",
             });
-
-            file = `${name}-RankCard.png`;
-
-            fs.writeFileSync(file, image);
 
             await interaction.editReply({ files: [image] });
 
