@@ -615,8 +615,8 @@ module.exports = {
                 .setRank(leaderboard)
                 .setOverlay('#23272A')
                 .setStatus('none')
-                .setStyles({ statistics: { rank: { value: { className: "rating-color", style: { color: ratingColor } } } } })
                 .setTextStyles({ xp: "RR:" })
+                .setStyles({ statistics: { xp: { value: { style: { color: ratingColor } } } } })
                 .setGraphemeProvider(BuiltInGraphemeProvider.FluentEmojiFlat);
 
             if (playerCardWide != "None") {
@@ -630,8 +630,6 @@ module.exports = {
             });
 
             await interaction.editReply({ files: [image] });
-
-            fs.unlinkSync(file);
         } else if (subCommand === "store") {
             await interaction.deferReply();
 
