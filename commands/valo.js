@@ -11,7 +11,7 @@ const path = require("path");
 const axios = require("axios");
 
 
-const { Font, RankCardBuilder, RankCardUserStatus, BuiltInGraphemeProvider } = require("canvacord");
+const { Font, RankCardBuilder, BuiltInGraphemeProvider } = require("canvacord");
 const Jimp = require("jimp");
 
 
@@ -634,7 +634,7 @@ module.exports = {
                 .setRank(5)
                 .setOverlay(90)
                 .setBackground("#23272a")
-                .setStatus(RankCardUserStatus.Online)
+                .setStatus('online')
                 .setGraphemeProvider(BuiltInGraphemeProvider.FluentEmojiFlat);
 
             if (playerRankUnpatched == 27) rankCard.setLevel(leaderboard, "#", true);
