@@ -615,7 +615,7 @@ module.exports = {
                 .setRank(leaderboard)
                 .setOverlay('#23272A')
                 .setStatus('none')
-                .setStyles({ xp: { text: { color: blue} } })
+                .setStyles({ xp: { text: { color: "blue"} } })
                 .setTextStyles({ xp: "color: blue" })
                 .setGraphemeProvider(BuiltInGraphemeProvider.FluentEmojiFlat);
 
