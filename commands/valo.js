@@ -634,7 +634,7 @@ module.exports = {
 
             fs.writeFileSync(file, image);
 
-            await interaction.editReply({ files: [file] });
+            await interaction.editReply({ files: [image] });
 
             fs.unlinkSync(file);
         } else if (subCommand === "store") {
