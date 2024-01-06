@@ -607,17 +607,28 @@ module.exports = {
             else if (playerRankUnpatched == 27) ratingRequired = playerRating;
             else ratingRequired = 100;
 
-            const rankCard = new canvacord.Rank()
-                .setAvatar(playerTier)
-                .setCustomStatusColor("#42454900")
-                .setRank(1, "Ascendant", false)
-                .setLevel(10, "RR", false)
-                .setUsername(name)
-                .setDiscriminator("0000")
-                .setCurrentXP(playerRating, ratingColor)
-                .setRequiredXP(ratingRequired)
-                .setBackground("IMAGE", playerCardWide)
-                .setDiscriminator(tag);
+            // const rankCard = new canvacord.Rank()
+            //     .setAvatar(playerTier)
+            //     .setCustomStatusColor("#42454900")
+            //     .setRank(1, "Ascendant", false)
+            //     .setLevel(10, "RR", false)
+            //     .setUsername(name)
+            //     .setDiscriminator("0000")
+            //     .setCurrentXP(playerRating, ratingColor)
+            //     .setRequiredXP(ratingRequired)
+            //     .setBackground("IMAGE", playerCardWide)
+            //     .setDiscriminator(tag);
+
+            const rankCard = new canvacord.RankCardBuilder()
+                .setUsername('kiki')
+                .setDisplayName('Kiki')
+                .setDiscriminator('1234')
+                .setAvatar('...')
+                .setCurrentXP(300)
+                .setRequiredXP(600)
+                .setLevel(2)
+                .setRank(5)
+                .setStatus('online');
 
             if (playerRankUnpatched == 27) rankCard.setLevel(leaderboard, "#", true);
 
