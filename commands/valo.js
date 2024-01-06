@@ -622,18 +622,18 @@ module.exports = {
             //     .setDiscriminator(tag);
 
             const card = new RankCardBuilder()
-                .setDisplayName("Wumpus 😍")
-                .setUsername("@wumpus")
-                .setAvatar("https://cdn.discordapp.com/embed/avatars/0.png?size=256")
-                .setCurrentXP(300)
-                .setRequiredXP(600)
+                .setDisplayName(name)
+                .setUsername("#" + tag)
+                .setAvatar(playerTier)
+                .setCurrentXP(playerRating)
+                .setRequiredXP(ratingRequired)
                 .setProgressCalculator(() => {
                     return Math.floor(Math.random() * 100);
                 })
-                .setLevel(2)
+                .setLevel(10)
                 .setRank(5)
                 .setOverlay(90)
-                .setBackground("#23272a")
+                .setBackground(playerCardWide)
                 .setStatus('online')
                 .setGraphemeProvider(BuiltInGraphemeProvider.FluentEmojiFlat);
 
