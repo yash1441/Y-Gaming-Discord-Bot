@@ -582,9 +582,7 @@ module.exports = {
 
             if (leaderboardData.status != 200) {
                 leaderboard = null;
-            }
-
-            leaderboard = leaderboardData.data[0].leaderboardRank;
+            } else leaderboard = leaderboardData.data[0].leaderboardRank;
 
             if (playerRating <= 25) ratingColor = "#FF0000";
             else if (playerRating <= 75) ratingColor = "#FF7F00";
