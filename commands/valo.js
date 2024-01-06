@@ -616,7 +616,7 @@ module.exports = {
                 .setOverlay('#23272A')
                 .setStatus('none')
                 .setTextStyles({ xp: "RR:" })
-                .setStyles({ statistics: { xp: { value: { style: { color: ratingColor } } } } })
+                .setStyles({ statistics: { xp: { text: { style: { 'font-weight': 'bold' } }, value: { style: { color: ratingColor } } } } })
                 .setGraphemeProvider(BuiltInGraphemeProvider.FluentEmojiFlat);
 
             if (playerCardWide != "None") {
