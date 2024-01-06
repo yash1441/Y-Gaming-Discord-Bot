@@ -630,11 +630,11 @@ module.exports = {
                 // .setProgressCalculator(() => {
                 //     return Math.floor(Math.random() * 100);
                 // })
-                //.setLevel(10)
-                //.setRank(5)
-                .setOverlay('#FF0000', 70)
+                .setLevel(null)
+                .setRank(null)
+                .setOverlay('#23272A')
                 .setBackground(playerCardWide)
-                //.setStatus('online')
+                .setStatus('none')
                 .setGraphemeProvider(BuiltInGraphemeProvider.FluentEmojiFlat);
 
             if (playerRankUnpatched == 27) card.setRank(leaderboard);
