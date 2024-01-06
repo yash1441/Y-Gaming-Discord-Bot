@@ -561,7 +561,7 @@ module.exports = {
             let playerRankUnpatched = mmrData.data.current_data.currenttier;
             if (playerRankUnpatched == null) playerRankUnpatched = 0;
             let playerTier = `https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/${playerRankUnpatched}/largeicon.png`;
-            //let playerRank = mmrData.data.current_data.currenttierpatched;
+            let playerRank = mmrData.data.current_data.currenttierpatched;
             let playerRating = mmrData.data.current_data.ranking_in_tier;
             if (playerRating == null) playerRating = 0;
             let name = accountData.data.name;
@@ -622,19 +622,19 @@ module.exports = {
             //     .setDiscriminator(tag);
 
             const card = new RankCardBuilder()
-                .setDisplayName(name)
-                .setUsername("#" + tag)
+                .setDisplayName(name + "#" + tag)
+                .setUsername(playerRank)
                 .setAvatar(playerTier)
                 .setCurrentXP(playerRating)
                 .setRequiredXP(ratingRequired)
                 .setProgressCalculator(() => {
                     return Math.floor(Math.random() * 100);
                 })
-                .setLevel(10)
-                .setRank(5)
-                .setOverlay(90)
+                //.setLevel(10)
+                //.setRank(5)
+                .setOverlay(50)
                 .setBackground(playerCardWide)
-                .setStatus('online')
+                //.setStatus('online')
                 .setGraphemeProvider(BuiltInGraphemeProvider.FluentEmojiFlat);
 
             if (playerRankUnpatched == 27) rankCard.setLevel(leaderboard, "#", true);
