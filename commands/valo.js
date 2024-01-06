@@ -574,25 +574,17 @@ module.exports = {
             let puuid = accountData.data.puuid;
             let file, ratingColor, ratingRequired, leaderboard;
 
-            if (playerRankUnpatched == 27) {
-                const leaderboardData = await vapi.getLeaderboard({
-                    version: "v1",
-                    region: interaction.options.getString("region"),
-                    puuid: puuid,
-                });
+            const leaderboardData = await vapi.getLeaderboard({
+                version: "v1",
+                region: interaction.options.getString("region"),
+                puuid: puuid,
+            });
 
-                if (leaderboardData.status != 200) {
-                    return await interaction.editReply({
-                        content:
-                            "<@132784173311197184>\n\n" +
-                            "```json\n" +
-                            JSON.stringify(leaderboardData, null, 2) +
-                            "```",
-                    });
-                }
-
-                leaderboard = leaderboardData.data[0].leaderboardRank;
+            if (leaderboardData.status != 200) {
+                leaderboard = null;
             }
+
+            leaderboard = leaderboardData.data[0].leaderboardRank;
 
             if (playerRating <= 25) ratingColor = "#FF0000";
             else if (playerRating <= 75) ratingColor = "#FF7F00";
@@ -634,7 +626,7 @@ module.exports = {
                 //     return Math.floor(Math.random() * 100);
                 // })
                 .setLevel(null)
-                .setRank(null)
+                .setRank(leaderboard)
                 .setOverlay('#23272A')
                 .setStatus('none')
                 .setGraphemeProvider(BuiltInGraphemeProvider.FluentEmojiFlat);
@@ -642,8 +634,6 @@ module.exports = {
             if (playerCardWide != "None") {
                 card.setBackground(playerCardWide);
             }
-
-            if (playerRankUnpatched == 27) card.setRank(leaderboard);
 
             const image = await card.build({
                 format: "png",
