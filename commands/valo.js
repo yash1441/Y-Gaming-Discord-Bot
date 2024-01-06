@@ -622,13 +622,8 @@ module.exports = {
                 card.setBackground(playerCardWide);
             }
 
-            const newStyles = {
-                progressBar: {
-                    barColor: 'green' // Change this to the desired color value
-                }
-            };
-
-            card.setStyles(newStyles);
+            console.log(card.style);
+            console.log(card.options);
 
             const image = await card.build({
                 format: "png",
