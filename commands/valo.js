@@ -616,7 +616,7 @@ module.exports = {
                 .setOverlay('#23272A')
                 .setStatus('none')
                 .setTextStyles({ xp: "RR:" })
-                .setStyles({ statistics: { rank: { text: { style: { 'font-size': '1.5em' } }, value: { style: { color: '#FFD700' } } }, xp: { text: { style: { 'font-size': '1.5em' } }, value: { style: { color: ratingColor } } } } })
+                .setStyles({ progressbar: { container: { color: red }, thumb: { color: red }, track: { color: red } }, statistics: { rank: { text: { style: { 'font-size': '1.5em', color: '#FFFFFF' } }, value: { style: { color: '#FFD700' } } }, xp: { text: { style: { 'font-size': '1.5em', color: '#FFFFFF' } }, value: { style: { color: ratingColor } } } } })
                 .setGraphemeProvider(BuiltInGraphemeProvider.FluentEmojiFlat);
 
             if (playerCardWide != "None") {
