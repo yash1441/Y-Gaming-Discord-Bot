@@ -623,8 +623,6 @@ module.exports = {
                 card.setBackground(playerCardWide);
             }
 
-            console.log(card.options);
-
             const image = await card.build({
                 format: "jpeg",
             });
