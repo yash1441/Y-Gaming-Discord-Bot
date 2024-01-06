@@ -626,18 +626,20 @@ module.exports = {
                 .setUsername(playerRank)
                 .setAvatar(playerTier)
                 .setCurrentXP(playerRating)
-                .setRequiredXP(ratingRequired)
-                .setProgressCalculator(() => {
-                    return Math.floor(Math.random() * 100);
-                })
+                .setRequiredXP(100)
+                // .setProgressCalculator(() => {
+                //     return Math.floor(Math.random() * 100);
+                // })
                 //.setLevel(10)
                 //.setRank(5)
-                .setOverlay(50)
+                .setOverlay(90)
                 .setBackground(playerCardWide)
                 //.setStatus('online')
                 .setGraphemeProvider(BuiltInGraphemeProvider.FluentEmojiFlat);
 
-            if (playerRankUnpatched == 27) rankCard.setLevel(leaderboard, "#", true);
+            if (playerRankUnpatched >= 24) {
+                card.setRank(playerRating);
+            }
 
             const image = await card.build({
                 format: "png",
