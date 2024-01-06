@@ -584,7 +584,7 @@ module.exports = {
                 leaderboard = null;
             } else leaderboard = leaderboardData.data[0].leaderboardRank;
 
-            if (playerRating <= 25) ratingColor = "#FF0000";
+            if (playerRating <= 25) ratingColor = "#FF3333";
             else if (playerRating <= 75) ratingColor = "#FF7F00";
             else ratingColor = "#00FF00";
 
