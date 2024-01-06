@@ -11,7 +11,7 @@ const path = require("path");
 const axios = require("axios");
 
 
-const { Font, RankCardBuilder } = require("canvacord");
+const { Font, RankCardBuilder, RankCardUserStatus, BuiltInGraphemeProvider } = require("canvacord");
 const Jimp = require("jimp");
 
 
@@ -606,6 +606,8 @@ module.exports = {
                     rankThreshold[`${interaction.options.getString("region")}`].immortal3;
             else if (playerRankUnpatched == 27) ratingRequired = playerRating;
             else ratingRequired = 100;
+
+            Font.loadDefault();
 
             // const rankCard = new canvacord.Rank()
             //     .setAvatar(playerTier)
