@@ -615,7 +615,7 @@ module.exports = {
                 .setRank(leaderboard)
                 .setOverlay('#23272A')
                 .setStatus('none')
-                .setTextStyles({ xp: "lol" })
+                .setTextStyles({ xp: "RR" })
                 .setGraphemeProvider(BuiltInGraphemeProvider.FluentEmojiFlat);
 
             if (playerCardWide != "None") {
