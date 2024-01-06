@@ -607,6 +607,7 @@ module.exports = {
                 .setUsername(playerRank)
                 .setAvatar(playerTier)
                 .setCurrentXP(playerRating)
+                .setRequiredXP(null)
                 .setProgressCalculator(() => {
                     return (playerRating / ratingRequired) * 100;
                 })
