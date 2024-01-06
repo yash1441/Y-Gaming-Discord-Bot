@@ -615,6 +615,7 @@ module.exports = {
                 .setRank(leaderboard)
                 .setOverlay('#23272A')
                 .setStatus('none')
+                .setStyle("border-radius: 50%")
                 .setTextStyles({ xp: "RR:" })
                 .setGraphemeProvider(BuiltInGraphemeProvider.FluentEmojiFlat);
 
