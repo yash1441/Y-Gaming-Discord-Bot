@@ -11,7 +11,7 @@ const path = require("path");
 const axios = require("axios");
 
 
-const canvacord = require("canvacord");
+const { Font, RankCardBuilder } = require("canvacord");
 const Jimp = require("jimp");
 
 
@@ -619,23 +619,36 @@ module.exports = {
             //     .setBackground("IMAGE", playerCardWide)
             //     .setDiscriminator(tag);
 
-            const rankCard = new canvacord.RankCardBuilder()
-                .setUsername('kiki')
-                .setDisplayName('Kiki')
-                .setDiscriminator('1234')
-                .setAvatar('...')
+            const card = new RankCardBuilder()
+                .setDisplayName("Wumpus 😍")
+                .setUsername("@wumpus")
+                .setAvatar("https://cdn.discordapp.com/embed/avatars/0.png?size=256")
                 .setCurrentXP(300)
                 .setRequiredXP(600)
+                .setProgressCalculator(() => {
+                    return Math.floor(Math.random() * 100);
+                })
                 .setLevel(2)
                 .setRank(5)
-                .setStatus('online');
+                .setOverlay(90)
+                .setBackground("#23272a")
+                .setStatus(RankCardUserStatus.Online)
+                .setGraphemeProvider(BuiltInGraphemeProvider.FluentEmojiFlat);
 
             if (playerRankUnpatched == 27) rankCard.setLevel(leaderboard, "#", true);
 
-            await rankCard.build().then((buffer) => {
-                file = `${name}-RankCard.png`;
-                canvacord.write(buffer, file);
+            const image = await card.build({
+                format: "png",
             });
+
+            file = `${name}-RankCard.png`;
+
+            await writeFileSync(file, image);
+
+            // await rankCard.build().then((buffer) => {
+            //     file = `${name}-RankCard.png`;
+            //     canvacord.write(buffer, file);
+            // });
 
             await interaction.editReply({ files: [file] });
 
