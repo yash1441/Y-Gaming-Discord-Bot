@@ -567,7 +567,10 @@ module.exports = {
             let name = accountData.data.name;
             let tag = accountData.data.tag;
             //let playerCardSmall = accountData.data.card.small;
-            let playerCardWide = accountData.data.card.wide;
+            let playerCardWide = "None";
+            if (accountData.data.card) {
+                playerCardWide = accountData.data.card.wide;
+            }
             let puuid = accountData.data.puuid;
             let file, ratingColor, ratingRequired, leaderboard;
 
@@ -633,9 +636,12 @@ module.exports = {
                 .setLevel(null)
                 .setRank(null)
                 .setOverlay('#23272A')
-                .setBackground(playerCardWide)
                 .setStatus('none')
                 .setGraphemeProvider(BuiltInGraphemeProvider.FluentEmojiFlat);
+
+            if (playerCardWide != "None") {
+                card.setBackground(playerCardWide);
+            }
 
             if (playerRankUnpatched == 27) card.setRank(leaderboard);
 
