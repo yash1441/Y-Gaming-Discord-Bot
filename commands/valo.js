@@ -616,7 +616,7 @@ module.exports = {
                 .setOverlay('#23272A')
                 .setStatus('none')
                 .setTextStyles({ xp: "RR:" })
-                .setStyles(username.name.color = 'blue')
+                .setStyles({ username: { name: { color: "blue" } } })
                 .setGraphemeProvider(BuiltInGraphemeProvider.FluentEmojiFlat);
 
             if (playerCardWide != "None") {
