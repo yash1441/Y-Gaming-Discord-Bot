@@ -623,11 +623,8 @@ module.exports = {
             }
 
             const newStyles = {
-                progressbar: {
-                    track: {
-                        // Assuming "color" is a property that defines the color
-                        backgroundColor: 'green' // Change this to the desired color value
-                    }
+                progressBar: {
+                    barColor: 'green' // Change this to the desired color value
                 }
             };
 
