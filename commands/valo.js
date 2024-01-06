@@ -586,7 +586,7 @@ module.exports = {
 
             if (playerRating <= 25) ratingColor = "#FF3333";
             else if (playerRating <= 75) ratingColor = "#FF7F00";
-            else ratingColor = "#00FF00";
+            else ratingColor = "#00CC33";
 
             if (playerRankUnpatched == 24)
                 ratingRequired =
