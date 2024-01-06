@@ -626,7 +626,7 @@ module.exports = {
                 progressbar: {
                     track: {
                         // Assuming "color" is a property that defines the color
-                        color: 'green' // Change this to the desired color value
+                        backgroundColor: 'green' // Change this to the desired color value
                     }
                 }
             };
