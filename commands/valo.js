@@ -631,8 +631,6 @@ module.exports = {
 
             fs.writeFileSync(file, image);
 
-            console.log(card.style);
-
             await interaction.editReply({ files: [file] });
 
             fs.unlinkSync(file);
