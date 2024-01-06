@@ -632,12 +632,12 @@ module.exports = {
                 // })
                 //.setLevel(10)
                 //.setRank(5)
-                .setOverlay(0)
+                .setOverlay('#FF000090')
                 .setBackground(playerCardWide)
                 //.setStatus('online')
                 .setGraphemeProvider(BuiltInGraphemeProvider.FluentEmojiFlat);
 
-            if (playerRankUnpatched == 27) card.setLevel(leaderboard, "#", true);
+            if (playerRankUnpatched == 27) card.setRank(leaderboard);
 
             const image = await card.build({
                 format: "png",
