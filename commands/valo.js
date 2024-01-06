@@ -626,7 +626,7 @@ module.exports = {
             console.log(card.options);
 
             const image = await card.build({
-                format: "png",
+                format: "webp",
             });
 
             await interaction.editReply({ files: [image] });
