@@ -637,7 +637,7 @@ module.exports = {
                 //.setStatus('online')
                 .setGraphemeProvider(BuiltInGraphemeProvider.FluentEmojiFlat);
 
-            if (playerRankUnpatched == 27) rankCard.setLevel(leaderboard, "#", true);
+            if (playerRankUnpatched == 27) card.setLevel(leaderboard, "#", true);
 
             const image = await card.build({
                 format: "png",
