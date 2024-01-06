@@ -626,7 +626,7 @@ module.exports = {
                 .setUsername(playerRank)
                 .setAvatar(playerTier)
                 .setCurrentXP(playerRating)
-                .setRequiredXP(100)
+                .setRequiredXP(ratingRequired)
                 // .setProgressCalculator(() => {
                 //     return Math.floor(Math.random() * 100);
                 // })
@@ -637,9 +637,7 @@ module.exports = {
                 //.setStatus('online')
                 .setGraphemeProvider(BuiltInGraphemeProvider.FluentEmojiFlat);
 
-            if (playerRankUnpatched >= 24) {
-                card.setRank(playerRating);
-            }
+            if (playerRankUnpatched == 27) rankCard.setLevel(leaderboard, "#", true);
 
             const image = await card.build({
                 format: "png",
