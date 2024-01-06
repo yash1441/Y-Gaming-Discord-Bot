@@ -607,7 +607,7 @@ module.exports = {
                 .setUsername(playerRank)
                 .setAvatar(playerTier)
                 .setCurrentXP(playerRating)
-                .setRequiredXP(null)
+                .setRequiredXP(ratingRequired)
                 .setProgressCalculator(() => {
                     return (playerRating / ratingRequired) * 100;
                 })
@@ -616,12 +616,22 @@ module.exports = {
                 .setOverlay('#23272A')
                 .setStatus('none')
                 .setTextStyles({ xp: "RR:" })
-                .setStyles({ username: { name: { color: "blue" } } })
                 .setGraphemeProvider(BuiltInGraphemeProvider.FluentEmojiFlat);
 
             if (playerCardWide != "None") {
                 card.setBackground(playerCardWide);
             }
+
+            const newStyles = {
+                progressbar: {
+                    track: {
+                        // Assuming "color" is a property that defines the color
+                        color: 'green' // Change this to the desired color value
+                    }
+                }
+            };
+
+            card.setStyles(newStyles);
 
             const image = await card.build({
                 format: "png",
