@@ -585,7 +585,7 @@ module.exports = {
             } else leaderboard = leaderboardData.data[0].leaderboardRank;
 
             if (playerRating <= 25) ratingColor = "#FF3333";
-            else if (playerRating <= 75) ratingColor = "#FF7F00";
+            else if (playerRating <= 75) ratingColor = "#FF6600";
             else ratingColor = "#00CC33";
 
             if (playerRankUnpatched == 24)
@@ -616,7 +616,7 @@ module.exports = {
                 .setOverlay('#23272A')
                 .setStatus('none')
                 .setTextStyles({ xp: "RR:" })
-                .setStyles({ progressbar: { thumb: { style: { backgroundColor: ratingColor } } }, username: { handle: { style: { 'font-size': '1.5em' } } }, statistics: { rank: { text: { style: { 'font-size': '1.5em', color: '#FFFFFF' } }, value: { style: { color: '#FFD700' } } }, xp: { text: { style: { 'font-size': '1.5em', color: '#FFFFFF' } }, value: { style: { color: ratingColor } } } } })
+                .setStyles({ progressbar: { thumb: { style: { backgroundColor: ratingColor } } }, username: { handle: { style: { 'font-size': '1.5em' } } }, statistics: { rank: { text: { style: { 'font-size': '1.5em', color: '#FFFFFF' } }, value: { style: { color: '#FFCC00' } } }, xp: { text: { style: { 'font-size': '1.5em', color: '#FFFFFF' } }, value: { style: { color: ratingColor } } } } })
                 .setGraphemeProvider(BuiltInGraphemeProvider.FluentEmojiFlat);
 
             if (playerCardWide != "None") {
