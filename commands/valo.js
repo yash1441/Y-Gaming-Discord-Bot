@@ -602,18 +602,6 @@ module.exports = {
 
             Font.loadDefault();
 
-            // const rankCard = new canvacord.Rank()
-            //     .setAvatar(playerTier)
-            //     .setCustomStatusColor("#42454900")
-            //     .setRank(1, "Ascendant", false)
-            //     .setLevel(10, "RR", false)
-            //     .setUsername(name)
-            //     .setDiscriminator("0000")
-            //     .setCurrentXP(playerRating, ratingColor)
-            //     .setRequiredXP(ratingRequired)
-            //     .setBackground("IMAGE", playerCardWide)
-            //     .setDiscriminator(tag);
-
             const card = new RankCardBuilder()
                 .setDisplayName(name + "#" + tag)
                 .setUsername(playerRank)
@@ -639,12 +627,9 @@ module.exports = {
 
             file = `${name}-RankCard.png`;
 
-            await fs.writeFileSync(file, image);
+            fs.writeFileSync(file, image);
 
-            // await rankCard.build().then((buffer) => {
-            //     file = `${name}-RankCard.png`;
-            //     canvacord.write(buffer, file);
-            // });
+            console.log(card.style);
 
             await interaction.editReply({ files: [file] });
 
