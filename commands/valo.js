@@ -645,7 +645,7 @@ module.exports = {
 
             file = `${name}-RankCard.png`;
 
-            await writeFileSync(file, image);
+            await fs.writeFileSync(file, image);
 
             // await rankCard.build().then((buffer) => {
             //     file = `${name}-RankCard.png`;
