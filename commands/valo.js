@@ -632,7 +632,7 @@ module.exports = {
                 // })
                 //.setLevel(10)
                 //.setRank(5)
-                .setOverlay('#FF0000')
+                .setOverlay('#FF0000', 70)
                 .setBackground(playerCardWide)
                 //.setStatus('online')
                 .setGraphemeProvider(BuiltInGraphemeProvider.FluentEmojiFlat);
