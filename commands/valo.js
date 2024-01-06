@@ -607,10 +607,9 @@ module.exports = {
                 .setUsername(playerRank)
                 .setAvatar(playerTier)
                 .setCurrentXP(playerRating)
-                .setRequiredXP(ratingRequired)
-                // .setProgressCalculator(() => {
-                //     return Math.floor(Math.random() * 100);
-                // })
+                .setProgressCalculator(() => {
+                    return (playerRating / ratingRequired) * 100;
+                })
                 .setLevel(null)
                 .setRank(leaderboard)
                 .setOverlay('#23272A')
