@@ -1059,7 +1059,7 @@ async function getNightMarket(username, password) {
 
 async function getStore(username, password) {
     await getValorantVersion();
-
+    
     let shouldContinue = true;
     await valorantAPI.authorize(username, password).catch((error) => {
         console.error(error);
@@ -1082,7 +1082,7 @@ async function getStore(username, password) {
 async function getValorantVersion() {
     await axios.get("https://valorant-api.com/v1/version").then((response) => {
         valorantAPI.user_agent =
-            "RiotClient/" +
+            "ShooterGame/" +
             response.data.data.riotClientBuild +
             " rso-auth (Windows;10;;Professional, x64)";
         valorantAPI.client_version = response.data.data.riotClientVersion;
