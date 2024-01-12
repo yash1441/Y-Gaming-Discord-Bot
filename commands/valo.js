@@ -1061,10 +1061,18 @@ async function getStore(username, password) {
     await getValorantVersion();
 
     console.log(valorantAPI.user_agent);
-    
+
     let shouldContinue = true;
     await valorantAPI.authorize(username, password).catch((error) => {
         console.error(error);
+
+        console.log({
+            username: valorantAPI.username,
+            user_id: valorantAPI.user_id,
+            access_token: valorantAPI.access_token,
+            entitlements_token: valorantAPI.entitlements_token,
+        });
+
         shouldContinue = false;
     });
 
@@ -1084,7 +1092,7 @@ async function getStore(username, password) {
 async function getValorantVersion() {
     await axios.get("https://valorant-api.com/v1/version").then((response) => {
         valorantAPI.user_agent =
-            "ShooterGame/" +
+            "RiotClient/" +
             response.data.data.riotClientBuild +
             " rso-auth (Windows;10;;Professional, x64)";
         valorantAPI.client_version = response.data.data.riotClientVersion;
