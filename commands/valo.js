@@ -1065,6 +1065,8 @@ async function getStore(username, password) {
         console.error(error);
         shouldContinue = false;
     });
+
+    console.log(shouldContinue);
     if (!shouldContinue) return false;
 
     const response = await valorantAPI
