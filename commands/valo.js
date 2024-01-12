@@ -1065,14 +1065,6 @@ async function getStore(username, password) {
     let shouldContinue = true;
     await valorantAPI.authorize(username, password).catch((error) => {
         console.error(error);
-
-        console.log({
-            username: valorantAPI.username,
-            user_id: valorantAPI.user_id,
-            access_token: valorantAPI.access_token,
-            entitlements_token: valorantAPI.entitlements_token,
-        });
-
         shouldContinue = false;
     });
 
