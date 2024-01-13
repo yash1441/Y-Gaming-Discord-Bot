@@ -1060,8 +1060,6 @@ async function getNightMarket(username, password) {
 async function getStore(username, password) {
     await getValorantVersion();
 
-    console.log({ username, password });
-
     let shouldContinue = true;
     await valorantAPI.authorize(username, password).catch((error) => {
         console.error(error);
