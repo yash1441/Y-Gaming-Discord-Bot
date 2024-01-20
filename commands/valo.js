@@ -9,7 +9,7 @@ const { SlashCommandBuilder,
 const fs = require("fs");
 const path = require("path");
 const axios = require("axios");
-
+const Valo = require('../Utils/valo-stuff.js');
 
 const { Font, RankCardBuilder, BuiltInGraphemeProvider } = require("canvacord");
 const Jimp = require("jimp");
@@ -480,36 +480,38 @@ module.exports = {
             });
         } else if (subCommand === "nightmarket") {
             await interaction.deferReply();
-            const userCreds = await valoLogin.findOne({ where: { id: interaction.user.id } });
-            if (!userCreds) {
-                return await interaction.editReply({ content: `Please use the </valo login:1127207637738606603> command first then try again.` })
-            }
 
-            const rawNightMarket = await getNightMarket(userCreds.username, userCreds.password);
-            if (!rawNightMarket) {
-                return await interaction.editReply({
-                    content:
-                        "Invalid login attempt. If you are sure your credentials were correct then please check if 2FA is enabled because the bot doesn't support 2FA as of yet.",
-                });
-            }
+            await interaction.editReply({ content: 'Under maintenance' });
+            // const userCreds = await valoLogin.findOne({ where: { id: interaction.user.id } });
+            // if (!userCreds) {
+            //     return await interaction.editReply({ content: `Please use the </valo login:1127207637738606603> command first then try again.` })
+            // }
 
-            const skins = await fetchNightmarketSkins(rawNightMarket);
-            const embeds = [];
+            // const rawNightMarket = await getNightMarket(userCreds.username, userCreds.password);
+            // if (!rawNightMarket) {
+            //     return await interaction.editReply({
+            //         content:
+            //             "Invalid login attempt. If you are sure your credentials were correct then please check if 2FA is enabled because the bot doesn't support 2FA as of yet.",
+            //     });
+            // }
 
-            for (const skin of skins) {
-                const skinEmbed = new EmbedBuilder()
-                    .setColor("#2B2D31")
-                    .setTitle(skin.name)
-                    .setThumbnail(skin.icon)
-                    .setDescription(
-                        "<:VP:1077169497582080104> " +
-                        skin.discountCosts +
-                        `    ||*-${skin.discountPercent}%*||`
-                    );
-                embeds.push(skinEmbed);
-            }
+            // const skins = await fetchNightmarketSkins(rawNightMarket);
+            // const embeds = [];
 
-            await interaction.editReply({ embeds: embeds });
+            // for (const skin of skins) {
+            //     const skinEmbed = new EmbedBuilder()
+            //         .setColor("#2B2D31")
+            //         .setTitle(skin.name)
+            //         .setThumbnail(skin.icon)
+            //         .setDescription(
+            //             "<:VP:1077169497582080104> " +
+            //             skin.discountCosts +
+            //             `    ||*-${skin.discountPercent}%*||`
+            //         );
+            //     embeds.push(skinEmbed);
+            // }
+
+            // await interaction.editReply({ embeds: embeds });
         } else if (subCommand === "rank") {
             await interaction.deferReply({ ephemeral: false });
             if (!interaction.options.getString("username").includes("#")) {
@@ -636,6 +638,16 @@ module.exports = {
                 return await interaction.editReply({ content: `Please use the </valo login:1127207637738606603> command first then try again.` })
             }
 
+            const build = await Valo.getVersion();
+            const login = await Valo.authorize(build, userCreds.username, userCreds.password);
+
+            if (login.error) return await interaction.editReply({ content: 'Invalid login attempt. If you are sure your credentials were correct then please check if 2FA is enabled because the bot doesn\'t support 2FA as of yet.' });
+            // else await interaction.editReply({ content: 'This command is under maintenance.' });
+
+            login.build = build;
+
+            const playerStore = await Valo.getStoreFront(login);
+
             let store;
             await vapi
                 .getFeaturedItems({
@@ -676,7 +688,6 @@ module.exports = {
                 embeds.push(embed);
             }
 
-            const playerStore = await getStore(userCreds.username, userCreds.password);
             if (!playerStore) {
                 return await interaction.editReply({
                     content:
@@ -740,7 +751,7 @@ module.exports = {
 
                 if (!created) {
                     await valoLogin.update({ username: username, password: password }, { where: { id: id } });
-                    return await submit.reply({ content: `Successfully updated your Valorant credentials.`, ephemeral: true })
+                    return await submit.reply({ content: `Successfully updated your Valorant credentials.`, ephemeral: true }).catch(console.error);
                 }
                 return await submit.reply({ content: `Successfully stored your Valorant credentials.`, ephemeral: true })
             } else {
@@ -1055,38 +1066,6 @@ async function getNightMarket(username, password) {
     if (response.data.BonusStore == undefined) return false;
 
     return response.data.BonusStore.BonusStoreOffers;
-}
-
-async function getStore(username, password) {
-    await getValorantVersion();
-
-    let shouldContinue = true;
-    await valorantAPI.authorize(username, password).catch((error) => {
-        console.error(error);
-        shouldContinue = false;
-    });
-
-    if (!shouldContinue) return false;
-
-    const response = await valorantAPI
-        .getPlayerStoreFront(valorantAPI.user_id)
-        .catch((error) => {
-            console.error(error);
-            shouldContinue = false;
-        });
-    if (!shouldContinue) return false;
-
-    return response.data.SkinsPanelLayout.SingleItemStoreOffers;
-}
-
-async function getValorantVersion() {
-    await axios.get("https://valorant-api.com/v1/version").then((response) => {
-        valorantAPI.user_agent =
-            "RiotClient/" +
-            response.data.data.riotClientBuild +
-            " rso-auth (Windows;10;;Professional, x64)";
-        valorantAPI.client_version = response.data.data.riotClientVersion;
-    });
 }
 
 async function fetchNightmarketSkins(rawNightMarket) {
