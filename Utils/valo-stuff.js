@@ -1,10 +1,6 @@
 const axios = require("axios").default;
-const fs = require("fs");
-const path = require("path");
 const { Agent } = require("https");
 const logger = require("../Logger/logger.js");
-const { http } = require("winston");
-const { type } = require("os");
 
 const ciphers = [
     'TLS_CHACHA20_POLY1305_SHA256',
