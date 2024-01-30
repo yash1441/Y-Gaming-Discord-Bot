@@ -108,13 +108,13 @@ async function authTokens(build, username, password, cookie) {
         httpsAgent: agent
     }
 
-    const response = await axios.request(options);
+    const response = await axios.request(options).catch((error) => console.error(error));
 
     const result = {
         error: true,
     }
 
-    if (response.data?.error === "auth_failure") {
+    if (!response || response.data?.error === "auth_failure") {
         return result;
     } else result.error = false;
     const tokens = parseTokensFromUrl(response.data.response.parameters.uri);
