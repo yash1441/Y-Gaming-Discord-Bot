@@ -108,7 +108,7 @@ async function authTokens(build, username, password, cookie) {
         httpsAgent: agent
     }
 
-    const response = await axios.request(options).catch((error) => console.error(error));
+    const response = await axios.request(options).catch((error) => console.error({ error }));
 
     const result = {
         error: true,
