@@ -642,7 +642,6 @@ module.exports = {
             const login = await Valo.authorize(build, userCreds.username, userCreds.password);
 
             if (login.error) return await interaction.editReply({ content: 'Invalid login attempt. If you are sure your credentials were correct then please check if 2FA is enabled because the bot doesn\'t support 2FA as of yet.' });
-            // else await interaction.editReply({ content: 'This command is under maintenance.' });
 
             login.build = build;
 
