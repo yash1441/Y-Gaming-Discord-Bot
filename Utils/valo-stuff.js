@@ -195,4 +195,21 @@ async function getStoreFront(login) {
     return response.data.SkinsPanelLayout.SingleItemStoreOffers;
 }
 
-module.exports = { getVersion, authorize, getStoreFront };
+async function getPlayerNightmarket(login) {
+    const options = {
+        method: 'GET',
+        url: 'https://pd.ap.a.pvp.net/store/v2/storefront/' + login.puuid,
+        headers: {
+            Authorization: `Bearer ${login.access_token}`,
+            'X-Riot-Entitlements-JWT': login.entitlements_token,
+            'X-Riot-ClientVersion': login.build.clientVersion,
+            'X-Riot-ClientPlatform': JSON.stringify(login.clientPlatform)
+        }
+    }
+
+    const response = await axios.request(options);
+
+    return response.data.BonusStore.BonusStoreOffers;
+}
+
+module.exports = { getVersion, authorize, getStoreFront, getPlayerNightmarket };
