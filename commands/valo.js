@@ -3,7 +3,9 @@ const { SlashCommandBuilder,
     ModalBuilder,
     TextInputBuilder,
     TextInputStyle,
-    ActionRowBuilder, } = require("discord.js");
+    ActionRowBuilder,
+    italic,
+    spoiler } = require("discord.js");
 
 
 const fs = require("fs");
@@ -480,38 +482,37 @@ module.exports = {
             });
         } else if (subCommand === "nightmarket") {
             await interaction.deferReply();
+            const userCreds = await valoLogin.findOne({ where: { id: interaction.user.id } });
+            if (!userCreds) {
+                return await interaction.editReply({ content: `Please use the </valo login:1127207637738606603> command first then try again.` })
+            }
 
-            await interaction.editReply({ content: 'Under maintenance' });
-            // const userCreds = await valoLogin.findOne({ where: { id: interaction.user.id } });
-            // if (!userCreds) {
-            //     return await interaction.editReply({ content: `Please use the </valo login:1127207637738606603> command first then try again.` })
-            // }
+            const build = await Valo.getVersion();
+            const login = await Valo.authorize(build, userCreds.username, userCreds.password);
 
-            // const rawNightMarket = await getNightMarket(userCreds.username, userCreds.password);
-            // if (!rawNightMarket) {
-            //     return await interaction.editReply({
-            //         content:
-            //             "Invalid login attempt. If you are sure your credentials were correct then please check if 2FA is enabled because the bot doesn't support 2FA as of yet.",
-            //     });
-            // }
+            if (login.error) return await interaction.editReply({ content: 'Invalid login attempt. If you are sure your credentials were correct then please check if 2FA is enabled because the bot doesn\'t support 2FA as of yet. If you did everything correctly, then maybe the bot is malfunctioning.' });
 
-            // const skins = await fetchNightmarketSkins(rawNightMarket);
-            // const embeds = [];
+            login.build = build;
 
-            // for (const skin of skins) {
-            //     const skinEmbed = new EmbedBuilder()
-            //         .setColor("#2B2D31")
-            //         .setTitle(skin.name)
-            //         .setThumbnail(skin.icon)
-            //         .setDescription(
-            //             "<:VP:1077169497582080104> " +
-            //             skin.discountCosts +
-            //             `    ||*-${skin.discountPercent}%*||`
-            //         );
-            //     embeds.push(skinEmbed);
-            // }
+            const playerNightmarket = await Valo.getPlayerNightmarket(login);
 
-            // await interaction.editReply({ embeds: embeds });
+            const skins = await fetchNightmarketSkins(playerNightmarket);
+            const embeds = [];
+
+            for (const skin of skins) {
+                const skinEmbed = new EmbedBuilder()
+                    .setColor("#2B2D31")
+                    .setTitle(skin.name)
+                    .setThumbnail(skin.icon)
+                    .setDescription(
+                        "### <:VP:1077169497582080104> " +
+                        skin.discountCosts + '\n🏷️ ' +
+                        spoiler(italic(skin.discountPercent + '%'))
+                    );
+                embeds.push(skinEmbed);
+            }
+
+            await interaction.editReply({ embeds: embeds });
         } else if (subCommand === "rank") {
             await interaction.deferReply({ ephemeral: false });
             if (!interaction.options.getString("username").includes("#")) {
