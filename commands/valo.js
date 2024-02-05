@@ -632,7 +632,7 @@ module.exports = {
 
             await interaction.editReply({ files: [image] });
         } else if (subCommand === "store") {
-            await interaction.deferReply();
+            await interaction.reply({ content: 'Trying to fetch your store, please wait...'});
 
             const userCreds = await valoLogin.findOne({ where: { id: interaction.user.id } });
             if (!userCreds) {
