@@ -706,7 +706,9 @@ module.exports = {
                 embeds.push(skinEmbed);
             }
 
-            await interaction.editReply({ content: '', embeds: embeds });
+            await interaction.deleteReply().catch(console.error);
+
+            await interaction.channel.send({ content: '', embeds: embeds });
         } else if (subCommand === "login") {
             const modal = new ModalBuilder()
                 .setCustomId("valoLogin")
