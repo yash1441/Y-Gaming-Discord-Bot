@@ -5,7 +5,8 @@ const { SlashCommandBuilder,
     TextInputStyle,
     ActionRowBuilder,
     italic,
-    spoiler } = require("discord.js");
+    spoiler,
+    userMention } = require("discord.js");
 
 
 const fs = require("fs");
@@ -632,7 +633,7 @@ module.exports = {
 
             await interaction.editReply({ files: [image] });
         } else if (subCommand === "store") {
-            await interaction.reply({ content: 'Trying to fetch your store, please wait...'});
+            await interaction.reply({ content: 'Trying to fetch your store, please wait...' });
 
             const userCreds = await valoLogin.findOne({ where: { id: interaction.user.id } });
             if (!userCreds) {
@@ -708,7 +709,7 @@ module.exports = {
 
             await interaction.deleteReply().catch(console.error);
 
-            await interaction.channel.send({ content: '', embeds: embeds });
+            await interaction.channel.send({ content: userMention(interaction.user.id), embeds: embeds });
         } else if (subCommand === "login") {
             const modal = new ModalBuilder()
                 .setCustomId("valoLogin")
