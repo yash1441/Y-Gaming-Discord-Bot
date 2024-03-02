@@ -792,6 +792,7 @@ async function createScoreboard(interaction, players, map, date, file) {
     const Harbor = await Jimp.read(agents.Harbor["displayIcon"]);
     const Gekko = await Jimp.read(agents.Gekko["displayIcon"]);
     const Deadlock = await Jimp.read(agents.Deadlock["displayIcon"]);
+    const Iso = await Jimp.read(agents.Iso["displayIcon"]);
 
     Fade.resize(64, 64);
     Breach.resize(64, 64);
@@ -815,6 +816,7 @@ async function createScoreboard(interaction, players, map, date, file) {
     Harbor.resize(64, 64);
     Gekko.resize(64, 64);
     Deadlock.resize(64, 64);
+    Iso.resize(64, 64);
 
     await interaction.editReply({
         content: "Loading map image for " + map + "...",
@@ -857,11 +859,17 @@ async function createScoreboard(interaction, players, map, date, file) {
         case "Piazza":
             mapImage = await Jimp.read("./Images/Maps/Piazza.png");
             break;
+        case "Drift":
+            mapImage = await Jimp.read("./Images/Maps/Drift.png");
+            break;
+        case "Sunset":
+            mapImage = await Jimp.read("./Images/Maps/Sunset.png");
+            break;
         default:
             mapImage = await Jimp.read("./Images/Maps/The Range.png");
             break;
     }
-    await mapImage.resize(1920, 1080);
+    mapImage.resize(1920, 1080);
 
     await interaction.editReply({ content: "Loading fonts..." });
 

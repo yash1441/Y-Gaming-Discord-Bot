@@ -37,5 +37,11 @@
 	},
 	"Piazza": {
 		"splash": "https://media.valorant-api.com/maps/de28aa9b-4cbe-1003-320e-6cb3ec309557/splash.png"
+	},
+	"Drift": {
+		"splash": "https://media.valorant-api.com/maps/2c09d728-42d5-30d8-43dc-96a05cc7ee9d/splash.png"
+	},
+	"Sunset": {
+		"splash": "https://media.valorant-api.com/maps/92584fbe-486a-b1b2-9faa-39b0f486b498/splash.png"
 	}
 }
