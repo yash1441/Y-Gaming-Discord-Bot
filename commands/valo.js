@@ -793,7 +793,7 @@ async function createScoreboard(interaction, players, map, date, file) {
     }
 
     const mapImage = await Jimp.read(mapsData[map].splash);
-    mapImage.resize(1920, 1080);
+    await mapImage.resize(1920, 1080);
 
     await interaction.editReply({ content: "Loading fonts..." });
 
