@@ -769,7 +769,6 @@ module.exports = {
 
 async function createScoreboard(interaction, players, map, date, file) {
     const scoreboardImage = await Jimp.read("ValorantScoreboardOverlay.png");
-    let mapImage;
 
     await interaction.editReply({ content: "Loading agent images..." });
 
@@ -784,53 +783,7 @@ async function createScoreboard(interaction, players, map, date, file) {
         content: "Loading map image for " + map + "...",
     });
 
-    switch (map) {
-        case "Ascent":
-            mapImage = await Jimp.read("./Images/Maps/Ascent.png");
-            break;
-        case "Bind":
-            mapImage = await Jimp.read("./Images/Maps/Bind.png");
-            break;
-        case "Haven":
-            mapImage = await Jimp.read("./Images/Maps/Haven.png");
-            break;
-        case "Split":
-            mapImage = await Jimp.read("./Images/Maps/Split.png");
-            break;
-        case "Icebox":
-            mapImage = await Jimp.read("./Images/Maps/Icebox.png");
-            break;
-        case "Breeze":
-            mapImage = await Jimp.read("./Images/Maps/Breeze.png");
-            break;
-        case "Fracture":
-            mapImage = await Jimp.read("./Images/Maps/Fracture.png");
-            break;
-        case "Pearl":
-            mapImage = await Jimp.read("./Images/Maps/Pearl.png");
-            break;
-        case "Lotus":
-            mapImage = await Jimp.read("./Images/Maps/Lotus.png");
-            break;
-        case "District":
-            mapImage = await Jimp.read("./Images/Maps/District.png");
-            break;
-        case "Kasbah":
-            mapImage = await Jimp.read("./Images/Maps/Kasbah.png");
-            break;
-        case "Piazza":
-            mapImage = await Jimp.read("./Images/Maps/Piazza.png");
-            break;
-        case "Drift":
-            mapImage = await Jimp.read("./Images/Maps/Drift.png");
-            break;
-        case "Sunset":
-            mapImage = await Jimp.read(mapsData.Sunset["splash"]);
-            break;
-        default:
-            mapImage = await Jimp.read("./Images/Maps/The Range.png");
-            break;
-    }
+    const mapImage = await Jimp.read(mapsData[map]?.splash ?? mapsData["The Range"].splash);
     mapImage.resize(1920, 1080);
 
     await interaction.editReply({ content: "Loading fonts..." });
