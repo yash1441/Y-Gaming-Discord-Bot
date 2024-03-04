@@ -209,7 +209,11 @@ async function getPlayerNightmarket(login) {
 
     const response = await axios.request(options);
 
-    return response.data.BonusStore.BonusStoreOffers;
+    if (response.data.BonusStore) {
+        return response.data.BonusStore.BonusStoreOffers;
+    }
+
+    return undefined;
 }
 
 module.exports = { getVersion, authorize, getStoreFront, getPlayerNightmarket };

@@ -503,6 +503,8 @@ module.exports = {
 
             const playerNightmarket = await Valo.getPlayerNightmarket(login);
 
+            if (!playerNightmarket) return await interaction.editReply({ content: `Nightmarket is not currently active.` });
+
             const skins = await fetchNightmarketSkins(playerNightmarket);
             const embeds = [];
 
