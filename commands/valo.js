@@ -910,7 +910,7 @@ async function createScoreboard(interaction, players, map, date, file) {
     for (i = 0, id = 0; i < 500; i += 100, id += 1) {
         // Agent
         mapImage.composite(
-            agents[players.red[id].character.replace("/", "_")],
+            agents[players.red[id].character.replace("/", "_")].splash,
             agentX,
             agentY + i
         ); //Red
