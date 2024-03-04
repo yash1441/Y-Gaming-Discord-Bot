@@ -786,8 +786,6 @@ async function createScoreboard(interaction, players, map, date, file) {
         content: "Loading map image for " + map + "...",
     });
 
-    logger.debug(map);
-
     if (map == "The Range") {
         return await interaction.editReply({
             content: "Bruh... You were in The Range.",
