@@ -780,54 +780,6 @@ async function createScoreboard(interaction, players, map, date, file) {
         agents[agent].resize(64, 64);
     }
 
-    // const Fade = await Jimp.read(agents.Fade["displayIcon"]);
-    // const Breach = await Jimp.read(agents.Breach["displayIcon"]);
-    // const Raze = await Jimp.read(agents.Raze["displayIcon"]);
-    // const Chamber = await Jimp.read(agents.Chamber["displayIcon"]);
-    // const KAY_O = await Jimp.read(agents["KAY/O"]["displayIcon"]);
-    // const Skye = await Jimp.read(agents.Skye["displayIcon"]);
-    // const Cypher = await Jimp.read(agents.Cypher["displayIcon"]);
-    // const Viper = await Jimp.read(agents.Viper["displayIcon"]);
-    // const Reyna = await Jimp.read(agents.Reyna["displayIcon"]);
-    // const Neon = await Jimp.read(agents.Neon["displayIcon"]);
-    // const Jett = await Jimp.read(agents.Jett["displayIcon"]);
-    // const Killjoy = await Jimp.read(agents.Killjoy["displayIcon"]);
-    // const Brimstone = await Jimp.read(agents.Brimstone["displayIcon"]);
-    // const Omen = await Jimp.read(agents.Omen["displayIcon"]);
-    // const Sage = await Jimp.read(agents.Sage["displayIcon"]);
-    // const Astra = await Jimp.read(agents.Astra["displayIcon"]);
-    // const Sova = await Jimp.read(agents.Sova["displayIcon"]);
-    // const Yoru = await Jimp.read(agents.Yoru["displayIcon"]);
-    // const Phoenix = await Jimp.read(agents.Phoenix["displayIcon"]);
-    // const Harbor = await Jimp.read(agents.Harbor["displayIcon"]);
-    // const Gekko = await Jimp.read(agents.Gekko["displayIcon"]);
-    // const Deadlock = await Jimp.read(agents.Deadlock["displayIcon"]);
-    // const Iso = await Jimp.read(agents.Iso["displayIcon"]);
-
-    // Fade.resize(64, 64);
-    // Breach.resize(64, 64);
-    // Raze.resize(64, 64);
-    // Chamber.resize(64, 64);
-    // KAY_O.resize(64, 64);
-    // Skye.resize(64, 64);
-    // Cypher.resize(64, 64);
-    // Viper.resize(64, 64);
-    // Reyna.resize(64, 64);
-    // Neon.resize(64, 64);
-    // Jett.resize(64, 64);
-    // Killjoy.resize(64, 64);
-    // Brimstone.resize(64, 64);
-    // Omen.resize(64, 64);
-    // Sage.resize(64, 64);
-    // Astra.resize(64, 64);
-    // Sova.resize(64, 64);
-    // Yoru.resize(64, 64);
-    // Phoenix.resize(64, 64);
-    // Harbor.resize(64, 64);
-    // Gekko.resize(64, 64);
-    // Deadlock.resize(64, 64);
-    // Iso.resize(64, 64);
-
     await interaction.editReply({
         content: "Loading map image for " + map + "...",
     });
@@ -908,14 +860,16 @@ async function createScoreboard(interaction, players, map, date, file) {
     mapImage.composite(scoreboardImage, 0, 0);
 
     for (i = 0, id = 0; i < 500; i += 100, id += 1) {
+        const redAgent = players.red[id].character.replace("/", "_");
+        const blueAgent = players.blue[id].character.replace("/", "_");
         // Agent
         mapImage.composite(
-            agents[players.red[id].character.replace("/", "_")].splash,
+            agents[redAgent],
             agentX,
             agentY + i
         ); //Red
         mapImage.composite(
-            eval(players.blue[id].character.replace("/", "_")),
+            agents[blueAgent],
             agentX + agentDiff,
             agentY + i
         ); //Blue
