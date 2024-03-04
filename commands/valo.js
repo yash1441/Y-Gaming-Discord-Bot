@@ -44,6 +44,9 @@ const rankThreshold = JSON.parse(
 const agents = JSON.parse(
     fs.readFileSync(path.join(dataDirectory, "agents.json"))
 );
+const maps = JSON.parse(
+    fs.readFileSync(path.join(dataDirectory, "maps.json"))
+);
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -863,7 +866,7 @@ async function createScoreboard(interaction, players, map, date, file) {
             mapImage = await Jimp.read("./Images/Maps/Drift.png");
             break;
         case "Sunset":
-            mapImage = await Jimp.read("./Images/Maps/Sunset.png");
+            mapImage = await Jimp.read(maps.Sunset["splash"]);
             break;
         default:
             mapImage = await Jimp.read("./Images/Maps/The Range.png");
