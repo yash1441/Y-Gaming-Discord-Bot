@@ -786,7 +786,13 @@ async function createScoreboard(interaction, players, map, date, file) {
         content: "Loading map image for " + map + "...",
     });
 
-    const mapImage = await Jimp.read(mapsData[map]?.splash ?? mapsData["The Range"].splash);
+    if (map == "The Range") {
+        return await interaction.editReply({
+            content: "Bruh... You were in The Range.",
+        });
+    }
+
+    const mapImage = await Jimp.read(mapsData[map].splash);
     mapImage.resize(1920, 1080);
 
     await interaction.editReply({ content: "Loading fonts..." });
