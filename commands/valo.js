@@ -104,12 +104,15 @@ module.exports = {
                         .setDescription("Choose a valorant game mode.")
                         .setRequired(false)
                         .addChoices(
-                            { name: "Competitive", value: "Competitive" },
-                            { name: "Unrated", value: "Unrated" },
-                            { name: "Swiftplay", value: "Swiftplay" },
-                            { name: "Replication", value: "Replication" },
-                            { name: "Spikerush", value: "Spikerush" },
-                            { name: "Custom", value: "Custom" }
+                            { name: "Competitive", value: "competitive" },
+                            { name: "Custom", value: "custom" },
+                            { name: "Deathmatch", value: "deathmatch" },
+                            { name: "Escalation", value: "escalation" },
+                            { name: "Team Deathmatch", value: "teamdeathmatch" },
+                            { name: "Unrated", value: "unrated" },
+                            { name: "Swiftplay", value: "swiftplay" },
+                            { name: "Replication", value: "replication" },
+                            { name: "Spikerush", value: "spikerush" }
                         )
                 ),
         )
