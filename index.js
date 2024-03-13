@@ -17,7 +17,6 @@ const path = require("path");
 const TwitchApi = require("node-twitch").default;
 require("dotenv").config();
 const logger = require("./Logger/logger.js");
-const Valorant = require("@liamcottle/valorant.js");
 const axios = require("axios").default;
 const CSGO = require('./Utils/cs-stuff.js');
 
@@ -54,8 +53,6 @@ const twitch = new TwitchApi({
 	client_id: process.env.TWITCH_ID,
 	client_secret: process.env.TWITCH_SECRET,
 });
-
-const valorantAPI = new Valorant.API(Valorant.Regions.AsiaPacific);
 
 // const dataDirectory = path.join(__dirname, "Data");
 // const weapons = JSON.parse(
@@ -127,7 +124,6 @@ client.on("ready", async () => {
 		}
 	});
 
-	await getValorantVersion("https://valorant-api.com/v1/version");
 	await dbInit();
 
 	// setInterval(() => {
@@ -424,23 +420,6 @@ async function sendOfflineEmbed(user, video, channelId) {
 			components: [row],
 		});
 	}
-}
-
-async function getValorantVersion(url) {
-	await axios.get(url).then((response) => {
-		valorantAPI.user_agent =
-			"RiotClient/" +
-			response.data.data.riotClientBuild +
-			" rso-auth (Windows;10;;Professional, x64)";
-		valorantAPI.client_version = response.data.data.riotClientVersion;
-	});
-
-	return logger.info(
-		"Valorant API User Agent: " +
-		valorantAPI.user_agent +
-		" | Valorant API Client Version: " +
-		valorantAPI.client_version
-	);
 }
 
 async function dbInit() {

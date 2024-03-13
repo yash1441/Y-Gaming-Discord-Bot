@@ -24,9 +24,6 @@ const logger = require("../Logger/logger.js");
 
 const HenrikDevValorantAPI = require("unofficial-valorant-api");
 const vapi = new HenrikDevValorantAPI();
-const Valorant = require("@liamcottle/valorant.js");
-const valorantAPI = new Valorant.API(Valorant.Regions.AsiaPacific);
-
 
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
@@ -982,30 +979,6 @@ async function createScoreboard(interaction, players, map, date, file) {
     await mapImage.writeAsync(file);
 }
 
-async function getNightMarket(username, password) {
-    await getValorantVersion();
-
-    let shouldContinue = true;
-    await valorantAPI.authorize(username, password).catch((error) => {
-        logger.error(error);
-        shouldContinue = false;
-    });
-
-    if (!shouldContinue) return false;
-
-    const response = await valorantAPI
-        .getPlayerStoreFront(valorantAPI.user_id)
-        .catch((error) => {
-            logger.error(error);
-            shouldContinue = false;
-        });
-
-    if (!shouldContinue) return false;
-
-    if (response.data.BonusStore == undefined) return false;
-
-    return response.data.BonusStore.BonusStoreOffers;
-}
 
 async function fetchNightmarketSkins(rawNightMarket) {
     const skins = [];
