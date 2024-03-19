@@ -11,6 +11,7 @@ module.exports = {
 				.setName("title")
 				.setDescription("Title of the poll")
 				.setRequired(true)
+				.setMaxLength(256)
 		),
 	async execute(interaction) {
 		await interaction.reply({ content: `Creating the poll...`, ephemeral: true });
