@@ -18,7 +18,6 @@ module.exports = {
 				.setName("choices")
 				.setDescription("Choices for the poll")
 				.setRequired(false)
-				.setMaxLength(256)
 		),
 	async execute(interaction) {
 		await interaction.reply({ content: `Creating the poll...`, ephemeral: true });
@@ -70,7 +69,7 @@ async function getChoices(choicesString) {
 	for (let i = 0; i < count; i++) {
 		options.push({
 			emoji: String.fromCodePoint(0x1F1E6 + i),
-			name: choices[i].trim(),
+			name: choices[i].trim().slice(0, 256),
 		});
 	}
 
