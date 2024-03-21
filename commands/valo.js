@@ -6,7 +6,9 @@ const { SlashCommandBuilder,
     ActionRowBuilder,
     italic,
     spoiler,
-    userMention } = require("discord.js");
+    userMention,
+    ButtonBuilder,
+    ButtonStyle } = require("discord.js");
 
 
 const fs = require("fs");
@@ -645,10 +647,20 @@ module.exports = {
                 return await interaction.editReply({ content: `Please use the </valo login:1127207637738606603> command first then try again.` })
             }
 
+            const retryButton = new ButtonBuilder()
+                .setLabel('Retry')
+                .setCustomId('retry_' + userCreds.username + '_' + userCreds.password)
+                .setStyle(ButtonStyle.Primary)
+                .setEmoji('🔁');
+
+            const row = new ActionRowBuilder().addComponents(retryButton);
+
             const build = await Valo.getVersion();
             const login = await Valo.authorize(build, userCreds.username, userCreds.password);
 
-            if (login.error) return await interaction.editReply({ content: 'Invalid login attempt. If you are sure your credentials were correct then please check if 2FA is enabled because the bot doesn\'t support 2FA as of yet. If you did everything correctly, then maybe the bot is malfunctioning.' });
+            if (login.error) {
+                return await interaction.editReply({ content: 'Invalid login attempt. If you are sure your credentials were correct then please check if 2FA is enabled because the bot doesn\'t support 2FA as of yet. If you did everything correctly, then maybe the bot is malfunctioning.', components: [row] });
+            }
 
             login.build = build;
 

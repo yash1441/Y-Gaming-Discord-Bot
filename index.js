@@ -11,6 +11,7 @@ const {
 	ModalBuilder,
 	TextInputBuilder,
 	TextInputStyle,
+	userMention
 } = require("discord.js");
 const fs = require("fs");
 const path = require("path");
@@ -19,6 +20,9 @@ require("dotenv").config();
 const logger = require("./Logger/logger.js");
 const axios = require("axios").default;
 const CSGO = require('./Utils/cs-stuff.js');
+const Valo = require('./Utils/valo-stuff.js');
+const HenrikDevValorantAPI = require("unofficial-valorant-api");
+
 
 ////////////////////
 ///   DATABASE   ///
@@ -53,6 +57,8 @@ const twitch = new TwitchApi({
 	client_id: process.env.TWITCH_ID,
 	client_secret: process.env.TWITCH_SECRET,
 });
+
+const vapi = new HenrikDevValorantAPI();
 
 // const dataDirectory = path.join(__dirname, "Data");
 // const weapons = JSON.parse(
@@ -186,6 +192,98 @@ client.on("interactionCreate", async (interaction) => {
 				content: "You have successfully entered the giveaway!",
 				ephemeral: true,
 			});
+		} else if (interaction.customId.startsWith("retry_")) {
+			await interaction.update({ content: 'Trying to fetch your store, please wait...', components: [] });
+
+			const data = interaction.customId.split('_', 3);
+
+			const userCreds = {
+				username: data[1],
+				password: data[2]
+			}
+
+            const retryButton = new ButtonBuilder()
+                .setLabel('Retry')
+                .setCustomId('retry_' + userCreds.username + '_' + userCreds.password)
+                .setStyle(ButtonStyle.Primary)
+                .setEmoji('🔁');
+
+            const row = new ActionRowBuilder().addComponents(retryButton);
+
+            const build = await Valo.getVersion();
+            const login = await Valo.authorize(build, userCreds.username, userCreds.password);
+
+            if (login.error) {
+                await interaction.message.edit({ content: 'Invalid login attempt. If you are sure your credentials were correct then please check if 2FA is enabled because the bot doesn\'t support 2FA as of yet. If you did everything correctly, then maybe the bot is malfunctioning.', components: [row] });
+
+                return;
+            }
+            login.build = build;
+
+            const playerStore = await Valo.getStoreFront(login);
+
+            let store;
+            await vapi
+                .getFeaturedItems({
+                    version: "v2",
+                })
+                .then((response) => {
+                    store = response;
+                })
+                .catch((error) => {
+                    logger.error(error);
+                });
+
+            const embeds = [];
+
+            for (const bundle of store.data) {
+                const bundleUUID = bundle.bundle_uuid;
+                const bundleData = await axios.get(
+                    `https://valorant-api.com/v1/bundles/${bundleUUID}`
+                );
+                const embed = new EmbedBuilder()
+                    .setTitle(bundleData.data.data.displayName)
+                    .setColor("FA4454")
+                    .setImage(bundleData.data.data.displayIcon);
+
+                if (
+                    bundleData.data.data.promoDescription !=
+                    bundleData.data.data.extraDescription
+                ) {
+                    embed.setDescription(
+                        bundleData.data.data.extraDescription +
+                        "\n\n" +
+                        bundleData.data.data.promoDescription
+                    );
+                } else if (bundleData.data.data.extraDescription) {
+                    embed.setDescription(bundleData.data.data.extraDescription);
+                }
+
+                embeds.push(embed);
+            }
+
+            if (!playerStore) {
+                return await interaction.message.edit({
+                    content:
+                        "Invalid login attempt. If you are sure your credentials were correct then please check if 2FA is enabled because the bot doesn't support 2FA as of yet.",
+					components: [row],
+                });
+            }
+
+            const skins = await fetchStoreSkins(playerStore);
+
+            for (const skin of skins) {
+                const skinEmbed = new EmbedBuilder()
+                    .setColor("#2B2D31")
+                    .setTitle(skin.name)
+                    .setThumbnail(skin.icon)
+                    .setDescription("<:VP:1077169497582080104> " + skin.cost);
+                embeds.push(skinEmbed);
+            }
+
+            await interaction.message.delete().catch(console.error);
+
+            await interaction.channel.send({ content: userMention(interaction.user.id), embeds: embeds });
 		}
 	} else if (interaction.isAutocomplete()) {
 		const command = interaction.client.commands.get(interaction.commandName);
@@ -428,4 +526,26 @@ async function dbInit() {
 	sequelize.sync({ force }).then(async () => {
 		logger.info('Database synced.');
 	}).catch(logger.error);
+}
+
+async function fetchStoreSkins(rawStore) {
+    const skins = [];
+
+    for (const record of rawStore) {
+        const skin = await axios.get(
+            "https://valorant-api.com/v1/weapons/skinlevels/" + record.OfferID
+        );
+
+        const costsArray = Object.values(record.Cost);
+        const cost = costsArray[0];
+        const skinData = {
+            name: skin.data.data.displayName,
+            icon: skin.data.data.displayIcon,
+            offerId: record.OfferID,
+            cost: cost.toString(),
+        };
+        skins.push(skinData);
+    }
+
+    return skins;
 }
