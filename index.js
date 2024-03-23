@@ -193,7 +193,6 @@ client.on("interactionCreate", async (interaction) => {
 				ephemeral: true,
 			});
 		} else if (interaction.customId.startsWith("retry_")) {
-			if (interaction.message.author.id != interaction.user.id) return await interaction.reply({ content: "Nice try.", ephemeral: true });
 			await interaction.update({ content: 'Trying to fetch your store, please wait...', components: [] });
 
 			const data = interaction.customId.split('_', 3);
