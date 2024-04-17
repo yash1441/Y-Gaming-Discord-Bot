@@ -52,12 +52,7 @@ async function authorize(build, username, password) {
     token.entitlements_token = await authEntitlements(build, token.access_token);
     token.username = username;
     token.password = password;
-    token.clientPlatform = {
-        platformType: "PC",
-        platformOS: "Windows",
-        platformOSVersion: "10.0.19042.1.256.64bit",
-        platformChipset: "Unknown",
-    };
+    token.clientPlatform = 'ew0KCSJwbGF0Zm9ybVR5cGUiOiAiUEMiLA0KCSJwbGF0Zm9ybU9TIjogIldpbmRvd3MiLA0KCSJwbGF0Zm9ybU9TVmVyc2lvbiI6ICIxMC4wLjE5MDQyLjEuMjU2LjY0Yml0IiwNCgkicGxhdGZvcm1DaGlwc2V0IjogIlVua25vd24iDQp9';
 
     const puuid = await getPuuid(build, token.access_token);
     token.puuid = puuid;
@@ -183,10 +178,11 @@ async function getStoreFront(login) {
         method: 'GET',
         url: 'https://pd.ap.a.pvp.net/store/v2/storefront/' + login.puuid,
         headers: {
+            'User-Agent': login.build.userAgent,
             Authorization: `Bearer ${login.access_token}`,
             'X-Riot-Entitlements-JWT': login.entitlements_token,
             'X-Riot-ClientVersion': login.build.clientVersion,
-            'X-Riot-ClientPlatform': JSON.stringify(login.clientPlatform)
+            'X-Riot-ClientPlatform': login.clientPlatform
         }
     }
 
@@ -203,7 +199,7 @@ async function getPlayerNightmarket(login) {
             Authorization: `Bearer ${login.access_token}`,
             'X-Riot-Entitlements-JWT': login.entitlements_token,
             'X-Riot-ClientVersion': login.build.clientVersion,
-            'X-Riot-ClientPlatform': JSON.stringify(login.clientPlatform)
+            'X-Riot-ClientPlatform': login.clientPlatform
         }
     }
 
