@@ -175,15 +175,17 @@ const parseTokensFromUrl = (uri) => {
 
 async function getStoreFront(login) {
     const options = {
-        method: 'GET',
-        url: 'https://pd.ap.a.pvp.net/store/v2/storefront/' + login.puuid,
+        method: 'POST',
+        url: 'https://pd.ap.a.pvp.net/store/v3/storefront/' + login.puuid,
         headers: {
+            'Content-Type': 'application/json',
             'User-Agent': login.build.userAgent,
             Authorization: `Bearer ${login.access_token}`,
             'X-Riot-Entitlements-JWT': login.entitlements_token,
             'X-Riot-ClientVersion': login.build.clientVersion,
             'X-Riot-ClientPlatform': login.clientPlatform
-        }
+        },
+        data: {}
     }
 
     const response = await axios.request(options);
