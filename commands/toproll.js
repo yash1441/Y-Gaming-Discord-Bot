@@ -8,7 +8,8 @@ module.exports = {
 		.setDescription("Testing toproll"),
 	async execute(interaction) {
         const button = new ButtonBuilder()
-            .setCustomId('toproll');
+            .setCustomId('toproll')
+            .setLabel('Toproll');
         
         const row = new ActionRowBuilder().addComponents(button);
 		await interaction.reply({ content: 'Test', components: [row], ephemeral: true });
