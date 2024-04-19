@@ -9,7 +9,8 @@ module.exports = {
 	async execute(interaction) {
         const button = new ButtonBuilder()
             .setCustomId('toproll')
-            .setLabel('Toproll');
+            .setLabel('Toproll')
+            .setStyle(ButtonStyle.Primary);
         
         const row = new ActionRowBuilder().addComponents(button);
 		await interaction.reply({ content: 'Test', components: [row], ephemeral: true });
