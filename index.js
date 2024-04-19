@@ -285,7 +285,7 @@ client.on("interactionCreate", async (interaction) => {
 
             await interaction.channel.send({ content: userMention(interaction.user.id), embeds: embeds });
 		} else if (interaction.customId === "toproll") {
-			interaction.editReply({ content: Date.now() });
+			interaction.message.edit({ content: Date.now() });
 		}
 	} else if (interaction.isAutocomplete()) {
 		const command = interaction.client.commands.get(interaction.commandName);
