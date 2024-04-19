@@ -9,7 +9,7 @@ module.exports = {
 	async execute(interaction) {
         const button = new ButtonBuilder()
             .setCustomId('toproll')
-            .setLabel('Toproll')
+            .setLabel('Start Game')
             .setStyle(ButtonStyle.Primary);
         
         const row = new ActionRowBuilder().addComponents(button);

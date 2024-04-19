@@ -285,8 +285,16 @@ client.on("interactionCreate", async (interaction) => {
 
             await interaction.channel.send({ content: userMention(interaction.user.id), embeds: embeds });
 		} else if (interaction.customId === "toproll") {
-			const d = new Date();
-			interaction.update({ content: d.toString() });
+			const button = new ButtonBuilder()
+            .setCustomId('toprolled')
+            .setLabel('Roll')
+            .setStyle(ButtonStyle.Primary);
+        
+        const row = new ActionRowBuilder().addComponents(button);
+		await interaction.reply({ content: 'Press the button below to start rolling!', components: [row], ephemeral: true });
+		} else if (interaction.customId === "toprolled") {
+			const randomNumber = Math.floor(Math.random() * 10) + 1;;
+			interaction.update({ content: randomNumber.toString() });
 		}
 	} else if (interaction.isAutocomplete()) {
 		const command = interaction.client.commands.get(interaction.commandName);
