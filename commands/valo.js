@@ -506,7 +506,6 @@ module.exports = {
 
             const skins = await fetchNightmarketSkins(playerNightmarket);
             const embeds = [];
-            const vpEmoji = interaction.client.emojis.cache.get("1231857629740138539");
 
             for (const skin of skins) {
                 const skinEmbed = new EmbedBuilder()
@@ -514,9 +513,7 @@ module.exports = {
                     .setTitle(skin.name)
                     .setThumbnail(skin.icon)
                     .setDescription(
-                        "### " +
-                        vpEmoji +
-                        " " +
+                        "### <:VP:1231857629740138539> " +
                         skin.discountCosts + '\n🏷️ ' +
                         spoiler(italic(skin.discountPercent + '%'))
                     );
