@@ -277,7 +277,7 @@ client.on("interactionCreate", async (interaction) => {
                     .setColor("#2B2D31")
                     .setTitle(skin.name)
                     .setThumbnail(skin.icon)
-                    .setDescription(process.env.VP_EMOTE + " " + skin.cost);
+                    .setDescription("<:VP:1231857629740138539> " + skin.cost);
                 embeds.push(skinEmbed);
             }
 
