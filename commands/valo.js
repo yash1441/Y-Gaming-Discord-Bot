@@ -506,7 +506,7 @@ module.exports = {
 
             const skins = await fetchNightmarketSkins(playerNightmarket);
             const embeds = [];
-            const vpEmoji = client.emojis.cache.get("1231857629740138539");
+            const vpEmoji = interaction.client.emojis.cache.get("1231857629740138539");
 
             for (const skin of skins) {
                 const skinEmbed = new EmbedBuilder()
