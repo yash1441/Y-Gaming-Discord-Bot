@@ -271,13 +271,14 @@ client.on("interactionCreate", async (interaction) => {
             }
 
             const skins = await fetchStoreSkins(playerStore);
+			const vpEmoji = client.emojis.cache.get("1231857629740138539");
 
             for (const skin of skins) {
                 const skinEmbed = new EmbedBuilder()
                     .setColor("#2B2D31")
                     .setTitle(skin.name)
                     .setThumbnail(skin.icon)
-                    .setDescription("<:VP:1231857629740138539> " + skin.cost);
+                    .setDescription(vpEmoji + " " + skin.cost);
                 embeds.push(skinEmbed);
             }
 
