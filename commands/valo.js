@@ -513,7 +513,9 @@ module.exports = {
                     .setTitle(skin.name)
                     .setThumbnail(skin.icon)
                     .setDescription(
-                        "### <:VP:1077169497582080104> " +
+                        "### " +
+                        process.env.VP_EMOTE +
+                        " " +
                         skin.discountCosts + '\n🏷️ ' +
                         spoiler(italic(skin.discountPercent + '%'))
                     );
