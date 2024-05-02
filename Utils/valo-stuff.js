@@ -12,7 +12,7 @@ const ciphers = [
 const agent = new Agent({
     ciphers: ciphers.join(':'),
     honorCipherOrder: true,
-    minVersion: 'TLSv1.2'
+    minVersion: 'TLSv1.3'
 });
 
 /// VALORANT VERSION ///
