@@ -73,7 +73,7 @@ async function authCookies(build) {
             nonce: '1',
             redirect_uri: 'https://playvalorant.com/opt_in',
             response_type: 'token id_token',
-            response_mode: 'query',
+            // response_mode: 'query',
             scope: 'account openid'
         },
         httpsAgent: agent
