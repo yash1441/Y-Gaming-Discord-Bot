@@ -1,8 +1,9 @@
 const axios = require("axios").default;
-const { Agent } = require("https");
+const https = require("https");
+const { IncomingHttpHeaders } = require("https");
 const logger = require("../Logger/logger.js");
 
-const ciphers = [
+const browserCipherOrdering = [
     'TLS_AES_128_GCM_SHA256',
     'TLS_AES_256_GCM_SHA384',
     'TLS_CHACHA20_POLY1305_SHA256',
@@ -20,10 +21,7 @@ const ciphers = [
     'AES256-SHA'
 ];
 
-const agent = new Agent({
-    ciphers: ciphers.join(':'),
-    honorCipherOrder: true,
-    minVersion: 'TLSv1.3',
+const agent = new https.Agent({
     maxCachedSessions: 0
 });
 
@@ -45,19 +43,16 @@ async function getVersion() {
 /// /// /// /// /// ///
 
 /// AUTHORIZATION FLOW ///
-
 async function authorize(build, username, password) {
     logger.debug('Authorizing user...');
 
-    const cookie = await authCookies(build);
+    const setCookie = await authCookies(build);
+    const cookie = setCookie.headers['set-cookie'].find((asid) => /^asid/.test(asid));
+
     logger.debug('Got cookies...');
 
-    const token = await authTokens(build, username, password, cookie);
-
-    if (token.error) {
-        logger.debug('Authorization Failed.');
-        return token;
-    }
+    const authResponse = await authTokens(build, username, password, cookie);
+    const token = parseTokensFromUrl(JSON.parse(authResponse.body).response.parameters.uri);
 
     logger.debug('Authorized Successfully.');
 
@@ -73,64 +68,89 @@ async function authorize(build, username, password) {
 }
 
 async function authCookies(build) {
-    const options = {
-        method: 'POST',
-        url: 'https://auth.riotgames.com/api/v1/authorization',
-        headers: {
-            'Content-Type': 'application/json',
-            'User-Agent': build.userAgent,
-            'Cache-Control': 'no-cache',
-            'Accept': 'application/json',
-            'Keep-Alive': true
-        },
-        data: {
-            client_id: 'play-valorant-web-prod',
+    return new Promise((resolve, reject) => {
+        const req = https.request('https://auth.riotgames.com/api/v1/authorization', {
+            method: 'POST',
+            headers: {
+                'user-agent': build.userAgent,
+                'Cache-Control': 'no-cache',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            ciphers: browserCipherOrdering.join(':'),
+            agent
+        }, res => {
+            const chunks = [];
+            res.on('data', chunk => {
+                chunks.push(chunk);
+            });
+            res.on('end', () => {
+                resolve({
+                    status: res.statusCode,
+                    headers: res.headers,
+                    body: Buffer.concat(chunks).toString()
+                });
+            });
+        });
+        req.on('error', reject);
+        req.write(JSON.stringify({
+            acr_values: '',
+            claims: '',
+            client_id: 'riot-client',
+            code_challenge: '',
+            code_challenge_method: '',
             nonce: '1',
-            redirect_uri: 'https://playvalorant.com/opt_in',
+            redirect_uri: 'http://localhost/redirect',
             response_type: 'token id_token',
-            scope: 'account openid'
-        },
-        httpsAgent: agent
-    };
-
-    const cookie = (await axios.request(options))
-        .headers['set-cookie'].find((asid) => /^asid/.test(asid));
-
-    return cookie;
+            scope: 'openid link ban lol_region lol summoner offline_access'
+        }));
+        req.end();
+    });
 }
 
 async function authTokens(build, username, password, cookie) {
     const options = {
-        method: 'PUT',
-        url: 'https://auth.riotgames.com/api/v1/authorization',
+        method: "PUT",
+        hostname: "auth.riotgames.com",
+        port: null,
+        path: "/api/v1/authorization",
         headers: {
-            Cookie: cookie,
-            'User-Agent': build.userAgent,
-            'Content-Type': 'application/json'
+            "cookie": cookie,
+            "user-agent": build.userAgent,
+            "Cache-Control": 'no-cache',
+            "Content-Type": "application/json",
+            "Keep-Alive": true,
         },
-        data: {
+        ciphers: browserCipherOrdering.join(':'),
+        agent
+    };
+
+    return new Promise((resolve, reject) => {
+        const req = https.request(options, function (res) {
+            const chunks = [];
+
+            res.on("data", function (chunk) {
+                chunks.push(chunk);
+            });
+
+            res.on("end", function () {
+                resolve({
+                    status: res.statusCode,
+                    headers: res.headers,
+                    body: Buffer.concat(chunks).toString()
+                });
+            });
+        });
+        req.on('error', reject);
+        req.write(JSON.stringify({
             type: 'auth',
             username: username,
             password: password,
+            remember: true,
             language: 'en_US'
-        },
-        httpsAgent: agent
-    }
-
-    const response = await axios.request(options).catch((error) => console.error({ error }));
-
-    const result = {
-        error: true,
-    }
-
-    if (!response || response.data?.error === "auth_failure") {
-        return result;
-    } else result.error = false;
-    const tokens = parseTokensFromUrl(response.data.response.parameters.uri);
-    result.access_token = tokens.access_token;
-    result.id_token = tokens.id_token;
-
-    return result;
+        }));
+        req.end();
+    });
 }
 
 async function authEntitlements(build, token) {
