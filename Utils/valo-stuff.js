@@ -49,7 +49,8 @@ async function authorize(build, username, password) {
     const setCookie = await authCookies(build);
     const cookie = setCookie.headers['set-cookie'].find((asid) => /^asid/.test(asid));
 
-    logger.debug(setCookie);
+    console.log(setCookie);
+    logger.debug(cookie);
 
     const authResponse = await authTokens(build, username, password, cookie);
     const token = parseTokensFromUrl(JSON.parse(authResponse.body).response.parameters.uri);
