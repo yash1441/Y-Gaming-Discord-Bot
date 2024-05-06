@@ -1,5 +1,6 @@
 const axios = require("axios").default;
 const https = require("https");
+const tls = require('tls');
 const { IncomingHttpHeaders } = require("https");
 const logger = require("../Logger/logger.js");
 
@@ -20,6 +21,8 @@ const browserCipherOrdering = [
     'AES128-SHA',
     'AES256-SHA'
 ];
+
+tls.DEFAULT_MIN_VERSION = 'TLSv1.3';
 
 const agent = new https.Agent({
     maxCachedSessions: 0,
