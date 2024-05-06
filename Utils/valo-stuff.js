@@ -22,7 +22,8 @@ const browserCipherOrdering = [
 ];
 
 const agent = new https.Agent({
-    maxCachedSessions: 0
+    maxCachedSessions: 0,
+    minVersion: "TLSv1.3"
 });
 
 /// VALORANT VERSION ///
