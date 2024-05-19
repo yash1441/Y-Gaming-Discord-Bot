@@ -25,7 +25,7 @@ const logger = require("../Logger/logger.js");
 
 
 const HenrikDevValorantAPI = require("unofficial-valorant-api");
-const vapi = new HenrikDevValorantAPI();
+const vapi = new HenrikDevValorantAPI(process.env.VALO_KEY);
 
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {

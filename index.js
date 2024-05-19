@@ -58,7 +58,7 @@ const twitch = new TwitchApi({
 	client_secret: process.env.TWITCH_SECRET,
 });
 
-const vapi = new HenrikDevValorantAPI();
+const vapi = new HenrikDevValorantAPI(process.env.VALO_KEY);
 
 // const dataDirectory = path.join(__dirname, "Data");
 // const weapons = JSON.parse(
