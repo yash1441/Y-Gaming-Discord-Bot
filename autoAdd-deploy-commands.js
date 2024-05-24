@@ -18,7 +18,7 @@ for (const file of commandFiles) {
 const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN);
 
 rest
-	.put(Routes.applicationCommands("631824500228620289"), { body: commands })
+	.put(Routes.applicationCommands(process.env.BOT_ID), { body: commands })
 	.then((data) =>
 		console.log(`Successfully registered ${data.length} application commands.`)
 	)
@@ -27,19 +27,19 @@ rest
 /* 
 For updating commands
 rest
-	.put(Routes.applicationCommands("631824500228620289"), { body: commands })
+	.put(Routes.applicationCommands("process.env.BOT_ID"), { body: commands })
 	.then((data) =>
 		console.log(`Successfully registered ${data.length} application commands.`)
 	)
 	.catch(console.error);
   
 For deleting commands
-	rest.delete(Routes.applicationCommand("631824500228620289", 'commandId'))
+	rest.delete(Routes.applicationCommand("process.env.BOT_ID", 'commandId'))
 	.then(() => console.log('Successfully deleted application command'))
 	.catch(console.error);
 
  For deleting all commands
-	 rest.put(Routes.applicationCommands("631824500228620289"), { body: [] })
+	 rest.put(Routes.applicationCommands("process.env.BOT_ID"), { body: [] })
 		.then(() => console.log('Successfully deleted all application commands.'))
 		.catch(console.error);
 */
