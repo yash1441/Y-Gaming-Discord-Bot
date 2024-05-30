@@ -1,10 +1,7 @@
 const axios = require("axios").default;
 const https = require("https");
 const tls = require('tls');
-const { HttpsProxyAgent } = require('https-proxy-agent');
 const logger = require("../Logger/logger.js");
-
-const httpsAgent = new HttpsProxyAgent(process.env.PROXY_URL);
 
 const browserCipherOrdering = [
     'TLS_AES_128_GCM_SHA256',
@@ -29,7 +26,7 @@ tls.DEFAULT_MIN_VERSION = 'TLSv1.3';
 const agent = new https.Agent({
     maxCachedSessions: 0,
     minVersion: "TLSv1.3",
-    agent: httpsAgent
+    proxy: process.env.PROXY_URL
 });
 
 /// VALORANT VERSION ///
