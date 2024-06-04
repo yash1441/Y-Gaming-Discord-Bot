@@ -1,6 +1,5 @@
 const axios = require("axios").default;
 const https = require("https");
-const { HttpsProxyAgent } = require('https-proxy-agent');
 const tls = require('tls');
 const logger = require("../Logger/logger.js");
 
@@ -24,9 +23,10 @@ const browserCipherOrdering = [
 
 tls.DEFAULT_MIN_VERSION = 'TLSv1.3';
 
-const proxyAgent = new HttpsProxyAgent(process.env.PROXY_URL);
-proxyAgent.options.maxCachedSessions = 0;
-proxyAgent.options.minVersion = "TLSv1.3";
+const agent = new https.Agent({
+    maxCachedSessions: 0,
+    minVersion: "TLSv1.3",
+});
 
 /// VALORANT VERSION ///
 
@@ -81,7 +81,7 @@ async function authCookies(build) {
                 'Accept': 'application/json'
             },
             ciphers: browserCipherOrdering.join(':'),
-            proxyAgent
+            agent
         }, res => {
             const chunks = [];
             res.on('data', chunk => {
@@ -125,7 +125,7 @@ async function authTokens(build, username, password, cookie) {
             "Keep-Alive": true,
         },
         ciphers: browserCipherOrdering.join(':'),
-        proxyAgent
+        agent
     };
 
     return new Promise((resolve, reject) => {
