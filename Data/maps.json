@@ -43,5 +43,8 @@
 	},
 	"Sunset": {
 		"splash": "https://media.valorant-api.com/maps/92584fbe-486a-b1b2-9faa-39b0f486b498/splash.png"
+	},
+	"Abyss": {
+		"splash": "https://media.valorant-api.com/maps/224b0a95-48b9-f703-1bd8-67aca101a61f/splash.png"
 	}
 }
