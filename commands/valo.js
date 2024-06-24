@@ -286,7 +286,7 @@ module.exports = {
             valoId = interaction.options.getString("username").split("#", 2);
 
             const region = interaction.options.getString("region");
-            const mode = interaction.options.getString("mode");
+            const mode = interaction.options.getString("mode") ?? "Competitive";
 
             await vapi
                 .getMatches({
