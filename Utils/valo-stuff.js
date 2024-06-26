@@ -3,29 +3,30 @@ const https = require("https");
 const tls = require('tls');
 const logger = require("../Logger/logger.js");
 
-const browserCipherOrdering = [
-    'TLS_AES_128_GCM_SHA256',
-    'TLS_AES_256_GCM_SHA384',
-    'TLS_CHACHA20_POLY1305_SHA256',
-    'ECDHE-ECDSA-AES128-GCM-SHA256',
-    'ECDHE-RSA-AES128-GCM-SHA256',
-    'ECDHE-ECDSA-AES256-GCM-SHA384',
-    'ECDHE-RSA-AES256-GCM-SHA384',
-    'ECDHE-ECDSA-CHACHA20-POLY1305',
-    'ECDHE-RSA-CHACHA20-POLY1305',
-    'ECDHE-RSA-AES128-SHA',
-    'ECDHE-RSA-AES256-SHA',
-    'AES128-GCM-SHA256',
-    'AES256-GCM-SHA384',
-    'AES128-SHA',
-    'AES256-SHA'
+const sigalgs = [
+    'ecdsa_secp256r1_sha256',
+    'rsa_pss_rsae_sha256',
+    'rsa_pkcs1_sha256',
+    'ecdsa_secp384r1_sha384',
+    'rsa_pss_rsae_sha384',
+    'rsa_pkcs1_sha384',
+    'rsa_pss_rsae_sha512',
+    'rsa_pkcs1_sha512',
+    'rsa_pkcs1_sha1',
 ];
 
-tls.DEFAULT_MIN_VERSION = 'TLSv1.3';
+const ciphers = [
+    'TLS_CHACHA20_POLY1305_SHA256',
+    'TLS_AES_128_GCM_SHA256',
+    'TLS_AES_256_GCM_SHA384',
+    'TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256'
+];
 
 const agent = new https.Agent({
-    maxCachedSessions: 0,
-    minVersion: "TLSv1.3",
+    ciphers: ciphers.join(':'),
+    honorCipherOrder: true,
+    minVersion: 'TLSv1.2',
+    sigalgs: sigalgs.join(':'),
 });
 
 /// VALORANT VERSION ///
@@ -80,7 +81,6 @@ async function authCookies(build) {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-            ciphers: browserCipherOrdering.join(':'),
             agent
         }, res => {
             const chunks = [];
@@ -124,7 +124,6 @@ async function authTokens(build, username, password, cookie) {
             "Content-Type": "application/json",
             "Keep-Alive": true,
         },
-        ciphers: browserCipherOrdering.join(':'),
         agent
     };
 
