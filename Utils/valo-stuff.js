@@ -99,13 +99,14 @@ async function authCookies(build) {
         req.write(JSON.stringify({
             acr_values: '',
             claims: '',
-            client_id: 'riot-client',
+            client_id: 'play-valorant-web-prod',
             code_challenge: '',
             code_challenge_method: '',
-            nonce: '1',
-            redirect_uri: 'http://localhost/redirect',
+            nonce: 1,
+            redirect_uri: 'https://playvalorant.com/opt_in',
             response_type: 'token id_token',
-            scope: 'openid link ban lol_region lol summoner offline_access'
+            response_mode: 'query',
+            scope: 'account openid'
         }));
         req.end();
     });
