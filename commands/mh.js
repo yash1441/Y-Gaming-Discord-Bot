@@ -9,11 +9,10 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("mh")
 		.setDescription("May the Sapphire Star guide you.")
-		.addStringOption((option) =>
-			option
+        .addSubcommand((subcommand) =>
+			subcommand
 				.setName("random-monster")
 				.setDescription("Gives a random monster")
-				.setRequired(true)
 		),
 	async execute(interaction) {
 		await interaction.deferReply({
@@ -21,7 +20,7 @@ module.exports = {
 			ephemeral: false,
 		});
 
-		const monsters = axios.get("https://mhw-db.com/monsters");
+		const monsters = await axios.get("https://mhw-db.com/monsters");
 		console.log(monsters);
 
 		await interaction.editReply({ content: `Test` });
