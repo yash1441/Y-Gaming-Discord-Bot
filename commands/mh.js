@@ -20,9 +20,15 @@ module.exports = {
 			ephemeral: false,
 		});
 
-		const monsters = await axios.get("https://mhw-db.com/monsters");
-		console.log(monsters.data);
+		const monstersData = await axios.get("https://mhw-db.com/monsters");
 
-		await interaction.editReply({ content: `Test` });
+        const monster = await getRandomMonster(monstersData.data);
+
+		await interaction.editReply({ content: monster.name });
 	},
 };
+
+async function getRandomMonster(monstersData) {
+    const randomIndex = Math.floor(Math.random() * monstersData.length);
+    return monstersData[randomIndex];
+}
