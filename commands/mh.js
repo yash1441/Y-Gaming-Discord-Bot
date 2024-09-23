@@ -1,4 +1,9 @@
-const { SlashCommandBuilder, EmbedBuilder, AttachmentBuilder } = require("discord.js");
+const {
+	SlashCommandBuilder,
+	EmbedBuilder,
+	AttachmentBuilder,
+	bold,
+} = require("discord.js");
 const logger = require("../Logger/logger.js");
 const fs = require("fs");
 const path = require("path");
@@ -16,28 +21,79 @@ module.exports = {
 		.setDescription("May the Sapphire Star guide you.")
 		.addSubcommand((subcommand) =>
 			subcommand
+				.setName("monster")
+				.setDescription("Search for a monster")
+				.addStringOption((option) =>
+					option
+						.setName("name")
+						.setDescription("The name of the monster")
+						.setRequired(true)
+				)
+		)
+		.addSubcommand((subcommand) =>
+			subcommand
 				.setName("random-monster")
 				.setDescription("Gives a random monster")
 		),
 	async execute(interaction) {
 		await interaction.deferReply({ ephemeral: false });
 
-		const monster =
-			monstersData[Math.floor(Math.random() * monstersData.length)];
+		if (interaction.options.getSubcommand() === "monster") {
+			const name = interaction.options.getString("name");
+			const monsterIndex = monstersData.findIndex(
+				(monster) => monster.name === name
+			);
+			if (!monsterIndex) {
+				return await interaction.editReply({
+					content: "Cannot find " + bold(name),
+				});
+			}
 
-		const file = new AttachmentBuilder("./Images/MHW/Monsters/Icons/" + escapeStuff(monster.name) + ".png")
+			const monster = monstersData[monsterIndex];
 
-		const embed = new EmbedBuilder()
-			.setTitle(monster.name)
-			.setDescription(monster.description)
-			.addFields({
-				name: "Species",
-				value: monster.species,
-				inline: false,
-			})
-			.setThumbnail("attachment://" + escapeStuff(monster.name) + ".png");
+			const file = new AttachmentBuilder(
+				"./Images/MHW/Monsters/Icons/" +
+					escapeStuff(monster.name) +
+					".png"
+			);
 
-		await interaction.editReply({ embeds: [embed], files: [file] });
+			const embed = new EmbedBuilder()
+				.setTitle(monster.name)
+				.setDescription(monster.description)
+				.addFields({
+					name: "Species",
+					value: monster.species,
+					inline: false,
+				})
+				.setThumbnail(
+					"attachment://" + escapeStuff(monster.name) + ".png"
+				);
+
+			await interaction.editReply({ embeds: [embed], files: [file] });
+		} else if (interaction.options.getSubcommand() === "random-monster") {
+			const monster =
+				monstersData[Math.floor(Math.random() * monstersData.length)];
+
+			const file = new AttachmentBuilder(
+				"./Images/MHW/Monsters/Icons/" +
+					escapeStuff(monster.name) +
+					".png"
+			);
+
+			const embed = new EmbedBuilder()
+				.setTitle(monster.name)
+				.setDescription(monster.description)
+				.addFields({
+					name: "Species",
+					value: monster.species,
+					inline: false,
+				})
+				.setThumbnail(
+					"attachment://" + escapeStuff(monster.name) + ".png"
+				);
+
+			await interaction.editReply({ embeds: [embed], files: [file] });
+		}
 	},
 };
 
