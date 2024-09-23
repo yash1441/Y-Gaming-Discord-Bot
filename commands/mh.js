@@ -25,7 +25,7 @@ module.exports = {
 		const monster =
 			monstersData[Math.floor(Math.random() * monstersData.length)];
 
-		const file = new AttachmentBuilder("./Images/MHW/Monsters/Icons/" + monster.name + ".png")
+		const file = new AttachmentBuilder("./Images/MHW/Monsters/Icons/" + escapeStuff(monster.name) + ".png")
 
 		const embed = new EmbedBuilder()
 			.setTitle(monster.name)
@@ -35,8 +35,12 @@ module.exports = {
 				value: monster.species,
 				inline: false,
 			})
-			.setThumbnail("attachment://" + encodeURI(monster.name) + ".png");
+			.setThumbnail("attachment://" + escapeStuff(monster.name) + ".png");
 
 		await interaction.editReply({ embeds: [embed], files: [file] });
 	},
 };
+
+function escapeStuff(string) {
+	return string.replace(/ /g, "_");
+}
