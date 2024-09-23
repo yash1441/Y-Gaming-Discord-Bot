@@ -66,7 +66,7 @@ module.exports = {
 					inline: false,
 				})
 				.setThumbnail(
-					"attachment://" + escapeStuff(monster.name) + ".png"
+					"attachment://" + encodeURI(escapeStuff(monster.name)) + ".png"
 				);
 
 			await interaction.editReply({ embeds: [embed], files: [file] });
@@ -89,7 +89,7 @@ module.exports = {
 					inline: false,
 				})
 				.setThumbnail(
-					"attachment://" + escapeStuff(monster.name) + ".png"
+					"attachment://" + encodeURI(escapeStuff(monster.name)) + ".png"
 				);
 
 			await interaction.editReply({ embeds: [embed], files: [file] });
