@@ -37,11 +37,33 @@ module.exports = {
 				.setDescription("Gives a random monster")
 		),
 	async autocomplete(interaction) {
-		const focusedValue = interaction.options.getFocused();
-		const choices = monstersData.map((monster) => monster.name);
-		const filtered = choices.filter((choice) =>
-			choice.startsWith(focusedValue)
-		);
+		const focusedValue = interaction.options
+			.getFocused()
+			.toLowerCase()
+			.split(" ");
+		const choices = monstersData.map((monster) => monster.name).slice();
+		const filtered = choices
+			.filter((choice) => {
+				const choiceLower = choice.toLowerCase();
+				return (
+					focusedValue.every((word) => choiceLower.includes(word)) ||
+					focusedValue.some((word) => choiceLower.includes(word))
+				);
+			})
+			.sort((a, b) => {
+				const aScore = focusedValue.reduce(
+					(score, word) =>
+						score + (a.toLowerCase().includes(word) ? 1 : 0),
+					0
+				);
+				const bScore = focusedValue.reduce(
+					(score, word) =>
+						score + (b.toLowerCase().includes(word) ? 1 : 0),
+					0
+				);
+				return bScore - aScore;
+			})
+			.slice(0, 25);
 		await interaction.respond(
 			filtered.map((choice) => ({ name: choice, value: choice }))
 		);
