@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, MessageAttachment } = require("discord.js");
 const logger = require("../Logger/logger.js");
 const fs = require("fs");
 const path = require("path");
@@ -25,11 +25,7 @@ module.exports = {
 		const monster =
 			monstersData[Math.floor(Math.random() * monstersData.length)];
 
-		const image = path.join(
-			__dirname,
-			"../Images/MHW/Monsters/Icons",
-			monster.name + ".png"
-		);
+		const image = new MessageAttachment("../Images/MHW/Monsters/Icons", monster.name + ".png");
 
 		const embed = new EmbedBuilder()
 			.setTitle(monster.name)
@@ -39,7 +35,8 @@ module.exports = {
 				value: monster.species,
 				inline: false,
 			})
-			.setThumbnail(image);
+			.attachFiles(image)
+			.setThumbnail("attachment://" + monster.name + ".png");
 
 		await interaction.editReply({ embeds: [embed] });
 	},
