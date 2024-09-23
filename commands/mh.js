@@ -5,6 +5,11 @@ const path = require("path");
 const axios = require("axios");
 require("dotenv").config();
 
+const dataDirectory = path.join(__dirname, "../Data/");
+const monstersData = JSON.parse(
+    fs.readFileSync(path.join(dataDirectory, "monsters.json"))
+);
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("mh")
@@ -20,9 +25,7 @@ module.exports = {
 			ephemeral: false,
 		});
 
-		const monstersData = await axios.get("https://mhw-db.com/monsters");
-
-        const monster = await getRandomMonster(monstersData.data);
+        const monster = await getRandomMonster(monstersData);
 
 		await interaction.editReply({ content: monster.name });
 	},
