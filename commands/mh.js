@@ -25,7 +25,7 @@ module.exports = {
 		const monster =
 			monstersData[Math.floor(Math.random() * monstersData.length)];
 
-		const file = new AttachmentBuilder("../Images/MHW/Monsters/Icons/" + monster.name + ".png")
+		const file = new AttachmentBuilder("./Images/MHW/Monsters/Icons/" + monster.name + ".png")
 
 		const embed = new EmbedBuilder()
 			.setTitle(monster.name)
