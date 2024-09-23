@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const logger = require("../Logger/logger.js");
 const fs = require("fs");
 const path = require("path");
@@ -22,13 +22,25 @@ module.exports = {
 	async execute(interaction) {
 		await interaction.deferReply({ ephemeral: false });
 
-		const monster = await getRandomMonster(monstersData);
+		const monster =
+			monstersData[Math.floor(Math.random() * monstersData.length)];
 
-		await interaction.editReply({ content: monster.name });
+		const image = path.join(
+			__dirname,
+			"../Images/MHW/Monsters/Icons",
+			monster.name + ".png"
+		);
+
+		const embed = new EmbedBuilder()
+			.setTitle(monster.name)
+			.setDescription(monster.description)
+			.addFields({
+				name: "Species",
+				value: monster.species,
+				inline: false,
+			})
+			.setThumbnail(image);
+
+		await interaction.editReply({ embeds: [embed] });
 	},
 };
-
-async function getRandomMonster(monstersData) {
-	const randomIndex = Math.floor(Math.random() * monstersData.length);
-	return monstersData[randomIndex];
-}
