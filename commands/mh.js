@@ -21,7 +21,7 @@ module.exports = {
 		});
 
 		const monsters = await axios.get("https://mhw-db.com/monsters");
-		console.log(monsters);
+		console.log(monsters.data);
 
 		await interaction.editReply({ content: `Test` });
 	},
