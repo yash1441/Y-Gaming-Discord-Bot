@@ -66,7 +66,7 @@ module.exports = {
 					inline: false,
 				})
 				.setThumbnail(
-					"attachment://" + encodeURI(escapeStuff(monster.name)) + ".png"
+					"attachment://" + escapeStuff(monster.name) + ".png"
 				);
 
 			await interaction.editReply({ embeds: [embed], files: [file] });
@@ -89,7 +89,7 @@ module.exports = {
 					inline: false,
 				})
 				.setThumbnail(
-					"attachment://" + encodeURI(escapeStuff(monster.name)) + ".png"
+					"attachment://" + escapeStuff(monster.name) + ".png"
 				);
 
 			await interaction.editReply({ embeds: [embed], files: [file] });
@@ -98,5 +98,5 @@ module.exports = {
 };
 
 function escapeStuff(string) {
-	return string.replace(/ /g, "_");
+	return string.replace(/ /g, "_").replace("'", "=");
 }
