@@ -3,6 +3,7 @@ const {
 	EmbedBuilder,
 	AttachmentBuilder,
 	bold,
+	Colors,
 } = require("discord.js");
 const logger = require("../Logger/logger.js");
 const fs = require("fs");
@@ -100,7 +101,8 @@ module.exports = {
 				})
 				.setThumbnail(
 					"attachment://" + escapeStuff(monster.name) + ".png"
-				);
+				)
+				.setColor(Colors.Blurple);
 
 			await interaction.editReply({ embeds: [embed], files: [file] });
 		} else if (interaction.options.getSubcommand() === "random-monster") {
@@ -123,7 +125,8 @@ module.exports = {
 				})
 				.setThumbnail(
 					"attachment://" + escapeStuff(monster.name) + ".png"
-				);
+				)
+				.setColor(Colors.Blurple);
 
 			await interaction.editReply({ embeds: [embed], files: [file] });
 		}
