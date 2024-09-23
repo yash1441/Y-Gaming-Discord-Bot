@@ -27,6 +27,7 @@ module.exports = {
 					option
 						.setName("name")
 						.setDescription("The name of the monster")
+						.setAutocomplete(true)
 						.setRequired(true)
 				)
 		)
@@ -35,6 +36,16 @@ module.exports = {
 				.setName("random-monster")
 				.setDescription("Gives a random monster")
 		),
+	async autocomplete(interaction) {
+		const focusedValue = interaction.options.getFocused();
+		const choices = monstersData.map((monster) => monster.name);
+		const filtered = choices.filter((choice) =>
+			choice.startsWith(focusedValue)
+		);
+		await interaction.respond(
+			filtered.map((choice) => ({ name: choice, value: choice }))
+		);
+	},
 	async execute(interaction) {
 		await interaction.deferReply({ ephemeral: false });
 
@@ -98,5 +109,5 @@ module.exports = {
 };
 
 function escapeStuff(string) {
-	return string.replace(/ /g, "_").replace("'", "=");
+	return string.replace(/ /g, "_").replace("'", "__");
 }
