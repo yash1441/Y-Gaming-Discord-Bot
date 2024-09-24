@@ -139,11 +139,18 @@ module.exports = {
 			const embed = new EmbedBuilder()
 				.setTitle(monster.name)
 				.setDescription(monster.description)
-				.addFields({
-					name: "Species",
-					value: monster.species,
-					inline: false,
-				})
+				.addFields(
+					{
+						name: "Species",
+						value: monster.species,
+						inline: true,
+					},
+					{
+						name: "Type",
+						value: monster.type,
+						inline: true,
+					}
+				)
 				.setThumbnail(
 					"attachment://" + escapeStuff(monster.name) + ".png"
 				)
