@@ -36,6 +36,16 @@ module.exports = {
 			subcommand
 				.setName("random-monster")
 				.setDescription("Gives a random monster")
+				.addStringOption((option) =>
+					option
+						.setName("size")
+						.setDescription("The size of the monster")
+						.addChoices(
+							{ name: "Small", value: "small" },
+							{ name: "Large", value: "large" }
+						)
+						.setRequired(false)
+				)
 		),
 	async autocomplete(interaction) {
 		const focusedValue = interaction.options
@@ -106,8 +116,14 @@ module.exports = {
 
 			await interaction.editReply({ embeds: [embed], files: [file] });
 		} else if (interaction.options.getSubcommand() === "random-monster") {
-			const monster =
-				monstersData[Math.floor(Math.random() * monstersData.length)];
+			const type = interaction.options.getString("type");
+
+			let randomIndex;
+			do {
+				randomIndex = Math.floor(Math.random() * monstersData.length);
+			} while (monstersData[randomIndex].type !== type);
+
+			const monster = monstersData[randomIndex];
 
 			const file = new AttachmentBuilder(
 				"./Images/MHW/Monsters/Icons/" +
