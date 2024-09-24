@@ -116,7 +116,7 @@ module.exports = {
 
 			await interaction.editReply({ embeds: [embed], files: [file] });
 		} else if (interaction.options.getSubcommand() === "random-monster") {
-			const type = interaction.options.getString("type");
+			const type = interaction.options.getString("size");
 
 			let monsterIndexMin = 0;
 			let monsterIndexMax = 57;
@@ -149,7 +149,7 @@ module.exports = {
 						inline: true,
 					},
 					{
-						name: "Type",
+						name: "Size",
 						value: monster.type,
 						inline: true,
 					}
