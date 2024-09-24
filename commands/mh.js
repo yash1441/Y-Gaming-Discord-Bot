@@ -119,7 +119,7 @@ module.exports = {
 			const type = interaction.options.getString("size");
 
 			let monsterIndexMin = 0;
-			let monsterIndexMax = 58;
+			let monsterIndexMax = 57;
 
 			type === "small" ? (monsterIndexMax = 15) : null;
 			type === "large" ? (monsterIndexMin = 16) : null;
