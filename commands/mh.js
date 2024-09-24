@@ -119,9 +119,13 @@ module.exports = {
 			const type = interaction.options.getString("type");
 
 			let randomIndex;
-			do {
-				randomIndex = Math.floor(Math.random() * monstersData.length);
-			} while (monstersData[randomIndex].type !== type);
+			if (type)
+				do {
+					randomIndex = Math.floor(
+						Math.random() * monstersData.length
+					);
+				} while (monstersData[randomIndex].type !== type);
+			else randomIndex = Math.floor(Math.random() * monstersData.length);
 
 			const monster = monstersData[randomIndex];
 
