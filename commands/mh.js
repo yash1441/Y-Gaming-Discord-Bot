@@ -118,16 +118,17 @@ module.exports = {
 		} else if (interaction.options.getSubcommand() === "random-monster") {
 			const type = interaction.options.getString("type");
 
-			let randomIndex;
-			if (type)
-				do {
-					randomIndex = Math.floor(
-						Math.random() * monstersData.length
-					);
-				} while (monstersData[randomIndex].type !== type);
-			else randomIndex = Math.floor(Math.random() * monstersData.length);
+			let monsterIndexMin = 0;
+			let monsterIndexMax = 57;
 
-			const monster = monstersData[randomIndex];
+			type === "small" ? (monsterIndexMax = 15) : (monsterIndexMin = 16);
+
+			const monsterIndex = Math.floor(
+				Math.random() * (monsterIndexMax - monsterIndexMin + 1) +
+					monsterIndexMin
+			);
+
+			const monster = monstersData[monsterIndex];
 
 			const file = new AttachmentBuilder(
 				"./Images/MHW/Monsters/Icons/" +
