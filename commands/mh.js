@@ -121,12 +121,15 @@ module.exports = {
 			let monsterIndexMin = 0;
 			let monsterIndexMax = 57;
 
-			type === "small" ? (monsterIndexMax = 15) : (monsterIndexMin = 16);
+			type === "small" ? (monsterIndexMax = 15) : null;
+			type === "large" ? (monsterIndexMin = 16) : null;
 
 			const monsterIndex = Math.floor(
 				Math.random() * (monsterIndexMax - monsterIndexMin + 1) +
 					monsterIndexMin
 			);
+
+			console.log(type, monsterIndexMin, monsterIndexMax, monsterIndex);
 
 			const monster = monstersData[monsterIndex];
 
