@@ -119,7 +119,7 @@ module.exports = {
 			const type = interaction.options.getString("size");
 
 			let monsterIndexMin = 0;
-			let monsterIndexMax = 57;
+			let monsterIndexMax = 58;
 
 			type === "small" ? (monsterIndexMax = 15) : null;
 			type === "large" ? (monsterIndexMin = 16) : null;
@@ -128,8 +128,6 @@ module.exports = {
 				Math.random() * (monsterIndexMax - monsterIndexMin + 1) +
 					monsterIndexMin
 			);
-
-			console.log(type, monsterIndexMin, monsterIndexMax, monsterIndex);
 
 			const monster = monstersData[monsterIndex];
 
