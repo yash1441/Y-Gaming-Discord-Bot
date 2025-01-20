@@ -1,10 +1,4 @@
-const {
-	SlashCommandBuilder,
-	EmbedBuilder,
-	AttachmentBuilder,
-	bold,
-	Colors,
-} = require("discord.js");
+const { SlashCommandBuilder, MessageFlags } = require("discord.js");
 const logger = require("../Logger/logger.js");
 const axios = require("axios");
 require("dotenv").config();
@@ -19,24 +13,37 @@ module.exports = {
 				.setDescription("Unscramble a pokemon name")
 				.addStringOption((option) =>
 					option
-						.setName("name")
+						.setName("letters")
 						.setDescription("Gimme the letters")
 						.setRequired(true)
 				)
 		),
 	async execute(interaction) {
-		await interaction.deferReply({ ephemeral: false });
+		await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
 		if (interaction.options.getSubcommand() === "unscramble") {
-			try {
-				const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0');
-				const pokemonNames = response.data.results.map(pokemon => pokemon.name);
-				console.log(pokemonNames); // You can remove this line if you don't need to log the names
-			} catch (error) {
-				logger.error('Error fetching Pokemon data:', error);
-				await interaction.followUp({ content: 'There was an error fetching the Pokemon data. Please try again later.', ephemeral: true });
-				return;
-			}
+			const scrambledText = interaction.options.getString("letters");
+			const response = await axios.get(
+				"https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0"
+			);
+			const pokemonNames = response.data.results.map(
+				(pokemon) => pokemon.name
+			);
+
+			const unscrambledPokemon = pokemonNames.filter((name) => {
+				const nameLetters = name.split("").sort().join("");
+				const scrambledLetters = scrambledText
+					.split("")
+					.sort()
+					.join("");
+				return scrambledLetters === nameLetters;
+			});
+
+			const result =
+				unscrambledPokemon.join(", ") || "No matching Pokémon found.";
+			await interaction.editReply({
+				content: result,
+			});
 		}
 	},
 };
