@@ -41,6 +41,9 @@
 	"Drift": {
 		"splash": "https://media.valorant-api.com/maps/2c09d728-42d5-30d8-43dc-96a05cc7ee9d/splash.png"
 	},
+	"Glitch": {
+		"splash": "https://media.valorant-api.com/maps/d6336a5a-428f-c591-98db-c8a291159134/splash.png"
+	},
 	"Sunset": {
 		"splash": "https://media.valorant-api.com/maps/92584fbe-486a-b1b2-9faa-39b0f486b498/splash.png"
 	},
