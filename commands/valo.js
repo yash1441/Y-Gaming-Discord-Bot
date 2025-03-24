@@ -915,7 +915,6 @@ async function createScoreboard(interaction, players, map, date, file) {
 		const blueAgent = players.blue[id].character.replace("/", "_");
 		// Agent
 		mapImage.composite(agents[redAgent], agentX, agentY + i); //Red
-		console.log(blueAgent);
 		mapImage.composite(agents[blueAgent], agentX + agentDiff, agentY + i); //Blue
 
 		//Name#Tag
