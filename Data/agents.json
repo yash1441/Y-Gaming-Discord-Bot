@@ -98,5 +98,9 @@
 	"Tejo": {
 		"displayIcon": "https://media.valorant-api.com/agents/b444168c-4e35-8076-db47-ef9bf368f384/displayicon.png",
 		"fullPortraitV2": "https://media.valorant-api.com/agents/b444168c-4e35-8076-db47-ef9bf368f384/fullportrait.png"
+	},
+	"Waylay": {
+		"displayIcon": "https://media.valorant-api.com/agents/df1cb487-4902-002e-5c17-d28e83e78588/displayicon.png",
+		"fullPortraitV2": "https://media.valorant-api.com/agents/df1cb487-4902-002e-5c17-d28e83e78588/fullportrait.png"
 	}
 }
