@@ -7,11 +7,7 @@ const {
 	ButtonBuilder,
 	ButtonStyle,
 	ActionRowBuilder,
-	ChannelType,
-	ModalBuilder,
-	TextInputBuilder,
-	TextInputStyle,
-	userMention
+	userMention,
 } = require("discord.js");
 const fs = require("fs");
 const path = require("path");
@@ -19,22 +15,32 @@ const TwitchApi = require("node-twitch").default;
 require("dotenv").config();
 const logger = require("./Logger/logger.js");
 const axios = require("axios").default;
-const CSGO = require('./Utils/cs-stuff.js');
-const Valo = require('./Utils/valo-stuff.js');
+const CSGO = require("./Utils/cs-stuff.js");
+const Valo = require("./Utils/valo-stuff.js");
 const HenrikDevValorantAPI = require("unofficial-valorant-api");
-
 
 ////////////////////
 ///   DATABASE   ///
 ////////////////////
-const Sequelize = require('sequelize');
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
-	host: process.env.DB_IP,
-	dialect: 'mysql',
-	logging: false
-});
-const giveawayEntries = require("./Models/giveawayEntries")(sequelize, Sequelize.DataTypes);
-const giveawayData = require("./Models/giveawayData")(sequelize, Sequelize.DataTypes);
+const Sequelize = require("sequelize");
+const sequelize = new Sequelize(
+	process.env.DB_NAME,
+	process.env.DB_USERNAME,
+	process.env.DB_PASSWORD,
+	{
+		host: process.env.DB_IP,
+		dialect: "mysql",
+		logging: false,
+	}
+);
+const giveawayEntries = require("./Models/giveawayEntries")(
+	sequelize,
+	Sequelize.DataTypes
+);
+const giveawayData = require("./Models/giveawayData")(
+	sequelize,
+	Sequelize.DataTypes
+);
 const csgoRanks = require("./Models/csgoRanks")(sequelize, Sequelize.DataTypes);
 
 ////////////////////
@@ -63,7 +69,7 @@ const vapi = new HenrikDevValorantAPI(process.env.VALO_KEY);
 // const dataDirectory = path.join(__dirname, "Data");
 // const weapons = JSON.parse(
 // 	fs.readFileSync(path.join(dataDirectory, "weapons.json"))
-// ); 
+// );
 
 let isLive = false;
 
@@ -106,7 +112,7 @@ client.on("ready", async () => {
 			{
 				name: `in ${client.guilds.cache.size} servers`,
 				type: ActivityType.Streaming,
-				url: "https://twitch.tv/tansmh",
+				url: "https://youtube.com/ygaming",
 			},
 		],
 		status: `dnd`,
@@ -151,18 +157,24 @@ client.on("interactionCreate", async (interaction) => {
 				await interaction.editReply({
 					content: "There was an error while executing this command!",
 				});
-			} else await interaction.reply({
-				content: "There was an error while executing this command!",
-			});
+			} else
+				await interaction.reply({
+					content: "There was an error while executing this command!",
+				});
 		}
 	} else if (interaction.isButton()) {
 		if (interaction.customId.startsWith("giveaway_")) {
 			await interaction.deferReply({ ephemeral: true });
 
 			const messageId = interaction.customId.split("_")[1];
-			const hasEntered = await giveawayEntries.findOne({ where: { discord_id: interaction.user.id, message_id: messageId } });
+			const hasEntered = await giveawayEntries.findOne({
+				where: { discord_id: interaction.user.id, message_id: messageId },
+			});
 			if (hasEntered) {
-				return await interaction.editReply({ content: `You have already entered this giveaway.`, ephemeral: true });
+				return await interaction.editReply({
+					content: `You have already entered this giveaway.`,
+					ephemeral: true,
+				});
 			}
 
 			await giveawayEntries.create({
@@ -172,7 +184,9 @@ client.on("interactionCreate", async (interaction) => {
 				discord_id: interaction.user.id,
 				entries: 1,
 			});
-			const entries = await giveawayEntries.findAndCountAll({ where: { message_id: messageId } });
+			const entries = await giveawayEntries.findAndCountAll({
+				where: { message_id: messageId },
+			});
 
 			const giveawayButton = new ButtonBuilder()
 				.setCustomId("giveaway_" + messageId)
@@ -181,11 +195,14 @@ client.on("interactionCreate", async (interaction) => {
 				.setEmoji("🎉");
 			const disableButton = new ButtonBuilder()
 				.setCustomId("disabledGiveaway")
-				.setLabel((entries.count).toString())
+				.setLabel(entries.count.toString())
 				.setStyle(ButtonStyle.Secondary)
 				.setDisabled(true)
 				.setEmoji("👤");
-			const row = new ActionRowBuilder().addComponents(giveawayButton, disableButton);
+			const row = new ActionRowBuilder().addComponents(
+				giveawayButton,
+				disableButton
+			);
 			interaction.message.edit({ components: [row] });
 
 			await interaction.editReply({
@@ -193,107 +210,125 @@ client.on("interactionCreate", async (interaction) => {
 				ephemeral: true,
 			});
 		} else if (interaction.customId.startsWith("retry_")) {
-			await interaction.update({ content: 'Trying to fetch your store, please wait...', components: [] });
+			await interaction.update({
+				content: "Trying to fetch your store, please wait...",
+				components: [],
+			});
 
-			const data = interaction.customId.split('_', 3);
+			const data = interaction.customId.split("_", 3);
 
 			const userCreds = {
 				username: data[1],
-				password: data[2]
+				password: data[2],
+			};
+
+			const retryButton = new ButtonBuilder()
+				.setLabel("Retry")
+				.setCustomId("retry_" + userCreds.username + "_" + userCreds.password)
+				.setStyle(ButtonStyle.Primary)
+				.setEmoji("🔁");
+
+			const row = new ActionRowBuilder().addComponents(retryButton);
+
+			const build = await Valo.getVersion();
+			const login = await Valo.authorize(
+				build,
+				userCreds.username,
+				userCreds.password
+			);
+
+			if (login.error) {
+				await interaction.message.edit({
+					content:
+						"Invalid login attempt. If you are sure your credentials were correct then please check if 2FA is enabled because the bot doesn't support 2FA as of yet. If you did everything correctly, then maybe the bot is malfunctioning.",
+					components: [row],
+				});
+
+				return;
+			}
+			login.build = build;
+
+			const playerStore = await Valo.getStoreFront(login);
+
+			let store;
+			await vapi
+				.getFeaturedItems({
+					version: "v2",
+				})
+				.then((response) => {
+					store = response;
+				})
+				.catch((error) => {
+					logger.error(error);
+				});
+
+			const embeds = [];
+
+			for (const bundle of store.data) {
+				const bundleUUID = bundle.bundle_uuid;
+				const bundleData = await axios.get(
+					`https://valorant-api.com/v1/bundles/${bundleUUID}`
+				);
+				const embed = new EmbedBuilder()
+					.setTitle(bundleData.data.data.displayName)
+					.setColor("FA4454")
+					.setImage(bundleData.data.data.displayIcon);
+
+				if (
+					bundleData.data.data.promoDescription !=
+					bundleData.data.data.extraDescription
+				) {
+					embed.setDescription(
+						bundleData.data.data.extraDescription +
+							"\n\n" +
+							bundleData.data.data.promoDescription
+					);
+				} else if (bundleData.data.data.extraDescription) {
+					embed.setDescription(bundleData.data.data.extraDescription);
+				}
+
+				embeds.push(embed);
 			}
 
-            const retryButton = new ButtonBuilder()
-                .setLabel('Retry')
-                .setCustomId('retry_' + userCreds.username + '_' + userCreds.password)
-                .setStyle(ButtonStyle.Primary)
-                .setEmoji('🔁');
-
-            const row = new ActionRowBuilder().addComponents(retryButton);
-
-            const build = await Valo.getVersion();
-            const login = await Valo.authorize(build, userCreds.username, userCreds.password);
-
-            if (login.error) {
-                await interaction.message.edit({ content: 'Invalid login attempt. If you are sure your credentials were correct then please check if 2FA is enabled because the bot doesn\'t support 2FA as of yet. If you did everything correctly, then maybe the bot is malfunctioning.', components: [row] });
-
-                return;
-            }
-            login.build = build;
-
-            const playerStore = await Valo.getStoreFront(login);
-
-            let store;
-            await vapi
-                .getFeaturedItems({
-                    version: "v2",
-                })
-                .then((response) => {
-                    store = response;
-                })
-                .catch((error) => {
-                    logger.error(error);
-                });
-
-            const embeds = [];
-
-            for (const bundle of store.data) {
-                const bundleUUID = bundle.bundle_uuid;
-                const bundleData = await axios.get(
-                    `https://valorant-api.com/v1/bundles/${bundleUUID}`
-                );
-                const embed = new EmbedBuilder()
-                    .setTitle(bundleData.data.data.displayName)
-                    .setColor("FA4454")
-                    .setImage(bundleData.data.data.displayIcon);
-
-                if (
-                    bundleData.data.data.promoDescription !=
-                    bundleData.data.data.extraDescription
-                ) {
-                    embed.setDescription(
-                        bundleData.data.data.extraDescription +
-                        "\n\n" +
-                        bundleData.data.data.promoDescription
-                    );
-                } else if (bundleData.data.data.extraDescription) {
-                    embed.setDescription(bundleData.data.data.extraDescription);
-                }
-
-                embeds.push(embed);
-            }
-
-            if (!playerStore) {
-                return await interaction.message.edit({
-                    content:
-                        "Invalid login attempt. If you are sure your credentials were correct then please check if 2FA is enabled because the bot doesn't support 2FA as of yet.",
+			if (!playerStore) {
+				return await interaction.message.edit({
+					content:
+						"Invalid login attempt. If you are sure your credentials were correct then please check if 2FA is enabled because the bot doesn't support 2FA as of yet.",
 					components: [row],
-                });
-            }
+				});
+			}
 
-            const skins = await fetchStoreSkins(playerStore);
+			const skins = await fetchStoreSkins(playerStore);
 
-            for (const skin of skins) {
-                const skinEmbed = new EmbedBuilder()
-                    .setColor("#2B2D31")
-                    .setTitle(skin.name)
-                    .setThumbnail(skin.icon)
-                    .setDescription("<:VP:1231857629740138539> " + skin.cost);
-                embeds.push(skinEmbed);
-            }
+			for (const skin of skins) {
+				const skinEmbed = new EmbedBuilder()
+					.setColor("#2B2D31")
+					.setTitle(skin.name)
+					.setThumbnail(skin.icon)
+					.setDescription("<:VP:1231857629740138539> " + skin.cost);
+				embeds.push(skinEmbed);
+			}
 
-            await interaction.message.delete().catch(console.error);
+			await interaction.message.delete().catch(console.error);
 
-            await interaction.channel.send({ content: userMention(interaction.user.id), embeds: embeds });
+			await interaction.channel.send({
+				content: userMention(interaction.user.id),
+				embeds: embeds,
+			});
 		} else if (interaction.customId === "toproll") {
 			const button = new ButtonBuilder()
-            .setCustomId('toprolled')
-            .setLabel('Roll')
-            .setStyle(ButtonStyle.Primary);
-        
-        const row = new ActionRowBuilder().addComponents(button);
-		await interaction.reply({ content: 'Press the button below to start rolling!', components: [row], ephemeral: true });
+				.setCustomId("toprolled")
+				.setLabel("Roll")
+				.setStyle(ButtonStyle.Primary);
+
+			const row = new ActionRowBuilder().addComponents(button);
+			await interaction.reply({
+				content: "Press the button below to start rolling!",
+				components: [row],
+				ephemeral: true,
+			});
 		} else if (interaction.customId === "toprolled") {
-			const randomNumber = Math.floor(Math.random() * 10) + 1;;
+			const randomNumber = Math.floor(Math.random() * 10) + 1;
 			interaction.update({ content: randomNumber.toString() });
 		}
 	} else if (interaction.isAutocomplete()) {
@@ -327,12 +362,12 @@ client.on("messageCreate", async (message) => {
 	try {
 		const embed = await CSGO.getStatusEmbed(message);
 		if (!embed.data.fields[0]) {
-			logger.error('Could not fetch rank status embed.');
+			logger.error("Could not fetch rank status embed.");
 			return;
 		}
 		message.channel.send({ embeds: [embed] });
-	} catch(error) {
-		logger.error('Could not send rank status embed.');
+	} catch (error) {
+		logger.error("Could not send rank status embed.");
 		console.log(error);
 	}
 });
@@ -532,31 +567,34 @@ async function sendOfflineEmbed(user, video, channelId) {
 }
 
 async function dbInit() {
-	const force = process.argv.includes('--force') || process.argv.includes('-f');
+	const force = process.argv.includes("--force") || process.argv.includes("-f");
 
-	sequelize.sync({ force }).then(async () => {
-		logger.info('Database synced.');
-	}).catch(logger.error);
+	sequelize
+		.sync({ force })
+		.then(async () => {
+			logger.info("Database synced.");
+		})
+		.catch(logger.error);
 }
 
 async function fetchStoreSkins(rawStore) {
-    const skins = [];
+	const skins = [];
 
-    for (const record of rawStore) {
-        const skin = await axios.get(
-            "https://valorant-api.com/v1/weapons/skinlevels/" + record.OfferID
-        );
+	for (const record of rawStore) {
+		const skin = await axios.get(
+			"https://valorant-api.com/v1/weapons/skinlevels/" + record.OfferID
+		);
 
-        const costsArray = Object.values(record.Cost);
-        const cost = costsArray[0];
-        const skinData = {
-            name: skin.data.data.displayName,
-            icon: skin.data.data.displayIcon,
-            offerId: record.OfferID,
-            cost: cost.toString(),
-        };
-        skins.push(skinData);
-    }
+		const costsArray = Object.values(record.Cost);
+		const cost = costsArray[0];
+		const skinData = {
+			name: skin.data.data.displayName,
+			icon: skin.data.data.displayIcon,
+			offerId: record.OfferID,
+			cost: cost.toString(),
+		};
+		skins.push(skinData);
+	}
 
-    return skins;
+	return skins;
 }
