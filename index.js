@@ -40,7 +40,16 @@ const csgoRanks = require("./Models/csgoRanks")(sequelize, Sequelize.DataTypes);
 ///    DEFINE    ///
 ////////////////////
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({
+	intents: [
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.GuildMessageReactions,
+		GatewayIntentBits.GuildVoiceStates,
+		GatewayIntentBits.DirectMessages,
+	],
+	partials: ["MESSAGE", "CHANNEL", "REACTION"],
+});
 
 const twitch = new TwitchApi({
 	client_id: process.env.TWITCH_ID,
