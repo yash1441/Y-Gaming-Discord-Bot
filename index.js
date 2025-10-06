@@ -1,7 +1,6 @@
 const {
 	Client,
 	Collection,
-	GatewayIntentBits,
 	EmbedBuilder,
 	ActivityType,
 	ButtonBuilder,
@@ -33,30 +32,14 @@ const sequelize = new Sequelize(
 		logging: false,
 	}
 );
-const giveawayEntries = require("./Models/giveawayEntries")(
-	sequelize,
-	Sequelize.DataTypes
-);
-const giveawayData = require("./Models/giveawayData")(
-	sequelize,
-	Sequelize.DataTypes
-);
+
 const csgoRanks = require("./Models/csgoRanks")(sequelize, Sequelize.DataTypes);
 
 ////////////////////
 ///    DEFINE    ///
 ////////////////////
 
-const client = new Client({
-	intents: [
-		GatewayIntentBits.Guilds,
-		GatewayIntentBits.GuildMessages,
-		GatewayIntentBits.GuildMessageReactions,
-		GatewayIntentBits.GuildVoiceStates,
-		GatewayIntentBits.DirectMessages,
-	],
-	partials: ["MESSAGE", "CHANNEL", "REACTION"],
-});
+const client = new Client();
 
 const twitch = new TwitchApi({
 	client_id: process.env.TWITCH_ID,
@@ -162,53 +145,7 @@ client.on("interactionCreate", async (interaction) => {
 				});
 		}
 	} else if (interaction.isButton()) {
-		if (interaction.customId.startsWith("giveaway_")) {
-			await interaction.deferReply({ ephemeral: true });
-
-			const messageId = interaction.customId.split("_")[1];
-			const hasEntered = await giveawayEntries.findOne({
-				where: { discord_id: interaction.user.id, message_id: messageId },
-			});
-			if (hasEntered) {
-				return await interaction.editReply({
-					content: `You have already entered this giveaway.`,
-					ephemeral: true,
-				});
-			}
-
-			await giveawayEntries.create({
-				message_id: messageId,
-				channel_id: interaction.channel.id,
-				server_id: interaction.guild.id,
-				discord_id: interaction.user.id,
-				entries: 1,
-			});
-			const entries = await giveawayEntries.findAndCountAll({
-				where: { message_id: messageId },
-			});
-
-			const giveawayButton = new ButtonBuilder()
-				.setCustomId("giveaway_" + messageId)
-				.setLabel("Join")
-				.setStyle(ButtonStyle.Success)
-				.setEmoji("🎉");
-			const disableButton = new ButtonBuilder()
-				.setCustomId("disabledGiveaway")
-				.setLabel(entries.count.toString())
-				.setStyle(ButtonStyle.Secondary)
-				.setDisabled(true)
-				.setEmoji("👤");
-			const row = new ActionRowBuilder().addComponents(
-				giveawayButton,
-				disableButton
-			);
-			interaction.message.edit({ components: [row] });
-
-			await interaction.editReply({
-				content: "You have successfully entered the giveaway!",
-				ephemeral: true,
-			});
-		} else if (interaction.customId.startsWith("retry_")) {
+		if (interaction.customId.startsWith("retry_")) {
 			await interaction.update({
 				content: "Trying to fetch your store, please wait...",
 				components: [],
@@ -314,21 +251,6 @@ client.on("interactionCreate", async (interaction) => {
 				content: userMention(interaction.user.id),
 				embeds: embeds,
 			});
-		} else if (interaction.customId === "toproll") {
-			const button = new ButtonBuilder()
-				.setCustomId("toprolled")
-				.setLabel("Roll")
-				.setStyle(ButtonStyle.Primary);
-
-			const row = new ActionRowBuilder().addComponents(button);
-			await interaction.reply({
-				content: "Press the button below to start rolling!",
-				components: [row],
-				ephemeral: true,
-			});
-		} else if (interaction.customId === "toprolled") {
-			const randomNumber = Math.floor(Math.random() * 10) + 1;
-			interaction.update({ content: randomNumber.toString() });
 		}
 	} else if (interaction.isAutocomplete()) {
 		const command = interaction.client.commands.get(interaction.commandName);

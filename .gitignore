@@ -29,5 +29,3 @@ hs_err_pid*
 node_modules/
 package-lock.json
 package.json
-
-Data/giveaways.json
