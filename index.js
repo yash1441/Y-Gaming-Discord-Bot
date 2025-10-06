@@ -7,6 +7,7 @@ const {
 	ButtonStyle,
 	ActionRowBuilder,
 	userMention,
+	GatewayIntentBits,
 } = require("discord.js");
 const fs = require("fs");
 const path = require("path");
