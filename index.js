@@ -95,7 +95,7 @@ for (const file of commandFiles) {
 //// BOT EVENTS ////
 ////////////////////
 
-client.on("ready", async () => {
+client.on("clientReady", async () => {
 	logger.info(
 		`Username: ${client.user.tag} Servers: ${client.guilds.cache.size}`
 	);
