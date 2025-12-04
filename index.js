@@ -109,24 +109,24 @@ client.on("clientReady", async () => {
 		],
 		status: `dnd`,
 	});
-	let serverlist = "";
-	client.guilds.cache.forEach((guild) => {
-		serverlist = serverlist.concat(
-			"- " + guild.name + ": ID: " + guild.id + "\n"
-		);
-	});
+	// let serverlist = "";
+	// client.guilds.cache.forEach((guild) => {
+	// 	serverlist = serverlist.concat(
+	// 		"- " + guild.name + ": ID: " + guild.id + "\n"
+	// 	);
+	// });
 
-	const embed = new EmbedBuilder()
-		.setColor("Random")
-		.setTitle("Servers that have Y-Gaming Discord Bot", "")
-		.setDescription(serverlist);
-	client.users.fetch("132784173311197184").then((user) => {
-		try {
-			user.send({ embeds: [embed] });
-		} catch (err) {
-			console.log("err");
-		}
-	});
+	// const embed = new EmbedBuilder()
+	// 	.setColor("Random")
+	// 	.setTitle("Servers that have Y-Gaming Discord Bot", "")
+	// 	.setDescription(serverlist);
+	// client.users.fetch("132784173311197184").then((user) => {
+	// 	try {
+	// 		user.send({ embeds: [embed] });
+	// 	} catch (err) {
+	// 		console.log("err");
+	// 	}
+	// });
 
 	await dbInit();
 
