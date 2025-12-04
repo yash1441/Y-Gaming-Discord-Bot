@@ -503,6 +503,9 @@ module.exports = {
 			});
 		} else if (subCommand === "nightmarket") {
 			await interaction.deferReply();
+			return await interaction.editReply({
+				content: "This command has been temporarily disabled.",
+			});
 			const userCreds = await valoLogin.findOne({
 				where: { id: interaction.user.id },
 			});
@@ -684,6 +687,9 @@ module.exports = {
 
 			await interaction.editReply({ files: [image] });
 		} else if (subCommand === "store") {
+			return await interaction.reply({
+				content: "This command has been temporarily disabled.",
+			});
 			await interaction.reply({
 				content: "Trying to fetch your store, please wait...",
 			});
@@ -789,6 +795,9 @@ module.exports = {
 				embeds: embeds,
 			});
 		} else if (subCommand === "login") {
+			return await interaction.reply({
+				content: "This command has been temporarily disabled.",
+			});
 			const modal = new ModalBuilder()
 				.setCustomId("valoLogin")
 				.setTitle("Valorant Login");
