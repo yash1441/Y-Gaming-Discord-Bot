@@ -52,5 +52,17 @@
 	},
 	"Corrode": {
 		"splash": "https://media.valorant-api.com/maps/1c18ab1f-420d-0d8b-71d0-77ad3c439115/splash.png"
+	},
+	"Skirmish A": {
+		"splash": "https://media.valorant-api.com/maps/a9009649-421f-d5d5-f80c-0cbe02c125bb/splash.png"
+	},
+	"Skirmish B": {
+		"splash": "https://media.valorant-api.com/maps/a38a3f9a-4042-844c-8970-a3ac2f7ce93d/splash.png"
+	},
+	"Skirmish C": {
+		"splash": "https://media.valorant-api.com/maps/a264de0f-4a04-9c78-c97a-a6b192ce6e86/splash.png"
+	},
+	"Basic Training": {
+		"splash": "https://media.valorant-api.com/maps/1f10dab3-4294-3827-fa35-c2aa00213cf3/splash.png"
 	}
 }
