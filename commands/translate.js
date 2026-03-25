@@ -1,6 +1,7 @@
 const {
 	ContextMenuCommandBuilder,
 	ApplicationCommandType,
+	MessageFlags,
 } = require("discord.js");
 const translate = require("google-translate-api-x");
 
@@ -14,13 +15,13 @@ module.exports = {
 		translate(message, { to: "en" })
 			.then((res) => {
 				interaction.reply({
-					ephemeral: true,
+					flags: MessageFlags.Ephemeral,
 					content: "```" + res.text + "```",
 				});
 			})
 			.catch((err) => {
 				console.log(err);
-				interaction.reply({ ephemeral: true, content: "Error." });
+				interaction.reply({ flags: MessageFlags.Ephemeral, content: "Error." });
 			});
 	},
 };

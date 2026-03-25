@@ -10,6 +10,7 @@ const {
 	userMention,
 	ButtonBuilder,
 	ButtonStyle,
+	MessageFlags,
 } = require("discord.js");
 
 const fs = require("fs");
@@ -35,22 +36,22 @@ const sequelize = new Sequelize(
 		host: process.env.DB_IP,
 		dialect: "mysql",
 		logging: false,
-	}
+	},
 );
 const valoLogin = require("../Models/valoLogin")(
 	sequelize,
-	Sequelize.DataTypes
+	Sequelize.DataTypes,
 );
 
 const dataDirectory = path.join(__dirname, "../Data");
 const rankThreshold = JSON.parse(
-	fs.readFileSync(path.join(dataDirectory, "rank-threshold.json"))
+	fs.readFileSync(path.join(dataDirectory, "rank-threshold.json")),
 );
 const agentsData = JSON.parse(
-	fs.readFileSync(path.join(dataDirectory, "agents.json"))
+	fs.readFileSync(path.join(dataDirectory, "agents.json")),
 );
 const mapsData = JSON.parse(
-	fs.readFileSync(path.join(dataDirectory, "maps.json"))
+	fs.readFileSync(path.join(dataDirectory, "maps.json")),
 );
 
 module.exports = {
@@ -61,14 +62,14 @@ module.exports = {
 			subcommand
 				.setName("account")
 				.setDescription(
-					"Get your account information (For development purposes)."
+					"Get your account information (For development purposes).",
 				)
 				.addStringOption((option) =>
 					option
 						.setName("username")
 						.setDescription("Enter a username with hashtag. Example: Name#Tag")
-						.setRequired(true)
-				)
+						.setRequired(true),
+				),
 		)
 		.addSubcommand((subcommand) =>
 			subcommand
@@ -78,8 +79,8 @@ module.exports = {
 					option
 						.setName("profile-code")
 						.setDescription("Enter a crosshair profile code.")
-						.setRequired(true)
-				)
+						.setRequired(true),
+				),
 		)
 		.addSubcommand((subcommand) =>
 			subcommand
@@ -96,14 +97,14 @@ module.exports = {
 							{ name: "North America", value: "na" },
 							{ name: "Korea", value: "kr" },
 							{ name: "Latin America", value: "latam" },
-							{ name: "Brazil", value: "br" }
-						)
+							{ name: "Brazil", value: "br" },
+						),
 				)
 				.addStringOption((option) =>
 					option
 						.setName("username")
 						.setDescription("Enter a username with hashtag. Example: Name#Tag")
-						.setRequired(true)
+						.setRequired(true),
 				)
 				.addStringOption((option) =>
 					option
@@ -119,9 +120,9 @@ module.exports = {
 							{ name: "Unrated", value: "unrated" },
 							{ name: "Swiftplay", value: "swiftplay" },
 							{ name: "Replication", value: "replication" },
-							{ name: "Spikerush", value: "spikerush" }
-						)
-				)
+							{ name: "Spikerush", value: "spikerush" },
+						),
+				),
 		)
 		.addSubcommand((subcommand) =>
 			subcommand
@@ -137,8 +138,8 @@ module.exports = {
 							{ name: "Sova", value: "Sova" },
 							{ name: "Fade", value: "Fade" },
 							{ name: "Killjoy", value: "Killjoy" },
-							{ name: "Brimstone", value: "Brimstone" }
-						)
+							{ name: "Brimstone", value: "Brimstone" },
+						),
 				)
 				.addStringOption((option) =>
 					option
@@ -153,16 +154,16 @@ module.exports = {
 							{ name: "Breeze", value: "Breeze" },
 							{ name: "Split", value: "Split" },
 							{ name: "Fracture", value: "Fracture" },
-							{ name: "Pearl", value: "Pearl" }
-						)
+							{ name: "Pearl", value: "Pearl" },
+						),
 				)
 				.addStringOption((option) =>
 					option
 						.setName("bombsite")
 						.setDescription("Choose a bombsite")
 						.setRequired(true)
-						.addChoices({ name: "A", value: "A" }, { name: "B", value: "B" })
-				)
+						.addChoices({ name: "A", value: "A" }, { name: "B", value: "B" }),
+				),
 		)
 		.addSubcommand((subcommand) =>
 			subcommand
@@ -179,30 +180,30 @@ module.exports = {
 							{ name: "North America", value: "na" },
 							{ name: "Korea", value: "kr" },
 							{ name: "Latin America", value: "latam" },
-							{ name: "Brazil", value: "br" }
-						)
+							{ name: "Brazil", value: "br" },
+						),
 				)
 				.addStringOption((option) =>
 					option
 						.setName("username")
 						.setDescription(
-							"Enter a valorant username with hashtag. Example: Name#Tag"
+							"Enter a valorant username with hashtag. Example: Name#Tag",
 						)
-						.setRequired(true)
+						.setRequired(true),
 				)
 				.addIntegerOption((option) =>
 					option
 						.setName("matches")
 						.setDescription(
-							"Enter the number of matches to be pulled. Default: 5"
+							"Enter the number of matches to be pulled. Default: 5",
 						)
-						.setRequired(false)
-				)
+						.setRequired(false),
+				),
 		)
 		.addSubcommand((subcommand) =>
 			subcommand
 				.setName("nightmarket")
-				.setDescription("Check your Nightmarket.")
+				.setDescription("Check your Nightmarket."),
 		)
 		.addSubcommand((subcommand) =>
 			subcommand
@@ -219,37 +220,37 @@ module.exports = {
 							{ name: "North America", value: "na" },
 							{ name: "Korea", value: "kr" },
 							{ name: "Latin America", value: "latam" },
-							{ name: "Brazil", value: "br" }
-						)
+							{ name: "Brazil", value: "br" },
+						),
 				)
 				.addStringOption((option) =>
 					option
 						.setName("username")
 						.setDescription(
-							"Enter a valorant username with hashtag. Example: Name#Tag"
+							"Enter a valorant username with hashtag. Example: Name#Tag",
 						)
-						.setRequired(true)
-				)
+						.setRequired(true),
+				),
 		)
 		.addSubcommand((subcommand) =>
-			subcommand.setName("store").setDescription("Check your store.")
+			subcommand.setName("store").setDescription("Check your store."),
 		)
 		.addSubcommand((subcommand) =>
 			subcommand
 				.setName("login")
 				.setDescription(
-					"Store your Valorant login for easier access to commands."
-				)
+					"Store your Valorant login for easier access to commands.",
+				),
 		),
 	async execute(interaction) {
 		const subCommand = interaction.options.getSubcommand();
 
 		if (subCommand === "account") {
-			await interaction.deferReply({ ephemeral: true });
+			await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 			if (!interaction.options.getString("username").includes("#")) {
 				return await interaction.editReply({
 					content: `**Error:** Cannot find __${interaction.options.getString(
-						"username"
+						"username",
 					)}__. Make sure the username is in this format - \`Name#Tag\``,
 				});
 			}
@@ -290,7 +291,7 @@ module.exports = {
 			if (!interaction.options.getString("username").includes("#")) {
 				return await interaction.editReply({
 					content: `**Error:** Cannot find __${interaction.options.getString(
-						"username"
+						"username",
 					)}__. Make sure the username is in this format - \`Name#Tag\``,
 				});
 			}
@@ -320,7 +321,7 @@ module.exports = {
 			if (match.error) {
 				interaction.editReply({
 					content: `**Error:** Cannot find __${interaction.options.getString(
-						"username"
+						"username",
 					)}__. Make sure the username is in this format - \`Name#Tag\`\n${
 						match.error
 					}`,
@@ -331,7 +332,7 @@ module.exports = {
 			if (match.data[0] == undefined || match.data[0] == undefined) {
 				interaction.editReply({
 					content: `**Error:** Cannot find last match data for __${interaction.options.getString(
-						"username"
+						"username",
 					)}__.`,
 				});
 				return;
@@ -429,7 +430,7 @@ module.exports = {
 			if (!interaction.options.getString("username").includes("#")) {
 				return await interaction.editReply({
 					content: `**Error:** Cannot find __${interaction.options.getString(
-						"username"
+						"username",
 					)}__. Make sure the username is in this format - \`Name#Tag\``,
 				});
 			}
@@ -462,7 +463,7 @@ module.exports = {
 			if (matches.error) {
 				return await interaction.editReply({
 					content: `**Error:** Cannot find __${interaction.options.getString(
-						"username"
+						"username",
 					)}__. Make sure the username is in this format - \`Name#Tag\``,
 				});
 			}
@@ -483,7 +484,7 @@ module.exports = {
 					.setDescription(`${match[i].date}`)
 					.addFields(
 						{ name: "Rank", value: `${match[i].currenttierpatched}` },
-						{ name: "RR", value: `${match[i].mmr_change_to_last_game}` }
+						{ name: "RR", value: `${match[i].mmr_change_to_last_game}` },
 					)
 					.setThumbnail(`${match[i].images.large}`);
 
@@ -497,7 +498,7 @@ module.exports = {
 
 			await interaction.editReply({
 				content: `**${interaction.options.getString(
-					"username"
+					"username",
 				)}** - Last 5 Matches`,
 				embeds: embeds,
 			});
@@ -519,7 +520,7 @@ module.exports = {
 			const login = await Valo.authorize(
 				build,
 				userCreds.username,
-				userCreds.password
+				userCreds.password,
 			);
 
 			if (login.error)
@@ -549,18 +550,18 @@ module.exports = {
 						"### <:VP:1231857629740138539> " +
 							skin.discountCosts +
 							"\n🏷️ " +
-							spoiler(italic(skin.discountPercent + "%"))
+							spoiler(italic(skin.discountPercent + "%")),
 					);
 				embeds.push(skinEmbed);
 			}
 
 			await interaction.editReply({ embeds: embeds });
 		} else if (subCommand === "rank") {
-			await interaction.deferReply({ ephemeral: false });
+			await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 			if (!interaction.options.getString("username").includes("#")) {
 				return await interaction.editReply({
 					content: `**Error:** Cannot find __${interaction.options.getString(
-						"username"
+						"username",
 					)}__. Make sure the username is in this format - \`Name#Tag\``,
 				});
 			}
@@ -582,7 +583,7 @@ module.exports = {
 			if (mmrData.status == 404 || accountData.status == 404) {
 				return await interaction.editReply({
 					content: `**Error:** Cannot find __${interaction.options.getString(
-						"username"
+						"username",
 					)}__. Make sure the username is in this format - \`Name#Tag\``,
 				});
 			} else if (mmrData.status != 200) {
@@ -715,7 +716,7 @@ module.exports = {
 			const login = await Valo.authorize(
 				build,
 				userCreds.username,
-				userCreds.password
+				userCreds.password,
 			);
 
 			if (login.error) {
@@ -747,7 +748,7 @@ module.exports = {
 			for (const bundle of store.data) {
 				const bundleUUID = bundle.bundle_uuid;
 				const bundleData = await axios.get(
-					`https://valorant-api.com/v1/bundles/${bundleUUID}`
+					`https://valorant-api.com/v1/bundles/${bundleUUID}`,
 				);
 				const embed = new EmbedBuilder()
 					.setTitle(bundleData.data.data.displayName)
@@ -761,7 +762,7 @@ module.exports = {
 					embed.setDescription(
 						bundleData.data.data.extraDescription +
 							"\n\n" +
-							bundleData.data.data.promoDescription
+							bundleData.data.data.promoDescription,
 					);
 				} else if (bundleData.data.data.extraDescription) {
 					embed.setDescription(bundleData.data.data.extraDescription);
@@ -845,23 +846,23 @@ module.exports = {
 				if (!created) {
 					await valoLogin.update(
 						{ username: username, password: password },
-						{ where: { id: id } }
+						{ where: { id: id } },
 					);
 					return await submit
 						.reply({
 							content: `Successfully updated your Valorant credentials.`,
-							ephemeral: true,
+							flags: MessageFlags.Ephemeral,
 						})
 						.catch(console.error);
 				}
 				return await submit.reply({
 					content: `Successfully stored your Valorant credentials.`,
-					ephemeral: true,
+					flags: MessageFlags.Ephemeral,
 				});
 			} else {
 				await interaction.followUp({
 					content: "Request timed out. Please try again.",
-					ephemeral: true,
+					flags: MessageFlags.Ephemeral,
 				});
 			}
 		}
@@ -933,7 +934,7 @@ async function createScoreboard(interaction, players, map, date, file) {
 			nameX + nameDiff,
 			nameY + i,
 			players.blue[id].name,
-			nameWrap
+			nameWrap,
 		); //Blue
 
 		//Kill
@@ -947,7 +948,7 @@ async function createScoreboard(interaction, players, map, date, file) {
 				alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM,
 			},
 			0,
-			0
+			0,
 		);
 		mapImage.print(
 			font32,
@@ -959,7 +960,7 @@ async function createScoreboard(interaction, players, map, date, file) {
 				alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM,
 			},
 			0,
-			0
+			0,
 		);
 
 		//Death
@@ -973,7 +974,7 @@ async function createScoreboard(interaction, players, map, date, file) {
 				alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM,
 			},
 			0,
-			0
+			0,
 		);
 		mapImage.print(
 			font32,
@@ -985,7 +986,7 @@ async function createScoreboard(interaction, players, map, date, file) {
 				alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM,
 			},
 			0,
-			0
+			0,
 		);
 
 		//Assist
@@ -999,7 +1000,7 @@ async function createScoreboard(interaction, players, map, date, file) {
 				alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM,
 			},
 			0,
-			0
+			0,
 		);
 		mapImage.print(
 			font32,
@@ -1011,7 +1012,7 @@ async function createScoreboard(interaction, players, map, date, file) {
 				alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM,
 			},
 			0,
-			0
+			0,
 		);
 	}
 
@@ -1026,7 +1027,7 @@ async function createScoreboard(interaction, players, map, date, file) {
 			alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM,
 		},
 		0,
-		0
+		0,
 	); // Red
 	mapImage.print(
 		font128,
@@ -1038,7 +1039,7 @@ async function createScoreboard(interaction, players, map, date, file) {
 			alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM,
 		},
 		0,
-		0
+		0,
 	); // Blue
 
 	// Map
@@ -1052,7 +1053,7 @@ async function createScoreboard(interaction, players, map, date, file) {
 			alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM,
 		},
 		0,
-		0
+		0,
 	);
 	mapImage.print(
 		font32,
@@ -1064,7 +1065,7 @@ async function createScoreboard(interaction, players, map, date, file) {
 			alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM,
 		},
 		960,
-		0
+		0,
 	);
 
 	await mapImage.writeAsync(file);
@@ -1075,7 +1076,7 @@ async function fetchNightmarketSkins(rawNightMarket) {
 
 	for (const record of rawNightMarket) {
 		const skin = await axios.get(
-			"https://valorant-api.com/v1/weapons/skinlevels/" + record.Offer.OfferID
+			"https://valorant-api.com/v1/weapons/skinlevels/" + record.Offer.OfferID,
 		);
 
 		const discountCostsArray = Object.values(record.DiscountCosts);
@@ -1098,7 +1099,7 @@ async function fetchStoreSkins(rawStore) {
 
 	for (const record of rawStore) {
 		const skin = await axios.get(
-			"https://valorant-api.com/v1/weapons/skinlevels/" + record.OfferID
+			"https://valorant-api.com/v1/weapons/skinlevels/" + record.OfferID,
 		);
 
 		const costsArray = Object.values(record.Cost);

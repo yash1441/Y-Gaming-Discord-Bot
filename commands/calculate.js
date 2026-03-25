@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, MessageFlags } = require("discord.js");
 const logger = require("../Logger/logger.js");
 
 module.exports = {
@@ -9,20 +9,23 @@ module.exports = {
 			option
 				.setName("math")
 				.setDescription("Math expression to calculate")
-				.setRequired(true)
+				.setRequired(true),
 		),
 	async execute(interaction) {
-		await interaction.reply({ content: `Calculating...`, ephemeral: true });
+		await interaction.reply({
+			content: `Calculating...`,
+			flags: MessageFlags.Ephemeral,
+		});
 
 		let math = interaction.options.getString("math");
-        const compute = (math = '') => {
-            let total = 0;
-            math = math.match(/[+\−]*(\.\d+|\d+(\.\d+)?)/g) || [];
-            while (math.length) {
-                total += parseFloat(math.shift());
-            };
-            return total.toString();
-        };
+		const compute = (math = "") => {
+			let total = 0;
+			math = math.match(/[+\−]*(\.\d+|\d+(\.\d+)?)/g) || [];
+			while (math.length) {
+				total += parseFloat(math.shift());
+			}
+			return total.toString();
+		};
 
 		await interaction.editReply({ content: compute(math) });
 	},

@@ -4,6 +4,7 @@ const {
 	AttachmentBuilder,
 	bold,
 	Colors,
+	MessageFlags,
 } = require("discord.js");
 const logger = require("../Logger/logger.js");
 const fs = require("fs");
@@ -13,7 +14,7 @@ require("dotenv").config();
 
 const dataDirectory = path.join(__dirname, "../Data/");
 const monstersData = JSON.parse(
-	fs.readFileSync(path.join(dataDirectory, "monsters.json"))
+	fs.readFileSync(path.join(dataDirectory, "monsters.json")),
 );
 
 module.exports = {
@@ -29,8 +30,8 @@ module.exports = {
 						.setName("name")
 						.setDescription("The name of the monster")
 						.setAutocomplete(true)
-						.setRequired(true)
-				)
+						.setRequired(true),
+				),
 		)
 		.addSubcommand((subcommand) =>
 			subcommand
@@ -42,10 +43,10 @@ module.exports = {
 						.setDescription("The size of the monster")
 						.addChoices(
 							{ name: "Small", value: "small" },
-							{ name: "Large", value: "large" }
+							{ name: "Large", value: "large" },
 						)
-						.setRequired(false)
-				)
+						.setRequired(false),
+				),
 		),
 	async autocomplete(interaction) {
 		const focusedValue = interaction.options
@@ -63,29 +64,27 @@ module.exports = {
 			})
 			.sort((a, b) => {
 				const aScore = focusedValue.reduce(
-					(score, word) =>
-						score + (a.toLowerCase().includes(word) ? 1 : 0),
-					0
+					(score, word) => score + (a.toLowerCase().includes(word) ? 1 : 0),
+					0,
 				);
 				const bScore = focusedValue.reduce(
-					(score, word) =>
-						score + (b.toLowerCase().includes(word) ? 1 : 0),
-					0
+					(score, word) => score + (b.toLowerCase().includes(word) ? 1 : 0),
+					0,
 				);
 				return bScore - aScore;
 			})
 			.slice(0, 25);
 		await interaction.respond(
-			filtered.map((choice) => ({ name: choice, value: choice }))
+			filtered.map((choice) => ({ name: choice, value: choice })),
 		);
 	},
 	async execute(interaction) {
-		await interaction.deferReply({ ephemeral: false });
+		await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
 		if (interaction.options.getSubcommand() === "monster") {
 			const name = interaction.options.getString("name");
 			const monsterIndex = monstersData.findIndex(
-				(monster) => monster.name === name
+				(monster) => monster.name === name,
 			);
 			if (!monsterIndex) {
 				return await interaction.editReply({
@@ -96,9 +95,7 @@ module.exports = {
 			const monster = monstersData[monsterIndex];
 
 			const file = new AttachmentBuilder(
-				"./Images/MHW/Monsters/Icons/" +
-					escapeStuff(monster.name) +
-					".png"
+				"./Images/MHW/Monsters/Icons/" + escapeStuff(monster.name) + ".png",
 			);
 
 			const embed = new EmbedBuilder()
@@ -114,11 +111,9 @@ module.exports = {
 						name: "Size",
 						value: monster.type,
 						inline: true,
-					}
+					},
 				)
-				.setThumbnail(
-					"attachment://" + escapeStuff(monster.name) + ".png"
-				)
+				.setThumbnail("attachment://" + escapeStuff(monster.name) + ".png")
 				.setColor(Colors.Blurple);
 
 			await interaction.editReply({ embeds: [embed], files: [file] });
@@ -133,15 +128,13 @@ module.exports = {
 
 			const monsterIndex = Math.floor(
 				Math.random() * (monsterIndexMax - monsterIndexMin + 1) +
-					monsterIndexMin
+					monsterIndexMin,
 			);
 
 			const monster = monstersData[monsterIndex];
 
 			const file = new AttachmentBuilder(
-				"./Images/MHW/Monsters/Icons/" +
-					escapeStuff(monster.name) +
-					".png"
+				"./Images/MHW/Monsters/Icons/" + escapeStuff(monster.name) + ".png",
 			);
 
 			const embed = new EmbedBuilder()
@@ -157,11 +150,9 @@ module.exports = {
 						name: "Size",
 						value: monster.type,
 						inline: true,
-					}
+					},
 				)
-				.setThumbnail(
-					"attachment://" + escapeStuff(monster.name) + ".png"
-				)
+				.setThumbnail("attachment://" + escapeStuff(monster.name) + ".png")
 				.setColor(Colors.Blurple);
 
 			await interaction.editReply({ embeds: [embed], files: [file] });

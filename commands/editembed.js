@@ -6,7 +6,8 @@ const {
 	ActionRowBuilder,
 	TextInputBuilder,
 	TextInputStyle,
-	PermissionFlagsBits
+	PermissionFlagsBits,
+	MessageFlags,
 } = require("discord.js");
 
 module.exports = {
@@ -22,7 +23,7 @@ module.exports = {
 		if (embed == undefined) {
 			return await interaction.reply({
 				content: "No embed found.",
-				ephemeral: true,
+				flags: MessageFlags.Ephemeral,
 			});
 		}
 
@@ -42,7 +43,7 @@ module.exports = {
 			.setTitle("Edit Embed")
 			.setComponents(
 				new ActionRowBuilder().setComponents(fields.title),
-				new ActionRowBuilder().setComponents(fields.description)
+				new ActionRowBuilder().setComponents(fields.description),
 			);
 
 		await interaction.showModal(modal);
@@ -60,20 +61,21 @@ module.exports = {
 		if (submit) {
 			let newEmbed = new EmbedBuilder()
 				.setTitle(submit.fields.getTextInputValue("title"))
-				.setDescription(
-					submit.fields.getTextInputValue("description")
-				)
+				.setDescription(submit.fields.getTextInputValue("description"))
 				.setColor(embed.color);
 
 			if (message.id == submit.customId.substring(9)) {
 				await message.edit({ embeds: [newEmbed] });
 				await submit.reply({
 					content: "Embed edited.",
-					ephemeral: true,
+					flags: MessageFlags.Ephemeral,
 				});
 			}
 		} else {
-			await interaction.reply({ content: "Timed out.", ephemeral: true });
+			await interaction.reply({
+				content: "Timed out.",
+				flags: MessageFlags.Ephemeral,
+			});
 		}
 	},
 };

@@ -1,4 +1,9 @@
-const { SlashCommandBuilder, EmbedBuilder, messageLink } = require("discord.js");
+const {
+	SlashCommandBuilder,
+	EmbedBuilder,
+	messageLink,
+	MessageFlags,
+} = require("discord.js");
 const logger = require("../Logger/logger.js");
 
 module.exports = {
@@ -11,16 +16,19 @@ module.exports = {
 				.setName("title")
 				.setDescription("Title of the poll")
 				.setRequired(true)
-				.setMaxLength(256)
+				.setMaxLength(256),
 		)
 		.addStringOption((option) =>
 			option
 				.setName("choices")
 				.setDescription("Choices for the poll")
-				.setRequired(false)
+				.setRequired(false),
 		),
 	async execute(interaction) {
-		await interaction.reply({ content: `Creating the poll...`, ephemeral: true });
+		await interaction.reply({
+			content: `Creating the poll...`,
+			flags: MessageFlags.Ephemeral,
+		});
 
 		const title = interaction.options.getString("title");
 		const choicesString = interaction.options.getString("choices");
@@ -44,7 +52,10 @@ module.exports = {
 			await message.react(option.emoji);
 		}
 
-		await interaction.editReply({ content: 'Created poll! ' + messageLink(interaction.channelId, message.id) });
+		await interaction.editReply({
+			content:
+				"Created poll! " + messageLink(interaction.channelId, message.id),
+		});
 	},
 };
 
@@ -52,14 +63,14 @@ async function getChoices(choicesString) {
 	if (!choicesString) {
 		return [
 			{
-				emoji: '🔼',
-				name: 'Upvote'
+				emoji: "🔼",
+				name: "Upvote",
 			},
 			{
-				emoji: '🔽',
-				name: 'Downvote'
-			}
-		]
+				emoji: "🔽",
+				name: "Downvote",
+			},
+		];
 	}
 
 	const choices = choicesString.split("|");
@@ -68,7 +79,7 @@ async function getChoices(choicesString) {
 	const options = [];
 	for (let i = 0; i < count; i++) {
 		options.push({
-			emoji: String.fromCodePoint(0x1F1E6 + i),
+			emoji: String.fromCodePoint(0x1f1e6 + i),
 			name: choices[i].trim().slice(0, 256),
 		});
 	}
