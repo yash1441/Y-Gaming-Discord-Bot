@@ -64,5 +64,8 @@
 	},
 	"Basic Training": {
 		"splash": "https://media.valorant-api.com/maps/1f10dab3-4294-3827-fa35-c2aa00213cf3/splash.png"
+	},
+	"Summit": {
+		"splash": "https://media.valorant-api.com/maps/756da597-416b-c0f2-f47b-afbdf28670bc/splash.png"
 	}
 }
